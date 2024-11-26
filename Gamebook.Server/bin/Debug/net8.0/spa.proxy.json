@@ -1,0 +1,10 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "https://localhost:62986",
+"RedirectUrl": "",
+"LaunchCommand": "npm run dev",
+"WorkingDirectory": "C:\\Users\\Tonda\\Desktop\\School\\3.rocnik\\WEB\\Gamebook\\Gamebook.Server\\..\\gamebook.client",
+"MaxTimeoutInSeconds": "120",
+"KeepRunning": "false"
+}
+}
