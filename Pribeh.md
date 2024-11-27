@@ -7,5 +7,7 @@ Hlavní postava se jednoho dne probudí a navštíví lékaře, který mu diagno
 Hráč má na výběr, jak tento čas stráví:
 + Může celé dva týdny propít v hospodě a utápět svůj osud v alkoholu.
 + Nebo se může vydat hledat informace o ztracené výpravě svého dědečka, která se stala místní záhadou.
+  
 Protagonista má několik přátel, přítelkyni a malou rodinu, což může ovlivnit jeho rozhodnutí a cestu. 
+
 Možná se mu podaří najít lek, ale kdo ví...
