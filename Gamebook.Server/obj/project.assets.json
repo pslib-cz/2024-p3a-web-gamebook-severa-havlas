@@ -478,23 +478,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Tonda\\.nuget\\packages\\": {},
+    "C:\\Users\\Kuba\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Tonda\\Desktop\\School\\3.rocnik\\WEB\\Gamebook\\Gamebook.Server\\Gamebook.Server.csproj",
+      "projectUniqueName": "C:\\Users\\Kuba\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
       "projectName": "Gamebook.Server",
-      "projectPath": "C:\\Users\\Tonda\\Desktop\\School\\3.rocnik\\WEB\\Gamebook\\Gamebook.Server\\Gamebook.Server.csproj",
-      "packagesPath": "C:\\Users\\Tonda\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Tonda\\Desktop\\School\\3.rocnik\\WEB\\Gamebook\\Gamebook.Server\\obj\\",
+      "projectPath": "C:\\Users\\Kuba\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
+      "packagesPath": "C:\\Users\\Kuba\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Kuba\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Tonda\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Kuba\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -520,9 +520,8 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+        "auditMode": "direct"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -556,7 +555,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
