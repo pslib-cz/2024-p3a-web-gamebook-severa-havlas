@@ -1,0 +1,32 @@
+CRUD
+
+CR Room
+RUD Room/{RoomId}
+
+CR Option
+RUD Option/{OptionId}
+
+CR NPC
+RUD NPC/{NPCId}
+
+CR ItemPosition
+RUD ItemPosition/{ItemPositionId}
+
+CR Connection
+RUD Connection/{ConnectionId}
+
+CR ActionType
+RUD ActionType/{ActionTypeId}
+
+CR Action
+RUD Action/{ActionId}
+
+R Connection/{FromRoomId}
+R Connection/{ToRoomId}
+
+R Action/{NPCId}
+R Action/{ItemId}
+
+
+ještě dodělat nějak mi tam něco chybí. Co myslíš?
+
