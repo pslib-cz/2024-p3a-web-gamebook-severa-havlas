@@ -1,1 +1,2 @@
 C:\Users\Tonda\Desktop\School\3.rocnik\WEB\Gamebook\gamebook.client\obj\Debug\gamebook.client.esproj.CoreCompileInputs.cache
+C:\Users\havla\Source\Repos\2024-p3a-web-gamebook-severa-havlas\gamebook.client\obj\Debug\gamebook.client.esproj.CoreCompileInputs.cache

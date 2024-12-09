@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Gamebook.Server.models
 {
   
-    public class Action
+    public class GameBookAction
     {
         [Key]
         public int ActionId { get; set; }
