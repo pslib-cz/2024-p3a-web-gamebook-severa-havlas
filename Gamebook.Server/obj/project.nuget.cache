@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "saULoi+zHroK9/6WC8SoZfp7CxWiuwhjvl+Sv+hR1s2H/x56z44xIraEeLoNwl8Dju8zKMVpAiHhWjvjgKIP8Q==",
+  "dgSpecHash": "oqCsJbQ1QgJuKDAzU0XzkVtuT4nCAXY/eVcPjcA0iWh/MmHgK4FIDVAvQkVcPSoGkh18wmOMu5dol7nQCA5qEg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\havla\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
+  "projectFilePath": "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\havla\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\havla\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

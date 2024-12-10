@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\havla\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj": {}
+    "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\havla\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj": {
+    "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\havla\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
+        "projectUniqueName": "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
         "projectName": "Gamebook.Server",
-        "projectPath": "C:\\Users\\havla\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
+        "projectPath": "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
         "packagesPath": "C:\\Users\\havla\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\havla\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\obj\\",
+        "outputPath": "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
