@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import './App.css';
 
 
@@ -12,7 +11,7 @@ function App() {
 
     return (
       <>
-      <p>ahoj</p>
+        <p>ahoj</p>
       </>
     );
 
