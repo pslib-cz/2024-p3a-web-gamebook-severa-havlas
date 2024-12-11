@@ -100,6 +100,40 @@ namespace Gamebook.Server.Controllers
             return NoContent();
         }
 
+
+        // GET: api/Connections/GetConnection/{FromRoomId}
+        [HttpGet("GetFromConnection/{FromRoomId}")]
+        public async Task<ActionResult<IEnumerable<Connection>>> GetConnectionsByFromRoomId(int FromRoomId)
+        {
+            // Find the connections based on FromRoomId
+            var connections = await _context.Connections
+                .Where(c => c.FromRoomId == FromRoomId)
+                .ToListAsync();
+
+            // If no connections are found
+            if (connections == null || !connections.Any())
+            {
+                return NotFound($"No connections found for FromRoomId: {FromRoomId}");
+            }
+
+            return Ok(connections);
+        }
+        [HttpGet("GetToConnection/{ToRoomId}")]
+        public async Task<ActionResult<IEnumerable<Connection>>> GetConnectionsByToRoomId(int ToRoomId)
+        {
+            // Find the connections based on ToRoomId
+            var connections = await _context.Connections
+                .Where(c => c.ToRoomId == ToRoomId)
+                .ToListAsync();
+
+            // If no connections are found
+            if (connections == null || !connections.Any())
+            {
+                return NotFound($"No connections found for ToRoomId: {ToRoomId}");
+            }
+
+            return Ok(connections);
+        }
         private bool ConnectionExists(int id)
         {
             return _context.Connections.Any(e => e.ConnectionId == id);
