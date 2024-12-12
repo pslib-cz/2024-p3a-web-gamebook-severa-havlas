@@ -13,17 +13,17 @@ interface Item {
   name: string;
 }
 
-interface NPC {
+export type NPC = {
   npcId: number;
   name: string;
 }
 
-interface GameBookAction {
+export type GameBookAction = {
   actionId: number;
   description: string;
 }
 
-interface Room {
+export type Room = {
   roomId: number;
   img: RoomImage; // Image in base64 string
   name: string; // Name of the room

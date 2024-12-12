@@ -1,0 +1,37 @@
+const postRoom = async (room: Room) => {
+    const response = await fetch('/api/rooms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(room),
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    return response.json();
+  };
+  const getRoomById = async (id: number) => {
+    const response = await fetch(`/api/rooms/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    return response.json();
+  };
+  const patchRoom = async (id: number, patchData: any) => {
+    const response = await fetch(`/api/rooms/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json-patch+json' },
+      body: JSON.stringify(patchData),
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+  };
+  const deleteRoom = async (id: number) => {
+    const response = await fetch(`/api/rooms/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+  };
+  
