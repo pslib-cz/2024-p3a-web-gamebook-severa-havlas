@@ -2,13 +2,13 @@
 type RoomImage = string;  // Base64 encoded image string
 
 // Define the types for connected entities
-interface Connection {
+export type Connection ={
   connectionId: number;
   fromRoomId: number;
   toRoomId: number;
 }
 
-interface Item {
+export type Item = {
   itemId: number;
   name: string;
 }
@@ -45,7 +45,7 @@ export type Room = {
 }
 
 // Define types for ItemPosition (if applicable)
-interface ItemPosition {
+export type ItemPosition ={
   positionId: number;
   x: number; // X coordinate
   y: number; // Y coordinate
