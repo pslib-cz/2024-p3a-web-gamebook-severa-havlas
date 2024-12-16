@@ -9,7 +9,7 @@ const RoomsList: React.FC = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await fetch('/api/rooms'); // Adjust endpoint if necessary
+        const response = await fetch('https://localhost:62986/api/rooms'); // Adjust endpoint if necessary
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
