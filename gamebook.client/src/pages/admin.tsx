@@ -3,6 +3,7 @@ import Query from '../queries/GetRooms';
 import Button from '../components/AtomButton';
 import  AtomForm  from "../components/AtomForm";
 import { useState } from "react";
+import RoomManager from "../queries/RoomManager";
 const Admin = () => {
     
     const [mrdka, setMrdka] = useState<boolean>(false);
@@ -25,6 +26,7 @@ const Admin = () => {
   errorMessage="Please use only letters and spaces"
   onSubmit={(value) => console.log('Form submitted with value:', value)}
 />
+        <RoomManager />
         </>
     );
 

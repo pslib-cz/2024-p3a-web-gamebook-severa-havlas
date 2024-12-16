@@ -35,10 +35,10 @@ const RoomManager: React.FC = () => {
 
   const handleUpdateRoom = async (updatedRoom: Room) => {
     try {
-      await putRoom(updatedRoom.roomId, updatedRoom);
+      const updated = await putRoom(updatedRoom.roomId, updatedRoom);
       setRooms(
         rooms.map((room) =>
-          room.roomId === updatedRoom.roomId ? updatedRoom : room
+          room.roomId === updated.roomId ? updated : room
         )
       );
     } catch (err: any) {
@@ -81,12 +81,12 @@ const RoomManager: React.FC = () => {
             <input
               type="text"
               placeholder="Name"
-              value={currentRoom.name}
+              value={currentRoom?.name}
               onChange={(e) => setCurrentRoom({ ...currentRoom, name: e.target.value })}
             />
             <textarea
               placeholder="Description"
-              value={currentRoom.text}
+              value={currentRoom?.text}
               onChange={(e) => setCurrentRoom({ ...currentRoom, text: e.target.value })}
             />
             <button type="submit">Save</button>
@@ -131,7 +131,7 @@ const RoomManager: React.FC = () => {
 
 export default RoomManager;
 const postRoom = async (room: Room) => {
-  const response = await fetch('/api/rooms', {
+  const response = await fetch('https://localhost:7058/api/rooms', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(room),
@@ -143,7 +143,7 @@ const postRoom = async (room: Room) => {
 };
 
 const putRoom = async (id: number, room: Room) => {
-    const response = await fetch(`/api/rooms/${id}`, {
+    const response = await fetch(`https://localhost:7058/api/rooms/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(room),
@@ -156,7 +156,7 @@ const putRoom = async (id: number, room: Room) => {
   
   // Improved PATCH function: reusable for updates
   const patchRoom = async (id: number, patchData: Partial<Room>) => {
-    const response = await fetch(`/api/rooms/${id}`, {
+    const response = await fetch(`https://localhost:7058/api/rooms/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json-patch+json' },
       body: JSON.stringify(patchData),
@@ -169,7 +169,7 @@ const putRoom = async (id: number, room: Room) => {
   
   // Utility function to fetch all rooms
   const getAllRooms = async (): Promise<Room[]> => {
-    const response = await fetch('/api/rooms');
+    const response = await fetch('https://localhost:7058/api/rooms');
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
     }
@@ -178,7 +178,7 @@ const putRoom = async (id: number, room: Room) => {
 
   // Function to delete a room
   const deleteRoom = async (id: number) => {
-    const response = await fetch(`/api/rooms/${id}`, {
+    const response = await fetch(`https://localhost:7058/api/rooms/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {

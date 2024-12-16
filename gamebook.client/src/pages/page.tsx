@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
-import RoomsList from "../queries/GetRooms";
+import RoomDetail from "../queries/GetRoom";
+
 
 const Page = () => {
   return (
-    <main>
-      <h2>This is a</h2>
-      <p>Page</p>
-      <Link to="/">home</Link>
-      <RoomsList />
-    </main>
+    <>
+      <RoomDetail />
+      <Link to="/Map">Mapa</Link>
+      <Link to="/">Ukončit Hru</Link>
+    </>
   );
 }
 
