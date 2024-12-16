@@ -10,8 +10,8 @@ using Gamebook.Server.models;
 
 namespace Gamebook.Server.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class RoomsController : ControllerBase
     {
         private readonly GamebookDbContext _context;

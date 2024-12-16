@@ -9,7 +9,14 @@ const RoomsList: React.FC = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await fetch('https://localhost:62986/api/rooms'); // Adjust endpoint if necessary
+        const response = await fetch('https://localhost:7058/api/rooms', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors',
+        }
+        ); // Adjust endpoint if necessary
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -17,8 +24,12 @@ const RoomsList: React.FC = () => {
         const data: Room[] = await response.json(); // Parse JSON response into Room[]
         setRooms(data); // Update state with fetched rooms
         setLoading(false);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
         setLoading(false);
       }
     };
