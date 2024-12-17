@@ -79,7 +79,7 @@ namespace Gamebook.Server.Controllers
                 Name = roomDto.Name,
                 Text = roomDto.Text
             };
-
+          
             _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
 

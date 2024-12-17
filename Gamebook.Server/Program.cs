@@ -31,15 +31,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors();
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.UseRouting();
 
+app.UseCors(); // Move UseCors here, after UseRouting
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+
 app.MapControllers();
+
+
 
 app.MapFallbackToFile("/index.html");
 
