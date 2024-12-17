@@ -1,5 +1,4 @@
-// Define the type for Image as a base64 string (you can change the type depending on how the byte array is handled)
-type RoomImage = string;  // Base64 encoded image string
+
 
 // Define the types for connected entities
 export type Connection ={
@@ -25,7 +24,7 @@ export type GameBookAction = {
 
 export type Room = {
   roomId: number;
-  img: RoomImage; // Image in base64 string
+  img: string; // Image in base64 string
   name: string; // Name of the room
   text: string; // Description of the room
   

@@ -12,6 +12,7 @@ namespace Gamebook.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class RoomsController : ControllerBase
     {
         private readonly GamebookDbContext _context;
@@ -21,16 +22,32 @@ namespace Gamebook.Server.Controllers
             _context = context;
         }
 
+        // Helper method: Convert byte array to base64 string
+        private string ConvertByteArrayToBase64(byte[] byteArray)
+        {
+            return Convert.ToBase64String(byteArray);
+        }
+
+        // GET: api/Rooms
         // GET: api/Rooms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
+        public async Task<ActionResult<IEnumerable<RoomDTO>>> GetRooms()
         {
-            return await _context.Rooms.ToListAsync();
+            var rooms = await _context.Rooms.ToListAsync();
+
+            var roomDTOs = rooms.Select(room => new RoomDTO
+            {
+                Name = room.Name,
+                Text = room.Text,
+                ImgBase64 = Convert.ToBase64String(room.Img)
+            });
+
+            return Ok(roomDTOs);
         }
 
         // GET: api/Rooms/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Room>> GetRoom(int id)
+        public async Task<ActionResult<RoomDTO>> GetRoom(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
 
@@ -39,54 +56,44 @@ namespace Gamebook.Server.Controllers
                 return NotFound();
             }
 
-            return room;
+            return new RoomDTO
+            {
+                Name = room.Name,
+                Text = room.Text,
+                ImgBase64 = Convert.ToBase64String(room.Img)
+            };
         }
 
-        // PUT: api/Rooms/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom(int id, Room room)
-        {
-            if (id != room.RoomId)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(room).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RoomExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Rooms
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Room>> PostRoom(Room room)
+        public async Task<ActionResult> PostRoom([FromBody] RoomDTO roomDto)
         {
+            if (string.IsNullOrWhiteSpace(roomDto.ImgBase64))
+            {
+                return BadRequest("Image data is required.");
+            }
+
+            var room = new Room
+            {
+                Img = Convert.FromBase64String(roomDto.ImgBase64), // Convert Base64 to byte array
+                Name = roomDto.Name,
+                Text = roomDto.Text
+            };
+
             _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRoom", new { id = room.RoomId }, room);
+            return CreatedAtAction(nameof(GetRoom), new { id = room.RoomId }, new
+            {
+                room.RoomId,
+                room.Name,
+                room.Text,
+                Img = roomDto.ImgBase64 // Send back Base64 string to match the response format
+            });
         }
 
-        // DELETE: api/Rooms/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRoom(int id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRoom(int id, [FromBody] RoomDTO roomDto)
         {
             var room = await _context.Rooms.FindAsync(id);
             if (room == null)
@@ -94,15 +101,25 @@ namespace Gamebook.Server.Controllers
                 return NotFound();
             }
 
-            _context.Rooms.Remove(room);
+            if (!string.IsNullOrWhiteSpace(roomDto.ImgBase64))
+            {
+                room.Img = Convert.FromBase64String(roomDto.ImgBase64); // Update image
+            }
+
+            room.Name = roomDto.Name;
+            room.Text = roomDto.Text;
+
+            _context.Entry(room).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
-
-        private bool RoomExists(int id)
+        public class RoomDTO
         {
-            return _context.Rooms.Any(e => e.RoomId == id);
+            public string Name { get; set; }
+            public string Text { get; set; }
+            public string ImgBase64 { get; set; } // Base64-encoded image string
         }
+
     }
 }
