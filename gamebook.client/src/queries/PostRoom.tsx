@@ -10,21 +10,17 @@ export type RoomDTO = {
 
 
 const PostRoomEffect = (RoomDTO: RoomDTO) => {
-  const roomData = {
-    name: "Enchanted Library",
-    text: "A magical room filled with ancient books and secrets.",
-    imgBase64: "iVBORw0KGgoAAAANSUhEUgAAAAUA..." // Replace with valid Base64 image data
-  };
+  
   const [triggerPost, setTriggerPost] = useState(false); // State to control the useEffect trigger
   useEffect(() => {
     const postRoom = async () => {
       try {
-        const response = await fetch("https://localhost:7068/api/Rooms", {
+        const response = await fetch("https://localhost:7058/api/Rooms", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(roomData), // Send the RoomDTO data
+          body: JSON.stringify(RoomDTO), // Send the RoomDTO data
         });
 
         if (!response.ok) {

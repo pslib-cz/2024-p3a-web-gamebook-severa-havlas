@@ -43,18 +43,11 @@ const CreateRoomForm: React.FC = () => {
       // Post the room
       const roomData = {
         imgBase64: base64String,
-        name,
+        name: name,
         text: description,
-        items: [],
-        npcs: [],
-        itemPositions: [],
-        connectionsFrom: [],
-        connectionsTo: [],
-        requiredItems: [],
-        requiredNPCs: [],
-        requiredActions: [],
-      };
 
+      };
+      
       await postRoom(roomData);
       alert('Room created successfully!');
 

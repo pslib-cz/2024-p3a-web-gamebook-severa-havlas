@@ -2,3 +2,4 @@ C:\Users\Tonda\Desktop\School\3.rocnik\WEB\Gamebook\gamebook.client\obj\Debug\ga
 C:\Users\havla\Source\Repos\2024-p3a-web-gamebook-severa-havlas\gamebook.client\obj\Debug\gamebook.client.esproj.CoreCompileInputs.cache
 C:\Users\jakub.havlas.022\Source\Repos\2024-p3a-web-gamebook-severa-havlas\gamebook.client\obj\Debug\gamebook.client.esproj.CoreCompileInputs.cache
 C:\Users\Tonda\Source\Repos\2024-p3a-web-gamebook-severa-havlas\gamebook.client\obj\Debug\gamebook.client.esproj.CoreCompileInputs.cache
+C:\Users\Kuba\source\repos\2024-p3a-web-gamebook-severa-havlas\gamebook.client\obj\Debug\gamebook.client.esproj.CoreCompileInputs.cache
