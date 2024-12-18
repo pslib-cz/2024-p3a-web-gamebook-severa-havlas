@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AtomForm from './AtomForm';
 import Button from './AtomButton';
 import postRoom from '../queries/PostRoom';
+import { Console } from 'console';
 
 const CreateRoomForm: React.FC = () => {
   const [name, setName] = useState<string>(''); // State for the room name
@@ -47,10 +48,10 @@ const CreateRoomForm: React.FC = () => {
         text: description,
 
       };
-      
+     
       await postRoom(roomData);
       alert('Room created successfully!');
-
+      console.log('Room data:', roomData);
       // Reset form
       setName('');
       setDescription('');

@@ -15,14 +15,16 @@ const RoomsList: React.FC = () => {
             'Content-Type': 'application/json',
           },
           mode: 'cors',
+
         }
-        ); // Adjust endpoint if necessary
+        ); 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data: Room[] = await response.json(); // Parse JSON response into Room[]
         setRooms(data); // Update state with fetched rooms
+        console.log('Rooms fetched:', data);
         setLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -33,7 +35,7 @@ const RoomsList: React.FC = () => {
         setLoading(false);
       }
     };
-
+    	
     fetchRooms();
   }, []);
 

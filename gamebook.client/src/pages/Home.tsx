@@ -4,8 +4,8 @@ const Home = () => {
   return (
     <main>
       <h2>Home of</h2>
-      <p>kozí hovna</p>
-      <Link to="/Admin">mastit si péro</Link>
+      <p>ksadasd</p>
+      <Link to="/Admin">pp</Link>
       <Link to="/Page/1">Page</Link>
     </main>
   );

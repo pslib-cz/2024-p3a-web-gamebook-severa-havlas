@@ -10,7 +10,7 @@ const RoomManager: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
-
+  let roomsStringified;
   // Fetch all rooms on component mount
   useEffect(() => {
     const fetchRooms = async () => {
@@ -92,7 +92,9 @@ const RoomManager: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {rooms.map((room) => (
+          {rooms.map((room: Room) => (
+            roomsStringified = JSON.stringify(rooms),
+            console.log(roomsStringified),
             <tr key={room.roomId}>
               <td>{room.roomId}</td>
               <td>

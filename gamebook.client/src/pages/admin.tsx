@@ -3,14 +3,11 @@ import GetRoom from "../queries/GetRooms";
 
 import { useState } from "react";
 import RoomManager from "../components/RoomManager";
-import MolekulePostRoomForm from "../components/MolekulePostRoomForm";
-import PostRoomEffect, { RoomDTO } from "../queries/PostRoom";
+import GetRooms from "../queries/GetRooms";
+import PostConnection from "../components/molekulePostConnection";
+
 const Admin = () => {
-  const roomData:RoomDTO = {
-    name: "Enchanted Library",
-    text: "A magical room filled with ancient books and secrets.",
-    imgBase64: "iVBORw0KGgoAAAANSUhEUgAAAAUA..." // Replace with valid Base64 image data
-  };
+ 
     const [mrdka, setMrdka] = useState<boolean>(false);
 
     const handleClick = () => {
@@ -21,12 +18,13 @@ const Admin = () => {
     return (
         <>
             <p>admin tu</p>
-            <Link to="/">domastil sem</Link>
+            <Link to="/">ahoj</Link>
            
            
       
         <RoomManager />
-      <PostRoomEffect name={roomData.name} text={roomData.text} imgBase64={roomData.imgBase64} />
+        <GetRooms />
+        <PostConnection />
      
         </>
     );
