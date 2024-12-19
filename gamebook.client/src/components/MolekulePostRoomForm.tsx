@@ -1,114 +1,87 @@
-import React, { useState } from 'react';
-import AtomForm from './AtomForm';
-import Button from './AtomButton';
-import postRoom from '../queries/PostRoom';
-import { Console } from 'console';
+import React, { useState } from "react";
 
-const CreateRoomForm: React.FC = () => {
-  const [name, setName] = useState<string>(''); // State for the room name
-  const [description, setDescription] = useState<string>(''); // State for the room description
-  const [file, setFile] = useState<File | null>(null); // State for file input
-  const [imgBase64, setImgBase64] = useState<string>(''); // State for Base64 image string
-  const [isReadyToSubmit, setIsReadyToSubmit] = useState<boolean>(false);
+const CreateRoom: React.FC = () => {
+  const [name, setName] = useState<string>("");
+  const [text, setText] = useState<string>("");
+  const [image, setImage] = useState<File | null>(null);
 
-  // Handle file selection and convert to Base64
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      console.log('File selected:', selectedFile.name);
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setImage(event.target.files[0]);
     }
   };
 
-  // Convert file to Base64 string
-  const convertFileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-  // Handle submission
-  const handleSubmit = async () => {
-    if (!name || !description || !file) {
-      alert('Please fill out all fields and select an image.');
+    if (!image) {
+      alert("Please select an image file.");
       return;
     }
 
+    // Create form data
+    const formData = new FormData();
+    formData.append("Img", image); // Attach the image file
+    formData.append("Name", name); // Attach the room name
+    formData.append("Text", text); // Attach the room description
+
     try {
-      const base64String = await convertFileToBase64(file); // Convert file
-      setImgBase64(base64String);
+      // Send request to the backend
+      const response = await fetch("https://localhost:7058/api/Rooms", {
+        method: "POST",
+        body: formData, // Send the form data as the body
+      });
 
-      // Post the room
-      const roomData = {
-        imgBase64: base64String,
-        name: name,
-        text: description,
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
 
-      };
-     
-      await postRoom(roomData);
-      alert('Room created successfully!');
-      console.log('Room data:', roomData);
-      // Reset form
-      setName('');
-      setDescription('');
-      setFile(null);
-      setImgBase64('');
-      setIsReadyToSubmit(false);
+      const data = await response.json();
+      console.log("Room created successfully:", data);
+      alert("Room created successfully!");
     } catch (error) {
-      console.error('Error creating room:', error);
-      alert('Failed to create room.');
+      console.error("Error creating room:", error);
+      alert("Failed to create room.");
     }
   };
 
-  // Enable submit button when all fields are ready
-  React.useEffect(() => {
-    if (name && description && file) {
-      setIsReadyToSubmit(true);
-    } else {
-      setIsReadyToSubmit(false);
-    }
-  }, [name, description, file]);
-
   return (
-    <div style={{ maxWidth: '500px', margin: 'auto' }}>
-      <h2>Create a New Room</h2>
-
-      {/* Name Input */}
-      <AtomForm
-        label="Room Name"
-        placeholder="Enter room name"
-        onSubmit={(value) => setName(value)}
-        validationPattern={/^[a-zA-Z0-9\s]+$/}
-        errorMessage="Room name can only contain letters, numbers, and spaces."
-      />
-
-      {/* Description Input */}
-      <AtomForm
-        label="Room Description"
-        placeholder="Enter room description"
-        onSubmit={(value) => setDescription(value)}
-      />
-
-      {/* File Input */}
-      <div style={{ margin: '10px 0' }}>
-        <label style={{ display: 'block', marginBottom: '5px' }}>Room Image</label>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
-        {file && <p>Selected file: {file.name}</p>}
-      </div>
-
-      {/* Submit Button */}
-      <Button
-        label="Create Room"
-        onClick={handleSubmit}
-        color={isReadyToSubmit ? 'green' : 'gray'}
-        size="medium"
-      />
+    <div>
+      <h1>Create a New Room</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Room Name:</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="text">Description:</label>
+          <textarea
+            id="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="image">Upload Image:</label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            required
+          />
+        </div>
+        <button type="submit">Create Room</button>
+      </form>
     </div>
   );
 };
 
-export default CreateRoomForm;
+export default CreateRoom;

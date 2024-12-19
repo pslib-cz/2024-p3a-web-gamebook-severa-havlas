@@ -22,144 +22,109 @@ namespace Gamebook.Server.Controllers
             _context = context;
         }
 
-        // Helper method: Convert byte array to base64 string
-        private string ConvertByteArrayToBase64(byte[] byteArray)
-        {
-            return Convert.ToBase64String(byteArray);
-        }
-
-        
-        // GET: api/Rooms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoomDTOs>>> GetRooms()
-        {
-            var rooms = await _context.Rooms.ToListAsync();
-
-            var roomDTOs = rooms.Select(room => new RoomDTOs
-            {
-                roomId = room.RoomId,
-                Name = room.Name,
-                Text = room.Text,
-                ImgBase64 = Convert.ToBase64String(room.Img)
-            });
-
-            return Ok(roomDTOs);
-        }
-
-        // GET: api/Rooms/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<RoomDTOs>> GetRoom(int id)
+        [Route("{id}/image")]
+        public async Task<IActionResult> GetRoomImage(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
-
-            if (room == null)
+            if (room == null || room.Img == null)
             {
-                return NotFound();
+                return NotFound("Image not found.");
             }
 
-            return new RoomDTOsz
-            {
-                roomId = room.RoomId,
-                Name = room.Name,
-                Text = room.Text,
-                ImgBase64 = Convert.ToBase64String(room.Img)
-            };
+            return File(room.Img, "image/jpeg"); // Adjust the MIME type as needed
         }
 
-
-        [HttpPost]
-        public async Task<ActionResult> PostRoom([FromBody] RoomDTO roomDto)
+        [HttpGet]
+        
+        public async Task<IActionResult> GetAllRooms()
         {
-            if (string.IsNullOrWhiteSpace(roomDto.ImgBase64))
-            {
-                return BadRequest("Image data is required.");
-            }
-
-            try
-            {
-                // Detect and remove Base64 header if it exists
-                const string base64HeaderPattern = @"^data:image\/[a-zA-Z]+;base64,";
-                if (System.Text.RegularExpressions.Regex.IsMatch(roomDto.ImgBase64, base64HeaderPattern))
-                {
-                    roomDto.ImgBase64 = System.Text.RegularExpressions.Regex.Replace(
-                        roomDto.ImgBase64,
-                        base64HeaderPattern,
-                        string.Empty
-                    );
-                }
-
-                // Convert Base64 string to a byte array
-                var room = new Room
-                {
-                    Img = Convert.FromBase64String(roomDto.ImgBase64), // Convert Base64 to byte array
-                    Name = roomDto.Name,
-                    Text = roomDto.Text
-                };
-
-                // Add to database and save changes
-                _context.Rooms.Add(room);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(GetRoom), new { id = room.RoomId }, new
+            var rooms = await _context.Rooms
+                .Select(room => new
                 {
                     room.RoomId,
                     room.Name,
                     room.Text,
-                    Img = roomDto.ImgBase64 // Optionally return the sanitized base64
-                });
-            }
-            catch (FormatException)
-            {
-                return BadRequest("Invalid Base64 string provided.");
-            }
-            catch (Exception ex)
-            {
-                // Handle other exceptions
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+                    ImgUrl = $"/api/rooms/{room.RoomId}/image" // Provide URL to fetch the image
+                })
+                .ToListAsync();
+
+            return Ok(rooms);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom(int id, [FromBody] RoomDTO roomDto)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetRoomById(int id)
         {
-            var room = await _context.Rooms.FindAsync(id);
+            var room = await _context.Rooms
+                .Where(r => r.RoomId == id)
+                .Select(r => new
+                {
+                    r.RoomId,
+                    r.Name,
+                    r.Text,
+                    ImgUrl = $"/api/rooms/{r.RoomId}/image", // Provide URL to fetch the image
+                    Items = r.Items.Select(i => new { i.ItemId, i.Name }), // Optional: Include related data
+                    NPCs = r.NPCs.Select(n => new { n.NPCId, n.Name })
+                })
+                .FirstOrDefaultAsync();
+
             if (room == null)
             {
-                return NotFound();
+                return NotFound($"Room with ID {id} not found.");
             }
 
-            if (!string.IsNullOrWhiteSpace(roomDto.ImgBase64))
+            return Ok(room);
+        }
+
+
+
+
+
+
+        [HttpPost]
+        
+        public async Task<IActionResult> CreateRoom([FromForm] RoomCreateDto roomDto)
+        {
+            if (roomDto.Img == null || roomDto.Img.Length == 0)
+                return BadRequest("Image is required.");
+
+            // Convert image to byte array
+            using var memoryStream = new MemoryStream();
+            await roomDto.Img.CopyToAsync(memoryStream);
+            var imgBytes = memoryStream.ToArray();
+
+            // Create Room object
+            var room = new Room
             {
-                room.Img = Convert.FromBase64String(roomDto.ImgBase64); // Update image
-            }
+                Name = roomDto.Name,
+                Text = roomDto.Text,
+                Img = imgBytes,
+                Items = new List<Item>(), // Initialize collections if needed
+                NPCs = new List<NPC>(),
+                ItemPositions = new List<ItemPosition>(),
+                ConnectionsFrom = new List<Connection>(),
+                ConnectionsTo = new List<Connection>(),
+                RequiredItems = new List<Item>(),
+                RequiredNPCs = new List<NPC>(),
+                RequiredActions = new List<GameBookAction>()
+            };
 
-            room.Name = roomDto.Name;
-            room.Text = roomDto.Text;
-
-            _context.Entry(room).State = EntityState.Modified;
+            // Save room to database (assuming EF Core)
+            _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(room);
         }
-        public class RoomDTO
+
+
+    
+        public class RoomCreateDto
         {
-            public string Name { get; set; }
-            public string Text { get; set; }
-            public string ImgBase64 { get; set; } // Base64-encoded image string
+            public required string Name { get; set; } // Name of the room
+            public required string Text { get; set; } // Description of the room
+            public IFormFile Img { get; set; }        // Image file (uploaded by user)
         }
-        public class RoomDTOs
-        {
-            public int roomId { get; set; }
-            public string Name { get; set; }
-            public string Text { get; set; }
-            public string ImgBase64 { get; set; } // Base64-encoded image string
-        }
-        public class RoomDTOsz
-        {
-            public int roomId { get; set; }
-            public string Name { get; set; }
-            public string Text { get; set; }
-            public string ImgBase64 { get; set; } // Base64-encoded image string
-        }
+
     }
 }

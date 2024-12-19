@@ -1,19 +1,17 @@
 import { Link } from "react-router-dom";
-import GetRoom from "../queries/GetRooms";
 
-import { useState } from "react";
-import RoomManager from "../components/RoomManager";
-import GetRooms from "../queries/GetRooms";
+import CreateRoom from "../components/MolekulePostRoomForm";
+import RoomList from "../components/MolekuleGetRooms";
+import RoomDetails from "../components/MolekuleGetRoom";
+
+
 import PostConnection from "../components/molekulePostConnection";
 
 const Admin = () => {
  
-    const [mrdka, setMrdka] = useState<boolean>(false);
+   
 
-    const handleClick = () => {
-        
-        setMrdka(true);
-      };
+ 
 
     return (
         <>
@@ -21,9 +19,9 @@ const Admin = () => {
             <Link to="/">ahoj</Link>
            
            
-      
-        <RoomManager />
-        <GetRooms />
+        <CreateRoom />
+        <RoomList />
+        <RoomDetails />
         <PostConnection />
      
         </>
