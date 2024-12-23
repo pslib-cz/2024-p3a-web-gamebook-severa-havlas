@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 
 type AtomFormProps = {
   label?: string; // Optional label for the text input
@@ -6,7 +6,7 @@ type AtomFormProps = {
   onSubmit: (value: string) => void; // Callback to handle form submission
   validationPattern?: RegExp; // Optional regex pattern for validation
   errorMessage?: string; // Error message to display if validation fails
-}
+};
 
 const AtomForm: React.FC<AtomFormProps> = ({
   label = 'Enter text',
@@ -18,36 +18,32 @@ const AtomForm: React.FC<AtomFormProps> = ({
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
 
-    if (validationPattern && !validationPattern.test(inputValue)) {
+    if (validationPattern && !validationPattern.test(value)) {
       setError(errorMessage);
       return;
     }
 
-    setError(null); // Clear any previous errors
-    onSubmit(inputValue);
-    setInputValue(''); // Reset input field after submission
+    setError(null); // Clear any validation error
+    onSubmit(value); // Automatically submit valid input
   };
 
   return (
-    <form onSubmit={handleSubmit} className="atom-form">
+    <div className="atom-form">
       {label && <label className="atom-form-label">{label}</label>}
       <input
         type="text"
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={handleChange}
         placeholder={placeholder}
         className="atom-form-input"
       />
       {error && <span className="atom-form-error">{error}</span>}
-      <button type="submit" className="atom-form-button">
-        Submit
-      </button>
-    </form>
+    </div>
   );
 };
 
 export default AtomForm;
-

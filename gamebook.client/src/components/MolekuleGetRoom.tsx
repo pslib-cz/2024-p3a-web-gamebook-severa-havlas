@@ -24,6 +24,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
         // Provide default values for `items` and `npcs` if they are missing
         setRoom({
           ...data,
+          connectionsTo: data.connectionsTo || [],
           items: data.items || [],
           npcs: data.npcs || [],
         });
@@ -49,7 +50,14 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
       <h1>{room.name}</h1>
       <img src={"https://localhost:7058"+room.imgUrl} alt={room.name} width={400} />
       <p>{room.text}</p>
+      <h2>Connections</h2>
+      <ul>
+        {room.connectionsTo.map((connectionsTo) => (
+          <li key={connectionsTo.connectionId}>{connectionsTo.connectionId}</li>
+        ))}
+      </ul>
       <h2>Items</h2>
+    
       <ul>
         {room.items.map((item) => (
           <li key={item.itemId}>{item.name}</li>
