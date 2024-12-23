@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Room } from "../types/types";
 
-type Room = {
-  roomId: number;
-  name: string;
-  text: string;
-  imgUrl: string;
-  items: { itemId: number; name: string }[];
-  npcs: { npcId: number; name: string }[];
+type RoomDetailsInputProps = {
+  id: string;
 };
 
-const RoomDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
+ 
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRoom = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         const response = await fetch(`https://localhost:7058/api/Rooms/${id}`);
         if (!response.ok) throw new Error("Failed to fetch room");
 
         const data: Room = await response.json();
-        setRoom(data);
+        // Provide default values for `items` and `npcs` if they are missing
+        setRoom({
+          ...data,
+          items: data.items || [],
+          npcs: data.npcs || [],
+        });
       } catch (error) {
         console.error(error);
-        alert("Error fetching room.");
+        setError("Error fetching room.");
       } finally {
         setLoading(false);
       }
@@ -36,12 +40,14 @@ const RoomDetails: React.FC = () => {
 
   if (loading) return <div>Loading...</div>;
 
+  if (error) return <div>{error}</div>;
+
   if (!room) return <div>Room not found.</div>;
 
   return (
     <div>
       <h1>{room.name}</h1>
-      <img src={room.imgUrl} alt={room.name} width={400} />
+      <img src={"https://localhost:7058"+room.imgUrl} alt={room.name} width={400} />
       <p>{room.text}</p>
       <h2>Items</h2>
       <ul>

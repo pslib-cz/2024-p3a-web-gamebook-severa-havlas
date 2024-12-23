@@ -39,8 +39,9 @@ const RoomList: React.FC = () => {
         {rooms.map((room) => (
           <li key={room.roomId}>
             <h2>{room.name}</h2>
+            <p>{room.roomId}</p>
             <p>{room.text}</p>
-            <img src={room.imgUrl} alt={room.name} width={200} />
+            <img src={"https://localhost:7058"+room.imgUrl} alt={room.name} width={200} />
           </li>
         ))}
       </ul>

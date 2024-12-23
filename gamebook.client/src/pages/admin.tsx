@@ -5,7 +5,7 @@ import RoomList from "../components/MolekuleGetRooms";
 import RoomDetails from "../components/MolekuleGetRoom";
 
 
-import PostConnection from "../components/molekulePostConnection";
+import PostConnection from "../components/MolekulePostConnection";
 
 const Admin = () => {
  
@@ -21,7 +21,7 @@ const Admin = () => {
            
         <CreateRoom />
         <RoomList />
-        <RoomDetails />
+        <RoomDetails id="1"/>
         <PostConnection />
      
         </>

@@ -8,6 +8,7 @@ const Map = () => {
       <Link to="/">Ukončit Hru</Link>
       <Link to="/Page/1">Doky</Link>
       <Link to="/Page/2">Kostel</Link>
+      <Link to="/Page/6">Room 1</Link>
     </main>
   );
 }

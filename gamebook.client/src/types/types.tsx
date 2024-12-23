@@ -24,7 +24,7 @@ export type GameBookAction = {
 
 export type Room = {
   roomId: number;
-  img: string; // Image in base64 string
+  imgUrl: string; 
   name: string; // Name of the room
   text: string; // Description of the room
   

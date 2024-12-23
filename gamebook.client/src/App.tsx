@@ -10,26 +10,20 @@ import Map from "./pages/Map";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>, 
+    element: <Home />,
   },
   {
     path: "/Admin",
-    element: <Admin/>
+    element: <Admin />,
   },
   {
-    path: "/Page",
-    element: <Page/>,
-    children: [
-      {
-        path: "/Page/:id",
-        element: <Page/>
-      }
-    ]
-  }, 
+    path: "/Page/:id", // Dynamic route for rooms
+    element: <Page />,
+  },
   {
     path: "/Map",
-    element: <Map/>
-  }
+    element: <Map />,
+  },
 ]);
 
 
