@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Room } from "../types/types";
-
+import ConnectionsViewer from "./MolekuleConnectionViewer";
 type RoomDetailsInputProps = {
   id: string;
 };
@@ -25,6 +25,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
         setRoom({
           ...data,
           connectionsTo: data.connectionsTo || [],
+          connectionsFrom: data.connectionsFrom || [],
           items: data.items || [],
           npcs: data.npcs || [],
         });
@@ -46,16 +47,13 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
   if (!room) return <div>Room not found.</div>;
 
   return (
+    
     <div>
       <h1>{room.name}</h1>
       <img src={"https://localhost:7058"+room.imgUrl} alt={room.name} width={400} />
       <p>{room.text}</p>
-      <h2>Connections</h2>
-      <ul>
-        {room.connectionsTo.map((connectionsTo) => (
-          <li key={connectionsTo.connectionId}>{connectionsTo.connectionId}</li>
-        ))}
-      </ul>
+      <h2>ConnectionsTo</h2>
+   <ConnectionsViewer id={id} />
       <h2>Items</h2>
     
       <ul>
@@ -69,7 +67,9 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
           <li key={npc.npcId}>{npc.name}</li>
         ))}
       </ul>
+      {JSON.stringify(room)}
     </div>
+    
   );
 };
 

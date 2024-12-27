@@ -7,6 +7,7 @@ import RoomDetails from "../components/MolekuleGetRoom";
 
 import PostConnection from "../components/MolekulePostConnection";
 import AtomForm from "../components/AtomForm";
+import MolekuleGetConnections from "../components/MolekuleGetConectionList";
 
 const Admin = () => {
  const [Id, setId] = useState<string>('');
@@ -25,7 +26,7 @@ const Admin = () => {
         <AtomForm onSubmit={(value) => setId(value)} />
         <RoomDetails id={Id}/>
         <PostConnection />
-     
+        <MolekuleGetConnections />
         </>
     );
 

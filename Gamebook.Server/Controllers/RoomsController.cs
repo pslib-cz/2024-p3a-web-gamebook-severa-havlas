@@ -56,6 +56,7 @@ namespace Gamebook.Server.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetRoomById(int id)
         {
+            
             var room = await _context.Rooms
                 .Where(r => r.RoomId == id)
                 .Select(r => new
@@ -65,7 +66,8 @@ namespace Gamebook.Server.Controllers
                     r.Text,
                     ImgUrl = $"/api/rooms/{r.RoomId}/image", // Provide URL to fetch the image
                     Items = r.Items.Select(i => new { i.ItemId, i.Name }), // Optional: Include related data
-                    NPCs = r.NPCs.Select(n => new { n.NPCId, n.Name })
+                    NPCs = r.NPCs.Select(n => new { n.NPCId, n.Name }),
+                   
                 })
                 .FirstOrDefaultAsync();
 

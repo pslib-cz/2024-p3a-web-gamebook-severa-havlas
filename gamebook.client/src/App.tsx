@@ -5,7 +5,8 @@ import Home from "./pages/Home";
 import Admin from "./pages/admin";
 import Page from "./pages/page";
 import Map from "./pages/Map";
-
+import { BrowserRouter as Router } from 'react-router-dom';
+import GameProvider from "./GameProvider";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,11 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <RouterProvider router={router} />
+    
+    <GameProvider>
+      <RouterProvider router={router} />
+    </GameProvider>
+    
   );
 }
 
