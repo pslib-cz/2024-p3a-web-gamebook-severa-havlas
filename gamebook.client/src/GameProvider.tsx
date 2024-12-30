@@ -14,7 +14,7 @@ export const GameContext = createContext<GameContextType>({
 
 // Create a Provider component to wrap your app
 export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [roomId, setRoomId] = useState<string | null>(null);
+  const [roomId, setRoomId] = useState<string | null>("1");
 
   return (
     <GameContext.Provider value={{ roomId, setRoomId }}>
@@ -25,7 +25,10 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 // Custom hook for easier context consumption
 export const useGameContext = () => {
+ 
+
     const context = useContext(GameContext);
+    console.log(context);
     if (!context) {
       throw new Error("useRoomContext must be used within a RoomProvider");
     }
