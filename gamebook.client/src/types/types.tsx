@@ -40,7 +40,11 @@ export type Room = {
 
 }
 
+export type ActionType = {
+  actionTypeId: number;
+  name: string;
 
+}
 export type requireds = {
   requiredItems: Item[]; // Items required for this room
   requiredNPCs: NPC[]; // NPCs required for this room

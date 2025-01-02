@@ -8,7 +8,9 @@ import RoomDetails from "../components/MolekuleGetRoom";
 import PostConnection from "../components/MolekulePostConnection";
 import AtomForm from "../components/AtomForm";
 import MolekuleGetConnections from "../components/MolekuleGetConectionList";
-
+import ItemForm from "../components/MolekulePostItem";
+import ActionTypeForm from "../components/MolekulePostActionType";
+import {ActionTypeDropdown} from "../components/AtomActionTypeDropDown";
 const Admin = () => {
  const [Id, setId] = useState<string>('');
    
@@ -27,6 +29,9 @@ const Admin = () => {
         <RoomDetails id={Id}/>
         <PostConnection />
         <MolekuleGetConnections />
+        <ItemForm />
+        <ActionTypeForm/>
+        <ActionTypeDropdown />
         </>
     );
 
