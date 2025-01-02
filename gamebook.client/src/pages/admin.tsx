@@ -10,7 +10,8 @@ import AtomForm from "../components/AtomForm";
 import MolekuleGetConnections from "../components/MolekuleGetConectionList";
 import ItemForm from "../components/MolekulePostItem";
 import ActionTypeForm from "../components/MolekulePostActionType";
-import {ActionTypeDropdown} from "../components/AtomActionTypeDropDown";
+import {ActionTypeList} from "../components/MolekuleGetActionTypes";
+import { PlayerItems } from "../components/MolekulePlayerItems";
 const Admin = () => {
  const [Id, setId] = useState<string>('');
    
@@ -31,7 +32,8 @@ const Admin = () => {
         <MolekuleGetConnections />
         <ItemForm />
         <ActionTypeForm/>
-        <ActionTypeDropdown />
+        <ActionTypeList />
+        <PlayerItems/>
         </>
     );
 
