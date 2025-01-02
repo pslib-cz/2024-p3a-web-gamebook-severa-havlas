@@ -119,8 +119,31 @@ namespace Gamebook.Server.Controllers
             return Ok(room);
         }
 
+        // GET: api/Rooms/5
+        // GET: api/Rooms/5
+        [HttpGet("Required/{id}")]
+        public async Task<ActionResult<object>> GetRoom(int id)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.RequiredItems)
+                .Include(r => r.RequiredNPCs)
+                .Include(r => r.RequiredActions)
+                .FirstOrDefaultAsync(r => r.RoomId == id);
 
-    
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            // Return only the required properties
+            return new
+            {
+
+                RequiredItems = room.RequiredItems,
+                RequiredNPCs = room.RequiredNPCs,
+                RequiredActions = room.RequiredActions
+            };
+        }
         public class RoomCreateDto
         {
             public required string Name { get; set; } // Name of the room

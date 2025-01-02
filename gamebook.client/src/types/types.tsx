@@ -37,12 +37,15 @@ export type Room = {
   connectionsFrom: Connection[]; // Connections originating from this room
   connectionsTo: Connection[]; // Connections leading to this room
 
-  // Required Items, NPCs, and Actions
+
+}
+
+
+export type requireds = {
   requiredItems: Item[]; // Items required for this room
   requiredNPCs: NPC[]; // NPCs required for this room
   requiredActions: GameBookAction[]; // Actions required for this room
 }
-
 // Define types for ItemPosition (if applicable)
 export type ItemPosition ={
   positionId: number;

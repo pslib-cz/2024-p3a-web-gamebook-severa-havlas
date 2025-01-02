@@ -28,7 +28,7 @@ export const useGameContext = () => {
  
 
     const context = useContext(GameContext);
-    console.log(context);
+   
     if (!context) {
       throw new Error("useRoomContext must be used within a RoomProvider");
     }

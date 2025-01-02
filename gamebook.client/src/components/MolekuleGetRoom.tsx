@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Room } from "../types/types";
 import ConnectionsViewer from "./MolekuleConnectionViewer";
+import GetRequireds from "./MolekuleGetRequireds";
 type RoomDetailsInputProps = {
   id: string;
 };
@@ -54,6 +55,8 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
       <p>{room.text}</p>
       <h2>ConnectionsTo</h2>
    <ConnectionsViewer id={id} />
+   <h2>Requireds</h2>
+   <GetRequireds roomId={id} />
       <h2>Items</h2>
     
       <ul>
