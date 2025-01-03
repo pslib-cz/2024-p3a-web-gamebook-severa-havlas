@@ -15,6 +15,8 @@ const GetRequireds: React.FC<GetRequiredsProps> = ({ roomId }) => {
         // Fetch room details from the API
         const fetchRoomData = async () => {
             try {
+                console.log("Room ID:", roomId);
+
                 const response = await fetch(`https://localhost:7058/api/Rooms/Required/${roomId}`);
 
                 if (!response.ok) {

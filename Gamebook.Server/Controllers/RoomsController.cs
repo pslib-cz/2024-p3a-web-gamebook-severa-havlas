@@ -144,6 +144,79 @@ namespace Gamebook.Server.Controllers
                 RequiredActions = room.RequiredActions
             };
         }
+        // PATCH: api/Rooms/{id}/UpdateRequirements
+        [HttpPatch("{id}/UpdateRequirements")]
+        public async Task<IActionResult> UpdateRoomRequirements(
+            int id,
+            [FromBody] RoomRequirementsUpdateDto updateDto)
+        {
+            // Validate input
+            if (updateDto == null)
+            {
+                return BadRequest("Invalid request payload.");
+            }
+
+            // Find the room
+            var room = await _context.Rooms
+                .Include(r => r.RequiredItems)
+                .Include(r => r.RequiredNPCs)
+                .Include(r => r.RequiredActions)
+                .FirstOrDefaultAsync(r => r.RoomId == id);
+
+            if (room == null)
+            {
+                return NotFound($"Room with ID {id} not found.");
+            }
+
+            try
+            {
+                // Update RequiredItems
+                if (updateDto.RequiredItems != null)
+                {
+                    var items = await _context.Items
+                        .Where(item => updateDto.RequiredItems.Contains(item.ItemId))
+                        .ToListAsync();
+
+                    room.RequiredItems = items;
+                }
+
+                // Update RequiredNPCs
+                if (updateDto.RequiredNPCs != null)
+                {
+                    var npcs = await _context.NPCs
+                        .Where(npc => updateDto.RequiredNPCs.Contains(npc.NPCId))
+                        .ToListAsync();
+
+                    room.RequiredNPCs = npcs;
+                }
+
+                // Update RequiredActions
+                if (updateDto.RequiredActions != null)
+                {
+                    var actions = await _context.Actions
+                        .Where(action => updateDto.RequiredActions.Contains(action.ActionId))
+                        .ToListAsync();
+
+                    room.RequiredActions = actions;
+                }
+
+                // Save changes
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                // Handle potential errors
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        public class RoomRequirementsUpdateDto
+        {
+            public List<int>? RequiredItems { get; set; }
+            public List<int>? RequiredNPCs { get; set; }
+            public List<int>? RequiredActions { get; set; }
+        }
+
         public class RoomCreateDto
         {
             public required string Name { get; set; } // Name of the room

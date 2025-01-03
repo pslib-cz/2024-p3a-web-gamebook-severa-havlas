@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Room } from "../types/types";
 import ConnectionsViewer from "./MolekuleConnectionViewer";
 import GetRequireds from "./MolekuleGetRequireds";
+import ConnectionViewer2 from "./MolekuleConnectionsController";
 type RoomDetailsInputProps = {
   id: string;
 };
@@ -58,12 +59,15 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
    <h2>Requireds</h2>
    <GetRequireds roomId={id} />
       <h2>Items</h2>
-    
+      
+      
       <ul>
         {room.items.map((item) => (
           <li key={item.itemId}>{item.name}</li>
         ))}
       </ul>
+      <h2>Ťaoání</h2>
+      <ConnectionViewer2 roomId={id} />
       <h2>NPCs</h2>
       <ul>
         {room.npcs.map((npc) => (
