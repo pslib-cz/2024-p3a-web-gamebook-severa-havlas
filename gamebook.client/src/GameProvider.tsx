@@ -1,14 +1,14 @@
-import { createContext, useState, useContext, useEffect  } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 // Define the shape of your context
 type GameContextType = {
   roomId: string | null;
   setRoomId: (id: string | null) => void;
   player: {
-    items: Record<string, string>; // Items in key-value format
+    items: Record<string, number>; // Items with numeric values
   };
-  setPlayerItems: (items: Record<string, string>) => void;
-}
+  setPlayerItems: (update: (prevItems: Record<string, number>) => Record<string, number>) => void;
+};
 
 // Create the context with a default value
 export const GameContext = createContext<GameContextType>({
@@ -21,10 +21,9 @@ export const GameContext = createContext<GameContextType>({
 });
 
 // Create a Provider component to wrap your app
-// Create a Provider component to wrap your app
 export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [roomId, setRoomId] = useState<string | null>("1");
-  const [player, setPlayer] = useState<{ items: Record<string, string> }>({
+  const [player, setPlayer] = useState<{ items: Record<string, number> }>({
     items: {}, // Default empty items
   });
 
@@ -32,17 +31,14 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        // Replace with your actual API endpoint
         const response = await fetch("https://localhost:7058/api/items");
         const data = await response.json();
 
-        // Convert the data into key-value pairs for the items object
-        const items = data.reduce((acc: Record<string, string>, item: { name: string }) => {
-          acc[item.name] = "0"; // Default quantity of 0
+        const items = data.reduce((acc: Record<string, number>, item: { name: string }) => {
+          acc[item.name] = 0; // Default quantity of 0
           return acc;
         }, {});
 
-        // Update the player's items
         setPlayer((prev) => ({
           ...prev,
           items,
@@ -56,10 +52,10 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []); // Runs once on mount
 
   // Function to update player's items
-  const setPlayerItems = (items: Record<string, string>) => {
+  const setPlayerItems = (update: (prevItems: Record<string, number>) => Record<string, number>) => {
     setPlayer((prev) => ({
       ...prev,
-      items,
+      items: update(prev.items),
     }));
   };
 
@@ -69,8 +65,6 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </GameContext.Provider>
   );
 };
-
-
 
 // Custom hook for easier context consumption
 export const useGameContext = () => {

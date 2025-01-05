@@ -4,12 +4,7 @@ import { useGameContext } from "../GameProvider";
 export const PlayerItems = () => {
   const { player, setPlayerItems } = useGameContext();
 
-  const addItem = () => {
-    setPlayerItems({
-      ...player.items,
-      newItem: "1", // Example: Add new item with quantity 1
-    });
-  };
+ 
 
   return (
     <div>
@@ -21,7 +16,7 @@ export const PlayerItems = () => {
           </li>
         ))}
       </ul>
-      <button onClick={addItem}>Add Item</button>
+
     </div>
   );
 };

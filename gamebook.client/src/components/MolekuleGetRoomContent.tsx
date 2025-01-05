@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useGameContext } from "../GameProvider";
 
 type NPC = {
   npcId: number;
@@ -31,6 +32,8 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
 
+  const { player, setPlayerItems } = useGameContext(); // Access game context
+
   useEffect(() => {
     const fetchRoomContent = async () => {
       if (!roomId) {
@@ -60,6 +63,24 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
 
     fetchRoomContent();
   }, [roomId]); // Re-run fetch when roomId changes
+
+  // Function to handle picking up an item
+  const handlePickUpItem = (itemId: number) => {
+    const pickedItem = roomContent?.items.find((item) => item.itemId === itemId);
+  
+    if (!pickedItem) {
+      console.error(`Item with ID ${itemId} not found.`);
+      return;
+    }
+  
+    // Add or increment item in player's inventory
+    setPlayerItems((prevItems: Record<string, number>) => ({
+      ...prevItems,
+      [pickedItem.name]: (prevItems[pickedItem.name] || 0) + 1,
+    }));
+  
+    console.log(`Picked up: ${pickedItem.name}`);
+  };
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
@@ -97,7 +118,17 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
               <ul>
                 {roomContent.items.map((item) => (
                   <li key={item.itemId}>
-                    {item.itemId} - {item.name}
+                    {item.itemId} - {item.name}{" "}
+                    <button
+                      onClick={() => handlePickUpItem(item.itemId)}
+                      style={{
+                        marginLeft: "10px",
+                        padding: "5px 10px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Pick up
+                    </button>
                   </li>
                 ))}
               </ul>
