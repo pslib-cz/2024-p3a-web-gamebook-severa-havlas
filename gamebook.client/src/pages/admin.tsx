@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useState } from 'react';
 import CreateRoom from "../components/MolekulePostRoomForm";
 import RoomList from "../components/MolekuleGetRooms";
-import RoomDetails from "../components/MolekuleGetRoom";
+import RoomDetails from "../components/OrgasmGetRoom";
 
 
 import PostConnection from "../components/MolekulePostConnection";

@@ -1,7 +1,9 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
-import RoomDetail from "../components/MolekuleGetRoom";
+import RoomDetail from "../components/OrgasmGetRoom";
 import { useContext, useEffect } from "react";
 import { GameContext } from "../GameProvider";
+import TextEditor from "../components/MolekuleNoteBlock";
+import ObraDinnTable from "../components/MolekuleTable";
 
 const Page = () => {
   const { id: paramId } = useParams<{ id: string }>(); // Extract the `id` from the URL
@@ -25,6 +27,8 @@ const Page = () => {
       ) : (
         <div>Room not found</div>
       )}
+  <TextEditor />
+  <ObraDinnTable />
       <Link to="/Map">Mapa</Link>
       <Link to="/">Ukončit Hru</Link>
     </>
