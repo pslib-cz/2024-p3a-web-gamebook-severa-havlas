@@ -1,0 +1,82 @@
+1. Tile Sliding Puzzle
+Description: Create a grid of numbered tiles with one empty slot. The player must slide the tiles to arrange them in numerical order.
+Implementation:
+Represent the grid as a 2D array in state.
+Allow players to swap the empty slot with adjacent tiles.
+Check if the tiles are in the correct order.
+Challenge: Implementing the logic to determine if tiles can move and detecting when the puzzle is solved.
+2. Word Scramble
+Description: Display a scrambled word, and the player must arrange the letters in the correct order.
+Implementation:
+Use state to store the scrambled and user-selected letter order.
+Provide drag-and-drop or button-based controls for rearranging letters.
+Validate the solution when the user submits their answer.
+Challenge: Scrambling the word while keeping it solvable and offering intuitive input controls.
+3. Pattern Matching (Simon Says)
+Description: Display a sequence of lights or colors. The player must repeat the sequence by clicking buttons.
+Implementation:
+Store the sequence in an array and progressively add to it.
+Use state to track the player's inputs and compare them to the sequence.
+Play feedback (e.g., sounds or flashes) for correct and incorrect inputs.
+Challenge: Adding time-based gameplay or increasing difficulty by speeding up the sequence.
+4. Lock Combination Puzzle
+Description: Present a combination lock with multiple dials the player can rotate to the correct positions.
+Implementation:
+Use an array to represent the dials and their current values.
+Allow the player to increment or decrement values.
+Check if the current values match the correct combination to unlock.
+Challenge: Hiding the combination in the game world (e.g., through hints or riddles).
+5. Memory Match
+Description: Show a grid of face-down cards. The player flips two cards at a time to find matching pairs.
+Implementation:
+Store the cards as an array of objects with value and flipped states.
+Allow the player to flip cards and check for matches.
+Track the player's progress until all pairs are matched.
+Challenge: Randomizing card placement and creating visually appealing card designs.
+6. Circuit Puzzle
+Description: Create a puzzle where the player connects points to complete a circuit or path.
+Implementation:
+Represent the circuit as a series of draggable points or togglable connections.
+Validate the circuit when all connections are correctly established.
+Challenge: Designing intuitive feedback for invalid connections.
+7. Matching Game
+Description: Match items from two lists (e.g., names to roles, clues to answers).
+Implementation:
+Render two columns with draggable or selectable items.
+Check if the player's matches are correct.
+Challenge: Ensuring the interface is intuitive for dragging or selecting.
+8. Maze Puzzle
+Description: Present a maze where the player navigates a character to an exit.
+Implementation:
+Represent the maze as a grid of cells.
+Use arrow keys or buttons for movement.
+Detect collisions with walls and reaching the exit.
+Challenge: Designing increasingly complex mazes.
+9. Sequence Puzzle
+Description: Show a sequence of numbers, colors, or shapes with one missing. The player must identify the missing piece.
+Implementation:
+Use an array to represent the sequence and randomly remove an element.
+Provide a set of options for the missing piece.
+Validate the player's choice.
+Challenge: Creating sequences that are challenging but solvable.
+10. Jigsaw Puzzle
+Description: Break an image into draggable pieces that the player must reassemble.
+Implementation:
+Divide an image into a grid of draggable pieces.
+Snap pieces into place when they are close enough to their correct position.
+Check if all pieces are correctly placed.
+Challenge: Managing piece placement and snapping with precision.
+11. Lights Out Puzzle
+Description: Create a grid of lights that toggle on and off when clicked. The goal is to turn all lights off.
+Implementation:
+Represent the grid as a 2D array of boolean states.
+Clicking a light toggles it and its adjacent lights.
+Check if all lights are off to solve the puzzle.
+Challenge: Designing challenging starting states that are solvable.
+12. Trivia or Riddle Puzzle
+Description: Ask the player a series of questions or riddles they must answer correctly.
+Implementation:
+Store questions and answers in an array.
+Validate the player's input for each question.
+Track progress through the questions.
+Challenge: Writing riddles or trivia questions that fit the game's theme.
