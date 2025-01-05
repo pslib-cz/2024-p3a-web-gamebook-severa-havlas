@@ -73,12 +73,12 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
         </p>
       )}
 
-      {roomContent && (
+      {roomContent ? (
         <div style={{ marginTop: "20px" }}>
           <h3>Room Content:</h3>
           <div>
             <strong>NPCs:</strong>
-            {roomContent.npcs.length > 0 ? (
+            {roomContent.npcs?.length > 0 ? (
               <ul>
                 {roomContent.npcs.map((npc) => (
                   <li key={npc.npcId}>
@@ -93,7 +93,7 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
 
           <div>
             <strong>Items:</strong>
-            {roomContent.items.length > 0 ? (
+            {roomContent.items?.length > 0 ? (
               <ul>
                 {roomContent.items.map((item) => (
                   <li key={item.itemId}>
@@ -108,7 +108,7 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
 
           <div>
             <strong>Item Positions:</strong>
-            {roomContent.itemPositions.length > 0 ? (
+            {roomContent.itemPositions?.length > 0 ? (
               <ul>
                 {roomContent.itemPositions.map((pos, index) => (
                   <li key={index}>
@@ -121,6 +121,8 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
             )}
           </div>
         </div>
+      ) : (
+        !loading && !error && <p>No room content available. Please try again.</p>
       )}
     </div>
   );
