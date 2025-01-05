@@ -3,6 +3,7 @@ import { Room } from "../types/types";
 import ConnectionsViewer from "./MolekuleConnectionViewer";
 import GetRequireds from "./MolekuleGetRequireds";
 import ConnectionViewer2 from "./MolekuleConnectionsController";
+import RoomContentViewer from "./MolekuleGetRoomContent";
 type RoomDetailsInputProps = {
   id: string;
 };
@@ -68,12 +69,9 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
       </ul>
       <h2>Ťaoání</h2>
       <ConnectionViewer2 roomId={id} />
-      <h2>NPCs</h2>
-      <ul>
-        {room.npcs.map((npc) => (
-          <li key={npc.npcId}>{npc.name}</li>
-        ))}
-      </ul>
+      <h2>Content</h2>
+        <RoomContentViewer roomId={id} />
+        
       {JSON.stringify(room)}
     </div>
     

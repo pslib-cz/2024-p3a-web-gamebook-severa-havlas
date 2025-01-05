@@ -52,7 +52,7 @@ export type requireds = {
 }
 // Define types for ItemPosition (if applicable)
 export type ItemPosition ={
-  positionId: number;
+  itemId: number;
   x: number; // X coordinate
   y: number; // Y coordinate
 }

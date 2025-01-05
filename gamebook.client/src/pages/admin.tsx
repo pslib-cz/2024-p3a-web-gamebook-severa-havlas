@@ -14,6 +14,7 @@ import {ActionTypeList} from "../components/MolekuleGetActionTypes";
 import { PlayerItems } from "../components/MolekulePlayerItems";
 import RoomRequirementsForm from "../components/MolekulePatchRequireds";
 import ItemsList from "../components/MolekuleGetItems";
+import UpdateRoomContentForm from "../components/MolekulePatchRoomContent";
 const Admin = () => {
  const [Id, setId] = useState<string>('1');
    
@@ -38,6 +39,7 @@ const Admin = () => {
         <PlayerItems/>
         <RoomRequirementsForm />
         <ItemsList />
+        <UpdateRoomContentForm />
         </>
     );
 
