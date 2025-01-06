@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import CreateRoom from "../components/MolekulePostRoomForm";
 import RoomList from "../components/MolekuleGetRooms";
 import RoomDetails from "../components/OrgasmGetRoom";
+import CreateNPCForm from "../components/MolekulePostNPC";
 
 
 import PostConnection from "../components/MolekulePostConnection";
@@ -15,6 +16,7 @@ import { PlayerItems } from "../components/MolekulePlayerItems";
 import RoomRequirementsForm from "../components/MolekulePatchRequireds";
 import ItemsList from "../components/MolekuleGetItems";
 import UpdateRoomContentForm from "../components/MolekulePatchRoomContent";
+import GraphComponent from "../components/MolekuleMapViewer";
 const Admin = () => {
  const [Id, setId] = useState<string>('1');
    
@@ -40,6 +42,8 @@ const Admin = () => {
         <RoomRequirementsForm />
         <ItemsList />
         <UpdateRoomContentForm />
+        <GraphComponent />
+        <CreateNPCForm />
         </>
     );
 

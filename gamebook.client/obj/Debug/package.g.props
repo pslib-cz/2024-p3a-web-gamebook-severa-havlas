@@ -18,6 +18,7 @@
     <PackageJsonDevdependenciesEslintJs Condition="$(PackageJsonDevdependenciesEslintJs) == ''">^9.13.0</PackageJsonDevdependenciesEslintJs>
     <PackageJsonDevdependenciesTypesNode Condition="$(PackageJsonDevdependenciesTypesNode) == ''">^20.12.1</PackageJsonDevdependenciesTypesNode>
     <PackageJsonDevdependenciesTypesReact Condition="$(PackageJsonDevdependenciesTypesReact) == ''">^18.3.12</PackageJsonDevdependenciesTypesReact>
+    <PackageJsonDevdependenciesTypesReactD3Graph Condition="$(PackageJsonDevdependenciesTypesReactD3Graph) == ''">^2.6.7</PackageJsonDevdependenciesTypesReactD3Graph>
     <PackageJsonDevdependenciesTypesReactDom Condition="$(PackageJsonDevdependenciesTypesReactDom) == ''">^18.3.1</PackageJsonDevdependenciesTypesReactDom>
     <PackageJsonDevdependenciesVitejsPluginReact Condition="$(PackageJsonDevdependenciesVitejsPluginReact) == ''">^4.3.3</PackageJsonDevdependenciesVitejsPluginReact>
     <PackageJsonDevdependenciesEslint Condition="$(PackageJsonDevdependenciesEslint) == ''">^9.13.0</PackageJsonDevdependenciesEslint>

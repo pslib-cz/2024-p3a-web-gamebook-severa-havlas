@@ -76,13 +76,46 @@ namespace Gamebook.Server.Controllers
         // POST: api/NPCs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<NPC>> PostNPC(NPC nPC)
+        public async Task<ActionResult<NPC>> PostNPC(NPC npc)
         {
-            _context.NPCs.Add(nPC);
-            await _context.SaveChangesAsync();
+            try
+            {
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(npc.Name))
+                {
+                    return BadRequest("Name is required.");
+                }
 
-            return CreatedAtAction("GetNPC", new { id = nPC.NPCId }, nPC);
+                if (string.IsNullOrWhiteSpace(npc.Description))
+                {
+                    return BadRequest("Description is required.");
+                }
+
+                if (npc.Action == null || npc.Action.ActionTypeId <= 0 || string.IsNullOrWhiteSpace(npc.Action.Name))
+                {
+                    return BadRequest("ActionTypeId and Action Name are required in the Action object.");
+                }
+
+                // Add NPC to the database
+                _context.NPCs.Add(npc);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetNPC", new { id = npc.NPCId }, npc);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log exception and return a meaningful error
+                Console.WriteLine(ex);
+                return StatusCode(500, "A database error occurred. Ensure all required fields are provided.");
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected errors
+                Console.WriteLine(ex);
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
+
 
         // DELETE: api/NPCs/5
         [HttpDelete("{id}")]
