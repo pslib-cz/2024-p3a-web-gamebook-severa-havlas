@@ -74,46 +74,49 @@ namespace Gamebook.Server.Controllers
         }
 
         // POST: api/NPCs
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<NPC>> PostNPC(NPC npc)
+        public async Task<IActionResult> CreateNPC([FromBody] NPCRequest request)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                // Validate required fields
-                if (string.IsNullOrWhiteSpace(npc.Name))
-                {
-                    return BadRequest("Name is required.");
-                }
-
-                if (string.IsNullOrWhiteSpace(npc.Description))
-                {
-                    return BadRequest("Description is required.");
-                }
-
-                if (npc.Action == null || npc.Action.ActionTypeId <= 0 || string.IsNullOrWhiteSpace(npc.Action.Name))
-                {
-                    return BadRequest("ActionTypeId and Action Name are required in the Action object.");
-                }
-
-                // Add NPC to the database
-                _context.NPCs.Add(npc);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetNPC", new { id = npc.NPCId }, npc);
+                return BadRequest(ModelState);
             }
-            catch (DbUpdateException ex)
+
+            // Fetch ActionType from the database
+            var actionType = await _context.Set<ActionType>().FindAsync(request.ActionTypeId);
+            if (actionType == null)
             {
-                // Log exception and return a meaningful error
-                Console.WriteLine(ex);
-                return StatusCode(500, "A database error occurred. Ensure all required fields are provided.");
+                return NotFound(new { Message = "Invalid ActionTypeId" });
             }
-            catch (Exception ex)
+
+            // Create new NPC instance
+            var npc = new NPC
             {
-                // Handle unexpected errors
-                Console.WriteLine(ex);
-                return StatusCode(500, "An unexpected error occurred.");
-            }
+                Name = request.Name,
+                Description = request.Description,
+                Action = actionType,
+                Target = request.Target
+            };
+
+            // Add to database
+            _context.Set<NPC>().Add(npc);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetNPC), new { id = npc.NPCId }, npc);
+        }
+        // Request DTO for NPC creation
+        public class NPCRequest
+        {
+            
+            public string Name { get; set; }
+
+           
+            public string Description { get; set; }
+
+            
+            public int ActionTypeId { get; set; } // Reference to ActionType
+
+            public int? Target { get; set; } // Optional
         }
 
 

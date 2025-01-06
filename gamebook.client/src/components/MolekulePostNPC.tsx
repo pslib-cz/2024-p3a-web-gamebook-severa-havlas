@@ -1,139 +1,121 @@
 import React, { useState } from "react";
 
-const CreateNPCForm: React.FC = () => {
-  const [formData, setFormData] = useState({
+interface FormData {
+  name: string;
+  description: string;
+  actionType: string;
+  target?: string;
+}
+
+const NPCForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     description: "",
-    actionTypeId: "",
-    actionName: "",
+    actionType: "",
     target: "",
   });
 
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // Ensure required fields are filled
-    if (!formData.name || !formData.description || !formData.actionTypeId || !formData.actionName) {
-      setStatusMessage("Please fill in all required fields.");
-      return;
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
 
     try {
-      const npcPayload = {
-        name: formData.name,
-        description: formData.description,
-        action: {
-          actionTypeId: parseInt(formData.actionTypeId, 10), // Ensure it's a number
-          name: formData.actionName,
-        },
-        target: formData.target ? parseInt(formData.target, 10) : null, // Optional target
-      };
-
       const response = await fetch("https://localhost:7058/api/NPCs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(npcPayload),
+        body: JSON.stringify({
+          name: formData.name,
+          description: formData.description,
+          actionType: parseInt(formData.actionType),
+          target: formData.target ? parseInt(formData.target) : null,
+        }),
       });
 
-      if (response.ok) {
-        const npc = await response.json();
-        setStatusMessage(`NPC "${npc.name}" created successfully!`);
-        setFormData({
-          name: "",
-          description: "",
-          actionTypeId: "",
-          actionName: "",
-          target: "",
-        });
-      } else {
-        const errorData = await response.json();
-        setStatusMessage(`Error: ${errorData.message || "Failed to create NPC."}`);
+      if (!response.ok) {
+        throw new Error("Failed to create NPC");
       }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setStatusMessage("An unexpected error occurred. Please try again.");
+
+      setSuccess("NPC created successfully!");
+      setFormData({ name: "", description: "", actionType: "", target: "" });
+    } catch (err) {
+      setError("Failed to create NPC. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="npc-form">
       <h2>Create NPC</h2>
-      {statusMessage && <p>{statusMessage}</p>}
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>
-            Name (Required):
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
         </div>
+
         <div>
-          <label>
-            Description (Required):
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
+          <label htmlFor="description">Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          ></textarea>
         </div>
+
         <div>
-          <label>
-            ActionTypeId (Required):
-            <input
-              type="number"
-              name="actionTypeId"
-              value={formData.actionTypeId}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
+          <label htmlFor="actionType">Action Type:</label>
+          <input
+            type="text"
+            id="actionType"
+            name="actionType"
+            value={formData.actionType}
+            onChange={handleChange}
+            required
+          />
         </div>
+
         <div>
-          <label>
-            Action Name (Required):
-            <input
-              type="text"
-              name="actionName"
-              value={formData.actionName}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
+          <label htmlFor="target">Target (Optional):</label>
+          <input
+            type="number"
+            id="target"
+            name="target"
+            value={formData.target}
+            onChange={handleChange}
+          />
         </div>
-        <div>
-          <label>
-            Target (Optional):
-            <input
-              type="number"
-              name="target"
-              value={formData.target}
-              onChange={handleInputChange}
-            />
-          </label>
-        </div>
-        <button type="submit">Create NPC</button>
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Submitting..." : "Create NPC"}
+        </button>
       </form>
     </div>
   );
 };
 
-export default CreateNPCForm;
+export default NPCForm;
