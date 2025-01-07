@@ -29,7 +29,7 @@ const NPCForm: React.FC = () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
-
+    
     try {
       const response = await fetch("https://localhost:7058/api/NPCs", {
         method: "POST",
@@ -39,7 +39,7 @@ const NPCForm: React.FC = () => {
         body: JSON.stringify({
           name: formData.name,
           description: formData.description,
-          actionType: parseInt(formData.actionType),
+          actionTypeId: parseInt(formData.actionType),
           target: formData.target ? parseInt(formData.target) : null,
         }),
       });
