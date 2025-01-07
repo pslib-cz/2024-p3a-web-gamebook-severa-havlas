@@ -4,6 +4,9 @@ import { useContext, useEffect } from "react";
 import { GameContext } from "../GameProvider";
 import TextEditor from "../components/MolekuleNoteBlock";
 import ObraDinnTable from "../components/MolekuleTable";
+import JigsawPuzzle from "../components/MolekuleJigsawPuzzle";
+import LightsOutPuzzle from "../components/MolekuleLightsOutPuzzle";
+import LockCombinationPuzzle from "../components/MolekuleLockPuzzle";
 
 const Page = () => {
   const { id: paramId } = useParams<{ id: string }>(); // Extract the `id` from the URL
@@ -29,6 +32,9 @@ const Page = () => {
       )}
   <TextEditor />
   <ObraDinnTable />
+  <JigsawPuzzle />
+  <LightsOutPuzzle />
+  <LockCombinationPuzzle numberOfDials={9} maxDialValue={9} />
       <Link to="/Map">Mapa</Link>
       <Link to="/">Ukončit Hru</Link>
     </>
