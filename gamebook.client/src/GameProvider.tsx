@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 
 // Define the shape of your context
 type GameContextType = {
@@ -21,11 +22,12 @@ export const GameContext = createContext<GameContextType>({
 });
 
 // Create a Provider component to wrap your app
-export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [roomId, setRoomId] = useState<string | null>("1");
+export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [roomId, setRoomId] = useState<string | null>(null);
   const [player, setPlayer] = useState<{ items: Record<string, number> }>({
     items: {}, // Default empty items
   });
+  const location = useLocation();
 
   // Fetch items from the database
   useEffect(() => {
@@ -51,6 +53,13 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchItems();
   }, []); // Runs once on mount
 
+  useEffect(() => {
+    // Extract roomId from the URL and update the context
+    const pathParts = location.pathname.split('/');
+    const newRoomId = pathParts[pathParts.length - 1];
+    setRoomId(newRoomId);
+  }, [location]); // Runs every time the location changes
+
   // Function to update player's items
   const setPlayerItems = (update: (prevItems: Record<string, number>) => Record<string, number>) => {
     setPlayer((prev) => ({
@@ -71,9 +80,9 @@ export const useGameContext = () => {
   const context = useContext(GameContext);
 
   if (!context) {
-    throw new Error("useGameContext must be used within a RoomProvider");
+    throw new Error("useGameContext must be used within a GameProvider");
   }
   return context;
 };
 
-export default RoomProvider;
+export default GameProvider;

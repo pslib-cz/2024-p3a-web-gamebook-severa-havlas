@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Graph } from "react-d3-graph";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGameContext } from '../GameProvider';
 
 interface Room {
   roomId: number;
@@ -26,11 +28,19 @@ interface GraphLink {
   target: string;
 }
 
-const GraphComponent: React.FC = () => {
+const MolekuleMapViewer: React.FC = () => {
   const [graphData, setGraphData] = useState<{ nodes: GraphNode[]; links: GraphLink[] }>({
     nodes: [],
     links: [],
   });
+
+  const { nodeId } = useParams();
+  const { roomId, setRoomId } = useGameContext();
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    setRoomId(nodeId);
+  }, [nodeId, setRoomId]);
 
   useEffect(() => {
     const fetchGraphData = async () => {
@@ -122,6 +132,10 @@ const GraphComponent: React.FC = () => {
     return nodes;
   };
 
+  const onClickNode = (nodeId: string) => {
+    navigate(`/Page/${nodeId}`);
+  };
+
   const graphConfig = {
     nodeHighlightBehavior: true,
     node: {
@@ -139,9 +153,9 @@ const GraphComponent: React.FC = () => {
   return (
     <div>
       <h2>Room Connections</h2>
-      <Graph id="graph-id" data={graphData} config={graphConfig} />
+      <Graph id="graph-id" data={graphData} config={graphConfig} onClickNode={onClickNode} />
     </div>
   );
 };
 
-export default GraphComponent;
+export default MolekuleMapViewer;

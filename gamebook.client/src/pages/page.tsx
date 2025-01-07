@@ -1,27 +1,22 @@
+import React, { useEffect } from 'react';
 import { Link, useParams, useNavigate } from "react-router-dom";
 import RoomDetail from "../components/OrgasmGetRoom";
-import { useContext, useEffect } from "react";
-import { GameContext } from "../GameProvider";
+import { useContext } from "react";
+import { useGameContext } from '../GameProvider';
 import TextEditor from "../components/MolekuleNoteBlock";
 import ObraDinnTable from "../components/MolekuleTable";
 import JigsawPuzzle from "../components/MolekuleJigsawPuzzle";
 import LightsOutPuzzle from "../components/MolekuleLightsOutPuzzle";
 import LockCombinationPuzzle from "../components/MolekuleLockPuzzle";
+import GraphComponent from "../components/MolekuleMapViewer";
 
 const Page = () => {
-  const { id: paramId } = useParams<{ id: string }>(); // Extract the `id` from the URL
-  const { roomId, setRoomId } = useContext(GameContext); // Access `roomId` and its setter from context
-  const navigate = useNavigate(); // Hook to programmatically navigate
+  const { id } = useParams();
+  const { roomId, setRoomId } = useGameContext();
 
-  // Update `roomId` in the context whenever `id` changes
   useEffect(() => {
-    changeId();
-  }, [roomId, setRoomId]);
-
-  const changeId = () => {
-     // Update the context
-    navigate(`/Page/${roomId}`); // Update the URL dynamically
-  };
+    setRoomId(id);
+  }, [id, setRoomId]);
 
   return (
     <>
@@ -34,6 +29,7 @@ const Page = () => {
   <ObraDinnTable />
   <JigsawPuzzle />
   <LightsOutPuzzle />
+  <GraphComponent />
   <LockCombinationPuzzle numberOfDials={9} maxDialValue={9} />
       <Link to="/Map">Mapa</Link>
       <Link to="/">Ukončit Hru</Link>

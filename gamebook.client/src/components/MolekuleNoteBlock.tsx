@@ -20,7 +20,7 @@ const TextEditor = () => {
 
   // Calculate the applied styles
   const getStyle = () => {
-    let style: React.CSSProperties = {};
+    const style: React.CSSProperties = {};
     if (bold) style.fontWeight = "bold";
     if (italic) style.fontStyle = "italic";
     if (underline) style.textDecoration = "underline";
@@ -33,7 +33,7 @@ const TextEditor = () => {
   return (
     <div className={`text-editor ${isCollapsed ? "collapsed" : ""}`}>
       <button className="toggle-button" onClick={toggleEditor}>
-        {isCollapsed ? "Open Editor" : "Close Editor"}
+        {isCollapsed ? "Open Editor" : "X"}
       </button>
 
       {!isCollapsed && (
