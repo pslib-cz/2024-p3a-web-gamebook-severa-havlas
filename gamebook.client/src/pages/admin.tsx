@@ -17,6 +17,8 @@ import RoomRequirementsForm from "../components/MolekulePatchRequireds";
 import ItemsList from "../components/MolekuleGetItems";
 import UpdateRoomContentForm from "../components/MolekulePatchRoomContent";
 import GraphComponent from "../components/MolekuleMapViewer";
+import GameBookActionsComponent from "../components/MolekuleGetActions";
+import GameBookActionsPostComponent from "../components/MolekulePostAction";
 const Admin = () => {
  const [Id, setId] = useState<string>('1');
    
@@ -44,6 +46,8 @@ const Admin = () => {
         <UpdateRoomContentForm />
         <GraphComponent />
         <CreateNPCForm />
+        <GameBookActionsComponent />
+        <GameBookActionsPostComponent />
         </>
     );
 

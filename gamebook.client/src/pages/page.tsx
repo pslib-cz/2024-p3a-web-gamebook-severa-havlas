@@ -15,7 +15,7 @@ const Page = () => {
   const { roomId, setRoomId } = useGameContext();
 
   useEffect(() => {
-    setRoomId(id);
+    setRoomId(id ?? null);
   }, [id, setRoomId]);
 
   return (
@@ -29,7 +29,7 @@ const Page = () => {
   <ObraDinnTable />
   <JigsawPuzzle />
   <LightsOutPuzzle />
-  <GraphComponent />
+  
   <LockCombinationPuzzle numberOfDials={9} maxDialValue={9} />
       <Link to="/Map">Mapa</Link>
       <Link to="/">Ukončit Hru</Link>

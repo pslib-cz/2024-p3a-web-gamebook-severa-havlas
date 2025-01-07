@@ -44,6 +44,7 @@ const LockCombinationPuzzle: React.FC<LockCombinationPuzzleProps> = ({
 
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
+      {combination}
       <h1>Lock Combination Puzzle</h1>
       {isUnlocked ? (
         <h2 style={{ color: "green" }}>Unlocked! You solved the puzzle!</h2>
