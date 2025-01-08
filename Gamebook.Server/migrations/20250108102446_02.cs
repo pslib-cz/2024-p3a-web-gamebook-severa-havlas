@@ -5,7 +5,7 @@
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _01 : Migration
+    public partial class _02 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,50 +63,6 @@ namespace Gamebook.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Items",
-                columns: table => new
-                {
-                    ItemId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    ActionTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Target = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Items", x => x.ItemId);
-                    table.ForeignKey(
-                        name: "FK_Items_ActionTypes_ActionTypeId",
-                        column: x => x.ActionTypeId,
-                        principalTable: "ActionTypes",
-                        principalColumn: "ActionTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NPCs",
-                columns: table => new
-                {
-                    NPCId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    ActionTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Target = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NPCs", x => x.NPCId);
-                    table.ForeignKey(
-                        name: "FK_NPCs_ActionTypes_ActionTypeId",
-                        column: x => x.ActionTypeId,
-                        principalTable: "ActionTypes",
-                        principalColumn: "ActionTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Connections",
                 columns: table => new
                 {
@@ -153,6 +109,50 @@ namespace Gamebook.Server.Migrations
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    ItemId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    ActionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Target = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.ItemId);
+                    table.ForeignKey(
+                        name: "FK_Items_Actions_ActionId",
+                        column: x => x.ActionId,
+                        principalTable: "Actions",
+                        principalColumn: "ActionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NPCs",
+                columns: table => new
+                {
+                    NPCId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    ActionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Target = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NPCs", x => x.NPCId);
+                    table.ForeignKey(
+                        name: "FK_NPCs_Actions_ActionId",
+                        column: x => x.ActionId,
+                        principalTable: "Actions",
+                        principalColumn: "ActionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -339,9 +339,9 @@ namespace Gamebook.Server.Migrations
                 column: "Room1RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_ActionTypeId",
+                name: "IX_Items_ActionId",
                 table: "Items",
-                column: "ActionTypeId");
+                column: "ActionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NPCRoom_RoomId",
@@ -354,9 +354,9 @@ namespace Gamebook.Server.Migrations
                 column: "Room1RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NPCs_ActionTypeId",
+                name: "IX_NPCs_ActionId",
                 table: "NPCs",
-                column: "ActionTypeId");
+                column: "ActionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Options_GameBookActionActionId",

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20241209180955_01")]
-    partial class _01
+    [Migration("20250108102446_02")]
+    partial class _02
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,7 +108,7 @@ namespace Gamebook.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ActionTypeId")
+                    b.Property<int>("ActionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -124,7 +124,7 @@ namespace Gamebook.Server.Migrations
 
                     b.HasKey("ItemId");
 
-                    b.HasIndex("ActionTypeId");
+                    b.HasIndex("ActionId");
 
                     b.ToTable("Items");
                 });
@@ -162,7 +162,7 @@ namespace Gamebook.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ActionTypeId")
+                    b.Property<int>("ActionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -178,7 +178,7 @@ namespace Gamebook.Server.Migrations
 
                     b.HasKey("NPCId");
 
-                    b.HasIndex("ActionTypeId");
+                    b.HasIndex("ActionId");
 
                     b.ToTable("NPCs");
                 });
@@ -327,9 +327,9 @@ namespace Gamebook.Server.Migrations
 
             modelBuilder.Entity("Gamebook.Server.models.Item", b =>
                 {
-                    b.HasOne("Gamebook.Server.models.ActionType", "Action")
+                    b.HasOne("Gamebook.Server.models.GameBookAction", "Action")
                         .WithMany()
-                        .HasForeignKey("ActionTypeId")
+                        .HasForeignKey("ActionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -357,9 +357,9 @@ namespace Gamebook.Server.Migrations
 
             modelBuilder.Entity("Gamebook.Server.models.NPC", b =>
                 {
-                    b.HasOne("Gamebook.Server.models.ActionType", "Action")
+                    b.HasOne("Gamebook.Server.models.GameBookAction", "Action")
                         .WithMany()
-                        .HasForeignKey("ActionTypeId")
+                        .HasForeignKey("ActionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

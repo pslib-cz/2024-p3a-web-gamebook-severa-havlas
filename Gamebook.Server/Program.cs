@@ -1,5 +1,6 @@
-using Gamebook.Server.Data;
+ï»¿using Gamebook.Server.Data;
 using Microsoft.EntityFrameworkCore;
+using Gamebook.Server.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,9 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin() // Nahraïte port správným portem React aplikace
-               .AllowAnyMethod() // Povolení všech HTTP metod (GET, POST, DELETE, atd.)
-               .AllowAnyHeader(); // Povolení všech hlavièek
+        policy.AllowAnyOrigin() // Nahraï¿½te port sprï¿½vnï¿½m portem React aplikace
+               .AllowAnyMethod() // Povolenï¿½ vï¿½ech HTTP metod (GET, POST, DELETE, atd.)
+               .AllowAnyHeader(); // Povolenï¿½ vï¿½ech hlaviï¿½ek
     });
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -43,5 +44,9 @@ app.MapControllers();
 
 
 app.MapFallbackToFile("/index.html");
+
+
+
+
 
 app.Run();

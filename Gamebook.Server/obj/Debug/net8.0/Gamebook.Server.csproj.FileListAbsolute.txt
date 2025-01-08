@@ -1198,3 +1198,4 @@ C:\Users\Kuba\source\repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\o
 C:\Users\Kuba\source\repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\obj\Debug\net8.0\Gamebook.Server.pdb
 C:\Users\Kuba\source\repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\obj\Debug\net8.0\Gamebook.Server.genruntimeconfig.cache
 C:\Users\Kuba\source\repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\obj\Debug\net8.0\ref\Gamebook.Server.dll
+C:\Users\jakub.havlas.022\source\repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll

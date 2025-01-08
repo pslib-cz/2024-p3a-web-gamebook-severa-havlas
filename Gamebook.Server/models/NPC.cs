@@ -9,7 +9,7 @@ namespace Gamebook.Server.models
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public ActionType Action { get; set; } // Enum
+        public GameBookAction Action { get; set; } // Enum
 
         // Relationships
         

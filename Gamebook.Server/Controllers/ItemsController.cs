@@ -78,23 +78,11 @@ namespace Gamebook.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Item>> PostItem(Item item)
         {
-            // Check if the ActionType already exists in the database
-            var existingActionType = await _context.ActionTypes.FindAsync(item.Action.ActionTypeId);
-            if (existingActionType == null)
-            {
-                return BadRequest(new { Message = "The specified ActionType does not exist." });
-            }
-
-            // Assign the existing ActionType to the item
-            item.Action = existingActionType;
-
-            // Add the item to the database
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetItem", new { id = item.ItemId }, item);
         }
-
 
         // DELETE: api/Items/5
         [HttpDelete("{id}")]

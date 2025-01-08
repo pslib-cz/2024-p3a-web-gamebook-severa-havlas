@@ -52,7 +52,7 @@ namespace Gamebook.Server.Data
                 .HasKey(i => i.ItemId);
 
             modelBuilder.Entity<Item>()
-                .HasOne<ActionType>(i => i.Action)
+                .HasOne<GameBookAction>(i => i.Action)
                 .WithMany();
 
             modelBuilder.Entity<ItemPosition>()
@@ -71,7 +71,7 @@ namespace Gamebook.Server.Data
                 .HasKey(n => n.NPCId);
 
             modelBuilder.Entity<NPC>()
-                .HasOne<ActionType>(n => n.Action)
+                .HasOne<GameBookAction>(n => n.Action)
                 .WithMany();
 
             modelBuilder.Entity<Option>()

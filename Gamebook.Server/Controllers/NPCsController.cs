@@ -42,83 +42,48 @@ namespace Gamebook.Server.Controllers
             return nPC;
         }
 
-        // PUT: api/NPCs/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutNPC(int id, NPC nPC)
-        {
-            if (id != nPC.NPCId)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(nPC).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NPCExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/NPCs
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> CreateNPC([FromBody] NPCRequest request)
+        public async Task<IActionResult> CreateNPC([FromBody] NPCDto npcDto)
         {
-            if (!ModelState.IsValid)
+            if (npcDto == null)
             {
-                return BadRequest(ModelState);
+                return BadRequest("NPC data is required.");
             }
 
-            // Fetch ActionType from the database
-            var actionType = await _context.Set<ActionType>().FindAsync(request.ActionTypeId);
-            if (actionType == null)
+            // Validate that the Action exists
+            var action = await _context.Actions
+                .FirstOrDefaultAsync(a => a.ActionId == npcDto.Action);
+
+            if (action == null)
             {
-                return NotFound(new { Message = "Invalid ActionTypeId" });
+                return NotFound($"Action with ID {npcDto.Action} {npcDto.Name} not found.");
             }
 
-            // Create new NPC instance
+            // Create the NPC entity
             var npc = new NPC
             {
-                Name = request.Name,
-                Description = request.Description,
-                Action = actionType,
-                Target = request.Target
+                Name = npcDto.Name,
+                Description = npcDto.Description,
+                Action = action
             };
 
-            // Add to database
-            _context.Set<NPC>().Add(npc);
+            // Add the NPC to the database
+            _context.NPCs.Add(npc);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetNPC), new { id = npc.NPCId }, npc);
         }
-        // Request DTO for NPC creation
-        public class NPCRequest
+
+        public class NPCDto
         {
-            
             public string Name { get; set; }
-
-           
             public string Description { get; set; }
-
-            
-            public int ActionTypeId { get; set; } // Reference to ActionType
-
-            public int? Target { get; set; } // Optional
+            public int Action { get; set; }
         }
-
 
         // DELETE: api/NPCs/5
         [HttpDelete("{id}")]
