@@ -1,179 +1,130 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
 
-const ItemForm = () => {
-  const [item, setItem] = useState({
-    ItemId: '', // ItemId can be a string for controlled input
-    Name: '',
-    Description: '',
-    Action: {
-      actionTypeId: '', // ActionTypeId for the action object
-      name: '', // Name for the action
-    },
-    Target: '', // Target is optional
+const ItemForm: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    gameBookActionId: "", // Regular input for ID
+    target: "", // Optional field
   });
 
-  const [actionTypes, setActionTypes] = useState<any[]>([]); // Assuming you want to populate ActionType options
+  const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Validation errors
 
-  // Fetch Action Types when the component mounts (useEffect)
-  useEffect(() => {
-    const fetchActionTypes = async () => {
-      try {
-        const response = await fetch('https://localhost:7058/api/ActionTypes');
-        if (!response.ok) {
-          throw new Error('Failed to fetch action types');
-        }
-        const data = await response.json();
-        setActionTypes(data); // Store action types in state
-      } catch (error) {
-        console.error('Error fetching action types:', error);
-      }
-    };
-
-    fetchActionTypes(); // Fetch action types on component mount
-  }, []); // Empty dependency array means this runs only once when the component mounts
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-
-    if (name === 'Action.actionTypeId' || name === 'Action.name') {
-      setItem((prevState) => ({
-        ...prevState,
-        Action: {
-          ...prevState.Action,
-          [name.split('.')[1]]: value,
-        },
-      }));
-    } else {
-      setItem((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.description) newErrors.description = "Description is required";
+    if (!formData.gameBookActionId) newErrors.gameBookActionId = "GameBookAction ID is required";
+    return newErrors;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Prepare the data for posting in the correct format
-    const postData = {
-      itemId: parseInt(item.ItemId, 10), // Convert ItemId to integer if necessary
-      name: item.Name,
-      description: item.Description,
-      action: {
-        actionTypeId: parseInt(item.Action.actionTypeId, 10), // Convert actionTypeId to integer
-        name: item.Action.name, // Use the action name from the form
-      },
-      target: item.Target ? parseInt(item.Target, 10) : null, // Target is optional
+    // Validate form inputs
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    // Prepare data for submission
+    const submitData = {
+      ...formData,
+      gameBookActionId: parseInt(formData.gameBookActionId, 10), // Convert to number
+      target: formData.target ? parseInt(formData.target, 10) : null, // Convert to number or keep null
     };
 
     try {
-      const response = await fetch('https://localhost:7058/api/Items', {
-        method: 'POST',
+      const response = await fetch("https://localhost:7058/api/items", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(postData),
+        body: JSON.stringify(submitData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create item');
+        throw new Error("Failed to create the item");
       }
 
       const result = await response.json();
-      console.log('Item Created:', result);
-      alert('Item successfully created!');
-      // Optionally reset the form or navigate to another page
-      setItem({
-        ItemId: '',
-        Name: '',
-        Description: '',
-        Action: {
-          actionTypeId: '',
-          name: '',
-        },
-        Target: '',
+      console.log("Item created:", result);
+      alert("Item created successfully!");
+
+      // Reset form
+      setFormData({
+        name: "",
+        description: "",
+        gameBookActionId: "",
+        target: "",
       });
+      setErrors({});
     } catch (error) {
-      console.error('Error:', error);
-      alert('Error creating item');
+      console.error("Error creating item:", error);
+      alert("Failed to create the item. Please try again.");
     }
   };
 
   return (
-    <div>
-      <h2>Create New Item</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="ItemId">Item ID:</label>
-          <input
-            type="number"
-            id="ItemId"
-            name="ItemId"
-            value={item.ItemId}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="Name">Name:</label>
-          <input
-            type="text"
-            id="Name"
-            name="Name"
-            value={item.Name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="Description">Description:</label>
-          <input
-            type="text"
-            id="Description"
-            name="Description"
-            value={item.Description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="Action.actionTypeId">Action Type ID:</label>
-          <input
-            type="number"
-            id="Action.actionTypeId"
-            name="Action.actionTypeId"
-            value={item.Action.actionTypeId}
-            onChange={handleChange}
-            required
-            placeholder="Enter ActionTypeId"
-          />
-        </div>
-        <div>
-          <label htmlFor="Action.name">Action Name:</label>
-          <input
-            type="text"
-            id="Action.name"
-            name="Action.name"
-            value={item.Action.name}
-            onChange={handleChange}
-            required
-            placeholder="Enter Action Name"
-          />
-        </div>
-        <div>
-          <label htmlFor="Target">Target (optional):</label>
-          <input
-            type="number"
-            id="Target"
-            name="Target"
-            value={item.Target}
-            onChange={handleChange}
-            placeholder="Optional Target ID"
-          />
-        </div>
-        <button type="submit">Create Item</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="item-form">
+      <div>
+        <label htmlFor="name">Name</label>
+        <input
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Enter item name"
+        />
+        {errors.name && <p className="error">{errors.name}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          placeholder="Enter item description"
+        />
+        {errors.description && <p className="error">{errors.description}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="gameBookActionId">GameBookAction ID</label>
+        <input
+          id="gameBookActionId"
+          name="gameBookActionId"
+          value={formData.gameBookActionId}
+          onChange={handleChange}
+          placeholder="Enter GameBookAction ID"
+        />
+        {errors.gameBookActionId && <p className="error">{errors.gameBookActionId}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="target">Target (Optional)</label>
+        <input
+          id="target"
+          name="target"
+          value={formData.target}
+          onChange={handleChange}
+          placeholder="Enter target (if any)"
+        />
+      </div>
+
+      <button type="submit">Create Item</button>
+    </form>
   );
 };
 

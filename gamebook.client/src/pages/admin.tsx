@@ -20,7 +20,7 @@ import GraphComponent from "../components/MolekuleMapViewer";
 import GameBookActionsComponent from "../components/MolekuleGetActions";
 import GameBookActionsPostComponent from "../components/MolekulePostAction";
 const Admin = () => {
- const [Id, setId] = useState<string>('1');
+
    
 
  
@@ -33,8 +33,8 @@ const Admin = () => {
            
         <CreateRoom />
         <RoomList />
-        <AtomForm onSubmit={(value) => setId(value)} />
-        <RoomDetails id={Id}/>
+        
+        
         <PostConnection />
         <MolekuleGetConnections />
         <ItemForm />

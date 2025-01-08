@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Gamebook.Server.Data;
 using Gamebook.Server.models;
+using static Gamebook.Server.Controllers.RoomsController;
 
 namespace Gamebook.Server.Controllers
 {
@@ -42,46 +43,49 @@ namespace Gamebook.Server.Controllers
             return item;
         }
 
-        // PUT: api/Items/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(int id, Item item)
-        {
-            if (id != item.ItemId)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(item).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Items
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Item>> PostItem(Item item)
+        public async Task<IActionResult> CreateItem([FromBody] ItemDTO itemDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Validate if GameBookAction exists
+            var gameBookAction = await _context.Actions.FindAsync(itemDto.GameBookActionId);
+            if (gameBookAction == null)
+            {
+                return NotFound($"GameBookAction with ID {itemDto.GameBookActionId} not found.");
+            }
+
+            // Create Item entity
+            var item = new Item
+            {
+                Name = itemDto.Name,
+                Description = itemDto.Description,
+                Action = gameBookAction,
+                Target = itemDto.Target
+            };
+
+            // Add to DbContext and save changes
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetItem", new { id = item.ItemId }, item);
+            // Return the created item
+            return Ok(item);
+        }
+
+        public class ItemDTO
+        {
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public int GameBookActionId { get; set; } // Foreign key to GameBookAction
+            public int? Target { get; set; } // Nullable target
         }
 
         // DELETE: api/Items/5

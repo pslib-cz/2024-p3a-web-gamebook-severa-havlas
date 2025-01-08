@@ -1,5 +1,14 @@
 
-
+export type  GameBookAction = {
+  ActionId: number;
+  ActionTypeId: number;
+  Options: any[];
+  ReqItem?: number;
+  ReqProgress?: number;
+  ReqNPC?: number;
+  Description: string;
+  ReqAction?: number;
+}
 // Define the types for connected entities
 export type Connection ={
   connectionId: number;
@@ -17,10 +26,7 @@ export type NPC = {
   name: string;
 }
 
-export type GameBookAction = {
-  actionId: number;
-  description: string;
-}
+
 
 export type Room = {
   roomId: number;

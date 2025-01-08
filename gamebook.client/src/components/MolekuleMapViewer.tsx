@@ -39,7 +39,7 @@ const MolekuleMapViewer: React.FC = () => {
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    setRoomId(nodeId);
+    setRoomId(nodeId ?? null);
   }, [nodeId, setRoomId]);
 
   useEffect(() => {
