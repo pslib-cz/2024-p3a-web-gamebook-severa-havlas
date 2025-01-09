@@ -1,20 +1,13 @@
 import React, { useState } from "react";
 
-// Define the types for GameBookAction and related properties
-interface ActionType {
-  id: number;
-  name: string; // Adjust this according to your actual ActionType model
-}
-
 interface Option {
-  id: number; // Adjust this according to your actual Option model
-  name: string; // Example field
+  label: string;
+  text: string;
+  actionId?: number; // Representing the next GameBookAction (Action)
 }
 
-interface GameBookAction {
-  actionId: number;
+interface GameBookActionCreateDto {
   actionTypeId: number;
-  actionType: ActionType;
   options: Option[];
   reqItem?: number;
   reqProgress?: number;
@@ -23,11 +16,9 @@ interface GameBookAction {
   reqAction?: number;
 }
 
-// Component
-const AddGameBookActionForm: React.FC = () => {
-  const [newAction, setNewAction] = useState<Omit<GameBookAction, 'actionId'>>({
+const CreateGameBookAction: React.FC = () => {
+  const [formData, setFormData] = useState<GameBookActionCreateDto>({
     actionTypeId: 0,
-    actionType: { id: 0, name: "" },
     options: [],
     reqItem: undefined,
     reqProgress: undefined,
@@ -35,121 +26,168 @@ const AddGameBookActionForm: React.FC = () => {
     description: "",
     reqAction: undefined,
   });
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const handleAddAction = async () => {
+  const [responseMessage, setResponseMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: name === "actionTypeId" || name === "reqItem" || name === "reqProgress" || name === "reqNPC" || name === "reqAction"
+        ? Number(value)
+        : value,
+    }));
+  };
+
+  const handleAddOption = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      options: [...prevState.options, { label: "", text: "", actionId: undefined }],
+    }));
+  };
+
+  const handleOptionChange = (
+    index: number,
+    field: "label" | "text" | "actionId",
+    value: string | number
+  ) => {
+    const updatedOptions = [...formData.options];
+    updatedOptions[index] = { ...updatedOptions[index], [field]: value };
+    setFormData((prevState) => ({ ...prevState, options: updatedOptions }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setResponseMessage(null);
+    setErrorMessage(null);
+
     try {
-      const response = await fetch(`https://localhost:7058/api/GameBookActions`, {
+      const response = await fetch("https://localhost:7058/api/GameBookActions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newAction),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
+        const error = await response.json();
+        setErrorMessage(error.message || "An error occurred while creating the GameBookAction.");
+        return;
       }
 
-      const createdAction: GameBookAction = await response.json();
-      setSuccessMessage(`Action with ID ${createdAction.actionId} successfully created!`);
-      setError(null);
-      // Reset the form
-      setNewAction({
-        actionTypeId: 0,
-        actionType: { id: 0, name: "" },
-        options: [],
-        reqItem: undefined,
-        reqProgress: undefined,
-        reqNPC: undefined,
-        description: "",
-        reqAction: undefined,
-      });
-    } catch (err: any) {
-      setError(err.message);
-      setSuccessMessage(null);
+      const result = await response.json();
+      setResponseMessage("GameBookAction created successfully!");
+    } catch (error) {
+      setErrorMessage("Failed to connect to the server. Please try again later.");
     }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setNewAction((prevAction) => ({
-      ...prevAction,
-      [name]: value,
-    }));
   };
 
   return (
     <div>
-      <h2>Add New GameBook Action</h2>
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleAddAction();
-        }}
-      >
+      <h1>Create GameBookAction</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>ActionTypeId:</label>
+          <input
+            type="number"
+            name="actionTypeId"
+            value={formData.actionTypeId}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
         <div>
           <label>Description:</label>
           <textarea
             name="description"
-            value={newAction.description}
+            value={formData.description}
             onChange={handleInputChange}
             required
           />
         </div>
         <div>
-          <label>Action Type ID:</label>
-          <input
-            type="number"
-            name="actionTypeId"
-            value={newAction.actionTypeId}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Required Item:</label>
+          <label>ReqItem:</label>
           <input
             type="number"
             name="reqItem"
-            value={newAction.reqItem ?? ""}
+            value={formData.reqItem || ""}
             onChange={handleInputChange}
           />
         </div>
         <div>
-          <label>Required Progress:</label>
+          <label>ReqProgress:</label>
           <input
             type="number"
             name="reqProgress"
-            value={newAction.reqProgress ?? ""}
+            value={formData.reqProgress || ""}
             onChange={handleInputChange}
           />
         </div>
         <div>
-          <label>Required NPC:</label>
+          <label>ReqNPC:</label>
           <input
             type="number"
             name="reqNPC"
-            value={newAction.reqNPC ?? ""}
+            value={formData.reqNPC || ""}
             onChange={handleInputChange}
           />
         </div>
         <div>
-          <label>Required Action:</label>
+          <label>ReqAction:</label>
           <input
             type="number"
             name="reqAction"
-            value={newAction.reqAction ?? ""}
+            value={formData.reqAction || ""}
             onChange={handleInputChange}
           />
         </div>
-        <button type="submit">Add Action</button>
+        <div>
+          <h3>Options</h3>
+          {formData.options.map((option, index) => (
+            <div key={index} style={{ marginBottom: "1em", border: "1px solid #ccc", padding: "1em" }}>
+              <input
+                type="text"
+                placeholder="Label"
+                value={option.label}
+                onChange={(e) =>
+                  handleOptionChange(index, "label", e.target.value)
+                }
+                required
+              />
+              <input
+                type="text"
+                placeholder="Text"
+                value={option.text}
+                onChange={(e) =>
+                  handleOptionChange(index, "text", e.target.value)
+                }
+                required
+              />
+              <input
+                type="number"
+                placeholder="Next ActionId (optional)"
+                value={option.actionId || ""}
+                onChange={(e) =>
+                  handleOptionChange(index, "actionId", Number(e.target.value))
+                }
+              />
+            </div>
+          ))}
+          <button type="button" onClick={handleAddOption}>
+            Add Option
+          </button>
+        </div>
+        <button type="submit">Create GameBookAction</button>
       </form>
+      {responseMessage && <p style={{ color: "green" }}>{responseMessage}</p>}
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
     </div>
   );
 };
 
-export default AddGameBookActionForm;
+export default CreateGameBookAction;

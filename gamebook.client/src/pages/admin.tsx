@@ -19,6 +19,8 @@ import UpdateRoomContentForm from "../components/MolekulePatchRoomContent";
 import GraphComponent from "../components/MolekuleMapViewer";
 import GameBookActionsComponent from "../components/MolekuleGetActions";
 import GameBookActionsPostComponent from "../components/MolekulePostAction";
+import UpdateOptions from "../components/MolekulePatchActionOptions";
+import PostOption from "../components/MolekulePostOption";
 const Admin = () => {
 
    
@@ -48,6 +50,8 @@ const Admin = () => {
         <CreateNPCForm />
         <GameBookActionsComponent />
         <GameBookActionsPostComponent />
+        <UpdateOptions />
+        <PostOption />
         </>
     );
 

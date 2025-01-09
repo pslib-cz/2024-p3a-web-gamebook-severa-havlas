@@ -2,6 +2,7 @@
 using Gamebook.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    partial class GamebookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250109090618_03")]
+    partial class _03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -191,9 +194,14 @@ namespace Gamebook.Server.Migrations
                     b.Property<int?>("ActionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("GameBookActionActionId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Label", "Text");
 
                     b.HasIndex("ActionId");
+
+                    b.HasIndex("GameBookActionActionId");
 
                     b.ToTable("Options");
                 });
@@ -316,7 +324,7 @@ namespace Gamebook.Server.Migrations
                     b.HasOne("Gamebook.Server.models.ActionType", "ActionType")
                         .WithMany()
                         .HasForeignKey("ActionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ActionType");
@@ -366,9 +374,12 @@ namespace Gamebook.Server.Migrations
             modelBuilder.Entity("Gamebook.Server.models.Option", b =>
                 {
                     b.HasOne("Gamebook.Server.models.GameBookAction", "Action")
+                        .WithMany()
+                        .HasForeignKey("ActionId");
+
+                    b.HasOne("Gamebook.Server.models.GameBookAction", null)
                         .WithMany("Options")
-                        .HasForeignKey("ActionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("GameBookActionActionId");
 
                     b.Navigation("Action");
                 });

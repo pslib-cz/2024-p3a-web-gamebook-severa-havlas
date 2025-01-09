@@ -36,17 +36,38 @@ namespace Gamebook.Server.Data
             modelBuilder.Entity<ActionType>()
                 .HasKey(a => a.ActionTypeId);
 
-            modelBuilder.Entity<GameBookAction>()
-                .HasKey(g => g.ActionId);
+            modelBuilder.Entity<GameBookAction>(entity =>
+            {
+                // Set primary key
+                entity.HasKey(gba => gba.ActionId);
 
-            modelBuilder.Entity<GameBookAction>()
-                .HasOne(g => g.ActionType)
-                .WithMany()
-                .HasForeignKey(g => g.ActionTypeId);
+                // Configure the relationship between GameBookAction and ActionType
+                entity.HasOne(gba => gba.ActionType) // Navigation property
+                      .WithMany() // Assuming ActionType can have many GameBookActions
+                      .HasForeignKey(gba => gba.ActionTypeId)
+                      .OnDelete(DeleteBehavior.Restrict); // Optional: Prevent cascading delete if needed
 
-            modelBuilder.Entity<GameBookAction>()
-                .HasMany(g => g.Options)
-                .WithOne();
+                // Configure the collection navigation property for Options
+                entity.HasMany(gba => gba.Options)
+                      .WithOne(o => o.Action)
+                      .OnDelete(DeleteBehavior.Cascade); // Define cascading behavior
+            });
+
+            // Configure Option
+            modelBuilder.Entity<Option>(entity =>
+            {
+                // Configure the navigation property with GameBookAction
+                entity.HasOne(o => o.Action)
+                      .WithMany(gba => gba.Options)
+                      .HasForeignKey("ActionId") // Configure foreign key column explicitly
+                      .OnDelete(DeleteBehavior.Cascade); // Define cascading behavior
+
+                // If needed, configure composite keys or constraints here
+            });
+
+            
+
+            
 
             modelBuilder.Entity<Item>()
                 .HasKey(i => i.ItemId);

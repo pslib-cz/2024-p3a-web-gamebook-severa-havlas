@@ -43,45 +43,83 @@ namespace Gamebook.Server.Controllers
         }
 
         // PUT: api/GameBookActions/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutGameBookAction(int id, GameBookAction gameBookAction)
+        [HttpPatch("UpdateOptions")]
+        public async Task<IActionResult> UpdateOptions([FromBody] UpdateOptionsDTO dto)
         {
-            if (id != gameBookAction.ActionId)
+            if (dto == null || dto.ActionId <= 0 || dto.Options == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid data.");
             }
 
-            _context.Entry(gameBookAction).State = EntityState.Modified;
+            // Find the GameBookAction by its ID
+            var action = await _context.Actions
+                .Include(a => a.Options)
+                .FirstOrDefaultAsync(a => a.ActionId == dto.ActionId);
+
+            if (action == null)
+            {
+                return NotFound($"GameBookAction with ID {dto.ActionId} not found.");
+            }
+
+            // Update the options
+            action.Options = dto.Options;
 
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok(action);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!GameBookActionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            return NoContent();
+        }
+        public class UpdateOptionsDTO
+        {
+            public int ActionId { get; set; } // ID of the action to update
+            public ICollection<Option> Options { get; set; } // Updated list of options
         }
 
         // POST: api/GameBookActions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<GameBookAction>> PostGameBookAction(GameBookAction gameBookAction)
+        public async Task<IActionResult> CreateGameBookAction([FromBody] GameBookActionCreateDto dto)
         {
-            _context.Actions.Add(gameBookAction);
+            // Validate if ActionTypeId exists
+            var actionTypeExists = await _context.Set<ActionType>()
+                                                 .AnyAsync(at => at.ActionTypeId == dto.ActionTypeId);
+            if (!actionTypeExists)
+            {
+                return BadRequest($"ActionType with ID {dto.ActionTypeId} does not exist.");
+            }
+
+            // Map DTO to GameBookAction
+            var gameBookAction = new GameBookAction
+            {
+                ActionTypeId = dto.ActionTypeId,
+                Options = dto.Options,
+                ReqItem = dto.ReqItem,
+                ReqProgress = dto.ReqProgress,
+                ReqNPC = dto.ReqNPC,
+                Description = dto.Description,
+                ReqAction = dto.ReqAction
+            };
+
+            // Save to database
+            _context.Set<GameBookAction>().Add(gameBookAction);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGameBookAction", new { id = gameBookAction.ActionId }, gameBookAction);
+            return Ok();
+        }
+        public class GameBookActionCreateDto
+        {
+            public int ActionTypeId { get; set; }
+            public ICollection<Option> Options { get; set; }
+            public int? ReqItem { get; set; }
+            public int? ReqProgress { get; set; }
+            public int? ReqNPC { get; set; }
+            public string Description { get; set; }
+            public int? ReqAction { get; set; }
         }
 
         // DELETE: api/GameBookActions/5
