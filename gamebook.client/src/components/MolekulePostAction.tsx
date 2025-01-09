@@ -3,7 +3,7 @@ import React, { useState } from "react";
 interface Option {
   label: string;
   text: string;
-  actionId?: number; // Representing the next GameBookAction (Action)
+  actionId?: string; // Representing the next GameBookAction (Action)
 }
 
 interface GameBookActionCreateDto {
@@ -173,7 +173,7 @@ const CreateGameBookAction: React.FC = () => {
                 placeholder="Next ActionId (optional)"
                 value={option.actionId || ""}
                 onChange={(e) =>
-                  handleOptionChange(index, "actionId", Number(e.target.value))
+                  handleOptionChange(index, "actionId", e.target.value)
                 }
               />
             </div>

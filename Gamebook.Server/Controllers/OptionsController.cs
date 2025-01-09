@@ -76,26 +76,44 @@ namespace Gamebook.Server.Controllers
         // POST: api/Options
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Option>> PostOption(Option option)
+        public async Task<IActionResult> ProcessOption([FromBody] OptionDto optionDto)
         {
-            _context.Options.Add(option);
-            try
+            if (optionDto == null)
             {
-                await _context.SaveChangesAsync();
+                return BadRequest("Invalid option data.");
             }
-            catch (DbUpdateException)
+
+            // Fetch GameBookAction if actionId is provided
+            GameBookAction? action = null;
+            if (optionDto.ActionId.HasValue)
             {
-                if (OptionExists(option.Label))
+                action = await _context.Actions
+                    .Include(a => a.ActionType) // Include related ActionType if needed
+                    .FirstOrDefaultAsync(a => a.ActionId == optionDto.ActionId.Value);
+
+                if (action == null)
                 {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
+                    return NotFound($"Action with ID {optionDto.ActionId.Value} not found.");
                 }
             }
 
-            return CreatedAtAction("GetOption", new { id = option.Label }, option);
+            // Map OptionDto to Option
+            var option = new Option
+            {
+                Label = optionDto.Label,
+                Text = optionDto.Text,
+                Action = action
+            };
+
+            return Ok(option);
+        }
+
+       
+        public class OptionDto
+        {
+            public string Label { get; set; }
+            public string Text { get; set; }
+            public int? ActionId { get; set; }
         }
 
         // DELETE: api/Options/5

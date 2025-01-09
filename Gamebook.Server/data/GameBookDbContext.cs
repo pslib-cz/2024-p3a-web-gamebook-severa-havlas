@@ -36,38 +36,25 @@ namespace Gamebook.Server.Data
             modelBuilder.Entity<ActionType>()
                 .HasKey(a => a.ActionTypeId);
 
-            modelBuilder.Entity<GameBookAction>(entity =>
-            {
-                // Set primary key
-                entity.HasKey(gba => gba.ActionId);
+         
 
-                // Configure the relationship between GameBookAction and ActionType
-                entity.HasOne(gba => gba.ActionType) // Navigation property
-                      .WithMany() // Assuming ActionType can have many GameBookActions
-                      .HasForeignKey(gba => gba.ActionTypeId)
-                      .OnDelete(DeleteBehavior.Restrict); // Optional: Prevent cascading delete if needed
+          
+            modelBuilder.Entity<GameBookAction>()
+                .HasMany(r => r.Options)
+                .WithMany();
 
-                // Configure the collection navigation property for Options
-                entity.HasMany(gba => gba.Options)
-                      .WithOne(o => o.Action)
-                      .OnDelete(DeleteBehavior.Cascade); // Define cascading behavior
-            });
+            modelBuilder.Entity<GameBookAction>()
+                  .HasKey(i => i.ActionId);
 
-            // Configure Option
-            modelBuilder.Entity<Option>(entity =>
-            {
-                // Configure the navigation property with GameBookAction
-                entity.HasOne(o => o.Action)
-                      .WithMany(gba => gba.Options)
-                      .HasForeignKey("ActionId") // Configure foreign key column explicitly
-                      .OnDelete(DeleteBehavior.Cascade); // Define cascading behavior
+            modelBuilder.Entity<GameBookAction>()
+               .HasOne<ActionType>(i => i.ActionType)
+               .WithMany();
 
-                // If needed, configure composite keys or constraints here
-            });
 
-            
+            modelBuilder.Entity<Option>()
+                .HasOne<GameBookAction>(i => i.Action)
+                .WithMany();
 
-            
 
             modelBuilder.Entity<Item>()
                 .HasKey(i => i.ItemId);
@@ -96,7 +83,7 @@ namespace Gamebook.Server.Data
                 .WithMany();
 
             modelBuilder.Entity<Option>()
-                .HasKey(o => new { o.Label, o.Text });
+                .HasKey(a => a.OptionId);
 
             modelBuilder.Entity<Room>()
                 .HasKey(r => r.RoomId);

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 interface Option {
   label: string;
   text: string;
-  actionId?: number; // Optional if ActionId is not mandatory
+  actionId?: string; // Optional if ActionId is not mandatory
 }
 
 const PostOption: React.FC = () => {
@@ -29,7 +29,7 @@ const PostOption: React.FC = () => {
     }
 
     try {
-      const response = await fetch("https://localhost:7058/api/GameBookActions/Options", {
+      const response = await fetch("https://localhost:7058/api/Options", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,13 +89,13 @@ const PostOption: React.FC = () => {
           <label>
             Action ID (Optional):
             <input
-              type="number"
+              type="string"
               name="actionId"
               value={option.actionId || ""}
               onChange={(e) =>
                 setOption((prevOption) => ({
                   ...prevOption,
-                  actionId: Number(e.target.value),
+                  actionId: e.target.value,
                 }))
               }
             />
