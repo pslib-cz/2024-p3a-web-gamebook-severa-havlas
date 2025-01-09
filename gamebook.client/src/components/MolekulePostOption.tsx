@@ -3,11 +3,11 @@ import React, { useState } from "react";
 interface Option {
   label: string;
   text: string;
-  actionId?: string; // Optional if ActionId is not mandatory
+  NextActionId?: number; // Optional if ActionId is not mandatory
 }
 
 const PostOption: React.FC = () => {
-  const [option, setOption] = useState<Option>({ label: "", text: "", actionId: undefined });
+  const [option, setOption] = useState<Option>({ label: "", text: "", NextActionId: undefined });
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +48,7 @@ const PostOption: React.FC = () => {
       const data = await response.json();
       setMessage(`Option created successfully: ${data.label}`);
       setError(null);
-      setOption({ label: "", text: "", actionId: undefined }); // Reset form
+      setOption({ label: "", text: "", NextActionId: undefined }); // Reset form
     } catch (err: any) {
       setError(err.message || "An error occurred.");
       setMessage(null);
@@ -91,11 +91,11 @@ const PostOption: React.FC = () => {
             <input
               type="string"
               name="actionId"
-              value={option.actionId || ""}
+              value={option.NextActionId || ""}
               onChange={(e) =>
                 setOption((prevOption) => ({
                   ...prevOption,
-                  actionId: e.target.value,
+                  NextActionId: Number(e.target.value),
                 }))
               }
             />

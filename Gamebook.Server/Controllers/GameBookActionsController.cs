@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Gamebook.Server.Data;
 using Gamebook.Server.models;
+using static Gamebook.Server.Controllers.GameBookActionsController;
 
 namespace Gamebook.Server.Controllers
 {
@@ -120,6 +121,37 @@ namespace Gamebook.Server.Controllers
             public int? ReqNPC { get; set; }
             public string Description { get; set; }
             public int? ReqAction { get; set; }
+        }
+
+        public class OptionIdsDto
+        {
+            
+            public List<int> OptionIds { get; set; } // List of Option IDs
+        }
+        [HttpPatch]
+        public async Task<IActionResult> FindOptionsByIds([FromBody] OptionIdsDto idsDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (idsDto.OptionIds == null || !idsDto.OptionIds.Any())
+            {
+                return BadRequest("OptionIds array cannot be null or empty.");
+            }
+
+            // Retrieve the options from the database
+            var options = await _context.Options
+                .Where(o => idsDto.OptionIds.Contains(o.OptionId))
+                .ToListAsync();
+
+            if (!options.Any())
+            {
+                return NotFound("No options found for the provided IDs.");
+            }
+
+            return Ok(options);
         }
 
         // DELETE: api/GameBookActions/5

@@ -5,7 +5,7 @@
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _02 : Migration
+    public partial class _06 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -120,15 +120,15 @@ namespace Gamebook.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    ActionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    GameBookActionId = table.Column<int>(type: "INTEGER", nullable: false),
                     Target = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.ItemId);
                     table.ForeignKey(
-                        name: "FK_Items_Actions_ActionId",
-                        column: x => x.ActionId,
+                        name: "FK_Items_Actions_GameBookActionId",
+                        column: x => x.GameBookActionId,
                         principalTable: "Actions",
                         principalColumn: "ActionId",
                         onDelete: ReferentialAction.Cascade);
@@ -160,13 +160,16 @@ namespace Gamebook.Server.Migrations
                 name: "Options",
                 columns: table => new
                 {
+                    OptionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Label = table.Column<string>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: false),
+                    NextActionId = table.Column<int>(type: "INTEGER", nullable: false),
                     GameBookActionActionId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Options", x => new { x.Label, x.Text });
+                    table.PrimaryKey("PK_Options", x => x.OptionId);
                     table.ForeignKey(
                         name: "FK_Options_Actions_GameBookActionActionId",
                         column: x => x.GameBookActionActionId,
@@ -339,9 +342,9 @@ namespace Gamebook.Server.Migrations
                 column: "Room1RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_ActionId",
+                name: "IX_Items_GameBookActionId",
                 table: "Items",
-                column: "ActionId");
+                column: "GameBookActionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NPCRoom_RoomId",

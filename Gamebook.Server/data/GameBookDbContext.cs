@@ -39,29 +39,21 @@ namespace Gamebook.Server.Data
          
 
           
-            modelBuilder.Entity<GameBookAction>()
-                .HasMany(r => r.Options)
-                .WithMany();
+        
 
             modelBuilder.Entity<GameBookAction>()
                   .HasKey(i => i.ActionId);
 
-            modelBuilder.Entity<GameBookAction>()
-               .HasOne<ActionType>(i => i.ActionType)
-               .WithMany();
+          
 
 
-            modelBuilder.Entity<Option>()
-                .HasOne<GameBookAction>(i => i.Action)
-                .WithMany();
+          
 
 
             modelBuilder.Entity<Item>()
                 .HasKey(i => i.ItemId);
 
-            modelBuilder.Entity<Item>()
-                .HasOne<GameBookAction>(i => i.Action)
-                .WithMany();
+          
 
             modelBuilder.Entity<ItemPosition>()
                 .HasKey(ip => ip.ItemPositionId);

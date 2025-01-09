@@ -75,45 +75,48 @@ namespace Gamebook.Server.Controllers
 
         // POST: api/Options
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<IActionResult> ProcessOption([FromBody] OptionDto optionDto)
+
+        public class OptionCreateDto
         {
-            if (optionDto == null)
+           
+            public string Label { get; set; }
+
+            
+            public string Text { get; set; }
+
+           
+            public int NextActionId { get; set; } // Foreign key to GameBookAction
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOption([FromBody] OptionCreateDto optionDto)
+        {
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid option data.");
+                return BadRequest(ModelState);
             }
 
-            // Fetch GameBookAction if actionId is provided
-            GameBookAction? action = null;
-            if (optionDto.ActionId.HasValue)
+            // Check if the related GameBookAction exists
+            var gameBookAction = await _context.Actions.FindAsync(optionDto.NextActionId);
+            if (gameBookAction == null)
             {
-                action = await _context.Actions
-                    .Include(a => a.ActionType) // Include related ActionType if needed
-                    .FirstOrDefaultAsync(a => a.ActionId == optionDto.ActionId.Value);
-
-                if (action == null)
-                {
-                    return NotFound($"Action with ID {optionDto.ActionId.Value} not found.");
-                }
+                return NotFound($"GameBookAction with ID {optionDto.NextActionId} not found.");
             }
 
-            // Map OptionDto to Option
+            // Map DTO to Entity
             var option = new Option
             {
                 Label = optionDto.Label,
                 Text = optionDto.Text,
-                Action = action
+                NextActionId = optionDto.NextActionId
             };
 
-            return Ok(option);
-        }
+            // Add and save the option
+            _context.Options.Add(option);
+            await _context.SaveChangesAsync();
 
-       
-        public class OptionDto
-        {
-            public string Label { get; set; }
-            public string Text { get; set; }
-            public int? ActionId { get; set; }
+            // Return the created option with its ID
+            return Ok(option);
         }
 
         // DELETE: api/Options/5

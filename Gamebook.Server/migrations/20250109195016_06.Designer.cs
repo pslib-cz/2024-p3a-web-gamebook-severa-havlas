@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20250109090917_04")]
-    partial class _04
+    [Migration("20250109195016_06")]
+    partial class _06
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,12 +108,12 @@ namespace Gamebook.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ActionId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("GameBookActionId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -124,7 +124,7 @@ namespace Gamebook.Server.Migrations
 
                     b.HasKey("ItemId");
 
-                    b.HasIndex("ActionId");
+                    b.HasIndex("GameBookActionId");
 
                     b.ToTable("Items");
                 });
@@ -185,18 +185,27 @@ namespace Gamebook.Server.Migrations
 
             modelBuilder.Entity("Gamebook.Server.models.Option", b =>
                 {
-                    b.Property<string>("Label")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("ActionId")
+                    b.Property<int>("OptionId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Label", "Text");
+                    b.Property<int?>("GameBookActionActionId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("ActionId");
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("NextActionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("OptionId");
+
+                    b.HasIndex("GameBookActionActionId");
 
                     b.ToTable("Options");
                 });
@@ -319,7 +328,7 @@ namespace Gamebook.Server.Migrations
                     b.HasOne("Gamebook.Server.models.ActionType", "ActionType")
                         .WithMany()
                         .HasForeignKey("ActionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ActionType");
@@ -327,13 +336,13 @@ namespace Gamebook.Server.Migrations
 
             modelBuilder.Entity("Gamebook.Server.models.Item", b =>
                 {
-                    b.HasOne("Gamebook.Server.models.GameBookAction", "Action")
+                    b.HasOne("Gamebook.Server.models.GameBookAction", "GameBookAction")
                         .WithMany()
-                        .HasForeignKey("ActionId")
+                        .HasForeignKey("GameBookActionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Action");
+                    b.Navigation("GameBookAction");
                 });
 
             modelBuilder.Entity("Gamebook.Server.models.ItemPosition", b =>
@@ -368,12 +377,9 @@ namespace Gamebook.Server.Migrations
 
             modelBuilder.Entity("Gamebook.Server.models.Option", b =>
                 {
-                    b.HasOne("Gamebook.Server.models.GameBookAction", "Action")
+                    b.HasOne("Gamebook.Server.models.GameBookAction", null)
                         .WithMany("Options")
-                        .HasForeignKey("ActionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Action");
+                        .HasForeignKey("GameBookActionActionId");
                 });
 
             modelBuilder.Entity("ItemRoom", b =>

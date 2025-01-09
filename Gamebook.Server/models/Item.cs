@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gamebook.Server.models
 {
@@ -9,7 +10,10 @@ namespace Gamebook.Server.models
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public GameBookAction Action { get; set; } // Enum
+
+        [ForeignKey("GameBookAction")]
+        public int GameBookActionId { get; set; }
+        public virtual GameBookAction GameBookAction { get; set; }
         public int? Target { get; set; } // Nullable target reference
     }
 }

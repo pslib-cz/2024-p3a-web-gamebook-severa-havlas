@@ -42,51 +42,55 @@ namespace Gamebook.Server.Controllers
 
             return item;
         }
+        public class ItemCreateDto
+        {
+            
+            public string Name { get; set; }
 
+            
+            public string Description { get; set; }
 
+            
+            public int GameBookActionId { get; set; } // Mandatory foreign key
 
-
-        // POST: api/Items
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+            public int? Target { get; set; } // Nullable field
+        }
         [HttpPost]
-        public async Task<IActionResult> CreateItem([FromBody] ItemDTO itemDto)
+        public async Task<IActionResult> CreateItem([FromBody] ItemCreateDto itemDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Validate if GameBookAction exists
+            // Check if the related GameBookAction exists
             var gameBookAction = await _context.Actions.FindAsync(itemDto.GameBookActionId);
             if (gameBookAction == null)
             {
                 return NotFound($"GameBookAction with ID {itemDto.GameBookActionId} not found.");
             }
 
-            // Create Item entity
+            // Map DTO to Entity
             var item = new Item
             {
                 Name = itemDto.Name,
                 Description = itemDto.Description,
-                Action = gameBookAction,
+                GameBookActionId = itemDto.GameBookActionId,
                 Target = itemDto.Target
             };
 
-            // Add to DbContext and save changes
+            // Add and save the item
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
-            // Return the created item
+            // Return the created item with its ID
             return Ok(item);
         }
 
-        public class ItemDTO
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public int GameBookActionId { get; set; } // Foreign key to GameBookAction
-            public int? Target { get; set; } // Nullable target
-        }
+
+        // POST: api/Items
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
 
         // DELETE: api/Items/5
         [HttpDelete("{id}")]
