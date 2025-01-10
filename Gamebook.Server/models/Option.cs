@@ -8,8 +8,11 @@ namespace Gamebook.Server.models
         public string Label { get; set; }
         public string Text { get; set; }
 
-        [ForeignKey("GameBookAction")]
-        public int NextActionId { get; set; }
-        
+        [ForeignKey("NextAction")]
+        public int? NextActionId { get; set; }
+
+        // Navigation property
+        public GameBookAction NextAction { get; set; }
+
     }
 }

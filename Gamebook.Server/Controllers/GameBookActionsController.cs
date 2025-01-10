@@ -42,12 +42,11 @@ namespace Gamebook.Server.Controllers
 
             return gameBookAction;
         }
-
-        // PUT: api/GameBookActions/5
-        [HttpPatch("UpdateOptions")]
-        public async Task<IActionResult> UpdateOptions([FromBody] UpdateOptionsDTO dto)
+        /*
+        [HttpPatch("{ActionId}")]
+        public async Task<IActionResult> UpdateOptions(int ActionId, [FromBody] UpdateOptionsDTO dto)
         {
-            if (dto == null || dto.ActionId <= 0 || dto.Options == null)
+            if (dto == null || ActionId <= 0 || dto.OptionIds == null || !dto.OptionIds.Any())
             {
                 return BadRequest("Invalid data.");
             }
@@ -55,31 +54,62 @@ namespace Gamebook.Server.Controllers
             // Find the GameBookAction by its ID
             var action = await _context.Actions
                 .Include(a => a.Options)
-                .FirstOrDefaultAsync(a => a.ActionId == dto.ActionId);
+                .FirstOrDefaultAsync(a => a.ActionId == ActionId);
 
             if (action == null)
             {
-                return NotFound($"GameBookAction with ID {dto.ActionId} not found.");
+                return NotFound($"Action with ID {ActionId} not found.");
             }
 
-            // Update the options
-            action.Options = dto.Options;
+            // Fetch the options from the database using the provided OptionIds
+            var options = await _context.Options
+                .Where(o => dto.OptionIds.Contains(o.OptionId))
+                .ToListAsync();
+
+            if (options.Count != dto.OptionIds.Count)
+            {
+                return BadRequest("One or more OptionIds are invalid.");
+            }
+
+            // Update the options for the action
+            action.Options = options;
+
+            // Explicitly mark entity as modified
+            _context.Entry(action).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok(action);
+
+                // Reload navigation properties
+                await _context.Entry(action).Reference(a => a.ActionType).LoadAsync();
+                await _context.Entry(action).Collection(a => a.Options).LoadAsync();
+
+                return Ok(new
+                {
+                    action.ActionId,
+                    action.ActionTypeId,
+                    ActionType = new { action.ActionType.ActionTypeId, action.ActionType.Name },
+                    Options = action.Options.Select(o => new { o.OptionId, o.Label, o.Text, o.NextActionId }),
+                    action.ReqItem,
+                    action.ReqProgress,
+                    action.ReqNPC,
+                    action.Description,
+                    action.ReqAction
+                });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         public class UpdateOptionsDTO
         {
-            public int ActionId { get; set; } // ID of the action to update
-            public ICollection<Option> Options { get; set; } // Updated list of options
+            
+            public ICollection<int> OptionIds { get; set; } // List of option IDs to associate with the action
         }
+
 
         // POST: api/GameBookActions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -123,36 +153,8 @@ namespace Gamebook.Server.Controllers
             public int? ReqAction { get; set; }
         }
 
-        public class OptionIdsDto
-        {
-            
-            public List<int> OptionIds { get; set; } // List of Option IDs
-        }
-        [HttpPatch]
-        public async Task<IActionResult> FindOptionsByIds([FromBody] OptionIdsDto idsDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (idsDto.OptionIds == null || !idsDto.OptionIds.Any())
-            {
-                return BadRequest("OptionIds array cannot be null or empty.");
-            }
-
-            // Retrieve the options from the database
-            var options = await _context.Options
-                .Where(o => idsDto.OptionIds.Contains(o.OptionId))
-                .ToListAsync();
-
-            if (!options.Any())
-            {
-                return NotFound("No options found for the provided IDs.");
-            }
-
-            return Ok(options);
-        }
+      
+      
 
         // DELETE: api/GameBookActions/5
         [HttpDelete("{id}")]
@@ -209,5 +211,6 @@ namespace Gamebook.Server.Controllers
         {
             return _context.Actions.Any(e => e.ActionId == id);
         }
+        */
     }
 }

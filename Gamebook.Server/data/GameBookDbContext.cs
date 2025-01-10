@@ -36,10 +36,10 @@ namespace Gamebook.Server.Data
             modelBuilder.Entity<ActionType>()
                 .HasKey(a => a.ActionTypeId);
 
-         
 
-          
-        
+
+            
+
 
             modelBuilder.Entity<GameBookAction>()
                   .HasKey(i => i.ActionId);

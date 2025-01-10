@@ -11,9 +11,9 @@ namespace Gamebook.Server.models
 
         [ForeignKey("ActionType")]
         public int ActionTypeId { get; set; }
-        public virtual ActionType ActionType { get; set; } // Navigation property
 
-        public ICollection<Option> Options { get; set; }
+        [ForeignKey("Option")]
+        public ICollection<int> OptionsIDs { get; set; }
         public int? ReqItem { get; set; }
         public int? ReqProgress { get; set; }
         public int? ReqNPC { get; set; }

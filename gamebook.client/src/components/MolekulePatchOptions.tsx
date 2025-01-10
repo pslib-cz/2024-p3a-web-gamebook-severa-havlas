@@ -1,109 +1,110 @@
 import React, { useState } from "react";
-import axios from "axios";
 
-interface Option {
-  optionId: number;
-  label: string;
-  text: string;
-  nextActionId: number;
-}
+const UpdateOptions: React.FC = () => {
+  const [actionId, setActionId] = useState<number | null>(null);
+  const [optionIds, setOptionIds] = useState<string>(""); // Comma-separated Option IDs
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [responseMessage, setResponseMessage] = useState<string | null>(null);
 
-const FetchOptions: React.FC = () => {
-  const [optionIds, setOptionIds] = useState<string>(""); // Input field value (comma-separated IDs)
-  const [options, setOptions] = useState<Option[] | null>(null); // Fetched options
-  const [error, setError] = useState<string | null>(null); // Error message
-
-  const handleFetchOptions = async () => {
-    // Clear previous error and results
-    setError(null);
-    setOptions(null);
-
-    // Parse input into an array of integers
-    const idsArray = optionIds
-      .split(",")
-      .map((id) => id.trim())
-      .filter((id) => !isNaN(Number(id)))
-      .map(Number);
-
-    if (idsArray.length === 0) {
-      setError("Please enter valid option IDs.");
+  // Handle form submission
+  const handleSubmit = async () => {
+    // Validate inputs
+    if (!actionId || actionId <= 0) {
+      alert("Please enter a valid Action ID.");
       return;
     }
 
+    if (!optionIds) {
+      alert("Please enter valid Option IDs (comma-separated).");
+      return;
+    }
+
+    // Parse OptionIds into an array of integers
+    const parsedOptionIds = optionIds
+      .split(",")
+      .map((id) => parseInt(id.trim()))
+      .filter((id) => !isNaN(id));
+
+    if (parsedOptionIds.length === 0) {
+      alert("Please provide valid Option IDs in the correct format (e.g., 1, 2, 3).");
+      return;
+    }
+
+    // Prepare the payload
+    const payload = {
+      OptionIds: parsedOptionIds,
+    };
+
+    setIsSubmitting(true);
+    setResponseMessage(null);
+
     try {
-      const response = await axios.patch<Option[]>("/api/options/find-options", {
-        optionIds: idsArray,
+      const response = await fetch(`https://localhost:7058/api/GameBookActions/${actionId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
-      setOptions(response.data);
-    } catch (err: any) {
-      if (err.response && err.response.status === 404) {
-        setError("No options found for the provided IDs.");
-      } else {
-        setError("An error occurred while fetching options.");
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "An error occurred.");
       }
+
+      const responseData = await response.json();
+      setResponseMessage("Options updated successfully!");
+      console.log("Updated Action:", responseData);
+    } catch (error: any) {
+      setResponseMessage(`Failed to update options: ${error.message}`);
+      console.error("API Error:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "500px", margin: "0 auto" }}>
-      <h2>Fetch Options</h2>
-      <p>Enter a comma-separated list of option IDs to fetch their details:</p>
-      <input
-        type="text"
-        value={optionIds}
-        onChange={(e) => setOptionIds(e.target.value)}
-        placeholder="E.g., 1, 2, 3"
-        style={{
-          width: "100%",
-          padding: "10px",
-          marginBottom: "10px",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
-        }}
-      />
+    <div>
+      <h3>Update GameBook Action Options</h3>
+
+      {/* Action ID Input */}
+      <div>
+        <label htmlFor="actionId">Action ID:</label>
+        <input
+          id="actionId"
+          type="number"
+          placeholder="Enter Action ID (e.g., 5)"
+          value={actionId || ""}
+          onChange={(e) => setActionId(Number(e.target.value))}
+        />
+      </div>
+
+      {/* Option IDs Input */}
+      <div>
+        <label htmlFor="optionIds">Option IDs:</label>
+        <input
+          id="optionIds"
+          type="text"
+          placeholder="Enter Option IDs (e.g., 1, 2, 3)"
+          value={optionIds}
+          onChange={(e) => setOptionIds(e.target.value)}
+        />
+      </div>
+
+      {/* Submit Button */}
       <button
-        onClick={handleFetchOptions}
-        style={{
-          padding: "10px 20px",
-          backgroundColor: "#007bff",
-          color: "#fff",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
+        type="button"
+        onClick={handleSubmit}
+        disabled={isSubmitting}
+        style={{ marginTop: "1em" }}
       >
-        Fetch Options
+        {isSubmitting ? "Submitting..." : "Update Options"}
       </button>
 
-      {error && (
-        <div
-          style={{
-            marginTop: "20px",
-            color: "red",
-            fontWeight: "bold",
-          }}
-        >
-          {error}
-        </div>
-      )}
-
-      {options && options.length > 0 && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Fetched Options:</h3>
-          <ul>
-            {options.map((option) => (
-              <li key={option.optionId} style={{ marginBottom: "10px" }}>
-                <strong>Option ID:</strong> {option.optionId} <br />
-                <strong>Label:</strong> {option.label} <br />
-                <strong>Text:</strong> {option.text} <br />
-                <strong>Next Action ID:</strong> {option.nextActionId}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* Response Message */}
+      {responseMessage && <p>{responseMessage}</p>}
     </div>
   );
 };
 
-export default FetchOptions;
+export default UpdateOptions;
