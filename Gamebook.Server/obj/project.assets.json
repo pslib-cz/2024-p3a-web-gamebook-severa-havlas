@@ -7254,23 +7254,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\havla\\.nuget\\packages\\": {},
+    "C:\\Users\\jakub.havlas.022\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
+      "projectUniqueName": "C:\\Users\\jakub.havlas.022\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
       "projectName": "Gamebook.Server",
-      "projectPath": "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
-      "packagesPath": "C:\\Users\\havla\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\havla\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\obj\\",
+      "projectPath": "C:\\Users\\jakub.havlas.022\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\Gamebook.Server.csproj",
+      "packagesPath": "C:\\Users\\jakub.havlas.022\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jakub.havlas.022\\source\\repos\\2024-p3a-web-gamebook-severa-havlas\\Gamebook.Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\havla\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jakub.havlas.022\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -7353,7 +7353,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

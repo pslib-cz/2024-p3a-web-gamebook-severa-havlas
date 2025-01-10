@@ -5,11 +5,30 @@
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _06 : Migration
+    public partial class _10 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Actions",
+                columns: table => new
+                {
+                    ActionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ActionTypeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    OptionsIDs = table.Column<string>(type: "TEXT", nullable: false),
+                    ReqItem = table.Column<int>(type: "INTEGER", nullable: true),
+                    ReqProgress = table.Column<int>(type: "INTEGER", nullable: true),
+                    ReqNPC = table.Column<int>(type: "INTEGER", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    ReqAction = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Actions", x => x.ActionId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ActionTypes",
                 columns: table => new
@@ -36,80 +55,6 @@ namespace Gamebook.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.RoomId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Actions",
-                columns: table => new
-                {
-                    ActionId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ActionTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ReqItem = table.Column<int>(type: "INTEGER", nullable: true),
-                    ReqProgress = table.Column<int>(type: "INTEGER", nullable: true),
-                    ReqNPC = table.Column<int>(type: "INTEGER", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    ReqAction = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Actions", x => x.ActionId);
-                    table.ForeignKey(
-                        name: "FK_Actions_ActionTypes_ActionTypeId",
-                        column: x => x.ActionTypeId,
-                        principalTable: "ActionTypes",
-                        principalColumn: "ActionTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Connections",
-                columns: table => new
-                {
-                    ConnectionId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FromRoomId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ToRoomId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Connections", x => x.ConnectionId);
-                    table.ForeignKey(
-                        name: "FK_Connections_Rooms_FromRoomId",
-                        column: x => x.FromRoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Connections_Rooms_ToRoomId",
-                        column: x => x.ToRoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GameBookActionRoom",
-                columns: table => new
-                {
-                    RequiredActionsActionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RoomId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GameBookActionRoom", x => new { x.RequiredActionsActionId, x.RoomId });
-                    table.ForeignKey(
-                        name: "FK_GameBookActionRoom_Actions_RequiredActionsActionId",
-                        column: x => x.RequiredActionsActionId,
-                        principalTable: "Actions",
-                        principalColumn: "ActionId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GameBookActionRoom_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,17 +109,66 @@ namespace Gamebook.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Label = table.Column<string>(type: "TEXT", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: false),
-                    NextActionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    GameBookActionActionId = table.Column<int>(type: "INTEGER", nullable: true)
+                    NextActionId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Options", x => x.OptionId);
                     table.ForeignKey(
-                        name: "FK_Options_Actions_GameBookActionActionId",
-                        column: x => x.GameBookActionActionId,
+                        name: "FK_Options_Actions_NextActionId",
+                        column: x => x.NextActionId,
                         principalTable: "Actions",
                         principalColumn: "ActionId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Connections",
+                columns: table => new
+                {
+                    ConnectionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FromRoomId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ToRoomId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Connections", x => x.ConnectionId);
+                    table.ForeignKey(
+                        name: "FK_Connections_Rooms_FromRoomId",
+                        column: x => x.FromRoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Connections_Rooms_ToRoomId",
+                        column: x => x.ToRoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameBookActionRoom",
+                columns: table => new
+                {
+                    RequiredActionsActionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RoomId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameBookActionRoom", x => new { x.RequiredActionsActionId, x.RoomId });
+                    table.ForeignKey(
+                        name: "FK_GameBookActionRoom_Actions_RequiredActionsActionId",
+                        column: x => x.RequiredActionsActionId,
+                        principalTable: "Actions",
+                        principalColumn: "ActionId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GameBookActionRoom_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -302,11 +296,6 @@ namespace Gamebook.Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Actions_ActionTypeId",
-                table: "Actions",
-                column: "ActionTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Connections_FromRoomId",
                 table: "Connections",
                 column: "FromRoomId");
@@ -362,14 +351,17 @@ namespace Gamebook.Server.Migrations
                 column: "ActionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Options_GameBookActionActionId",
+                name: "IX_Options_NextActionId",
                 table: "Options",
-                column: "GameBookActionActionId");
+                column: "NextActionId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ActionTypes");
+
             migrationBuilder.DropTable(
                 name: "Connections");
 
@@ -405,9 +397,6 @@ namespace Gamebook.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Actions");
-
-            migrationBuilder.DropTable(
-                name: "ActionTypes");
         }
     }
 }
