@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 
-interface Light {
-  row: number;
-  col: number;
-  isOn: boolean;
-}
-
 const LightsOutPuzzle: React.FC = () => {
-  const gridSize = 5; // 5x5 grid
+  const gridSize = 3; // 3x3 grid
   const [grid, setGrid] = useState<boolean[][]>(
     Array.from({ length: gridSize }, () =>
       Array.from({ length: gridSize }, () => Math.random() > 0.5)

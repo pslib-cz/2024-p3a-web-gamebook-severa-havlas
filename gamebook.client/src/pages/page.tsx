@@ -31,7 +31,6 @@ const Page = () => {
   <LightsOutPuzzle />
   
   <LockCombinationPuzzle numberOfDials={9} maxDialValue={9} />
-      <Link to="/Map">Mapa</Link>
       <Link to="/">Ukončit Hru</Link>
     </>
   );
