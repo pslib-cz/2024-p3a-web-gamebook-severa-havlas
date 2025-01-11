@@ -14,7 +14,6 @@ namespace Gamebook.Server.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemPosition> ItemPositions { get; set; }
         public DbSet<NPC> NPCs { get; set; }
-        public DbSet<Option> Options { get; set; }
         public DbSet<Room> Rooms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,8 +73,6 @@ namespace Gamebook.Server.Data
                 .HasOne<GameBookAction>(n => n.Action)
                 .WithMany();
 
-            modelBuilder.Entity<Option>()
-                .HasKey(a => a.OptionId);
 
             modelBuilder.Entity<Room>()
                 .HasKey(r => r.RoomId);

@@ -6,8 +6,11 @@ namespace Gamebook.Server.models
     {
         [Key]
         public int ActionTypeId { get; set; }
-        public string Name { get; set; } // Action type name, e.g., "Type1", "Type2"
+        public string Name { get; set; } // Name of the action type
+
+        // Navigation property
+        public virtual ICollection<GameBookAction> GameBookActions { get; set; }
     }
 
-   
+
 }

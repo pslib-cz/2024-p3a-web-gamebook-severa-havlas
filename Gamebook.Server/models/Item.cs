@@ -12,8 +12,9 @@ namespace Gamebook.Server.models
         public string Description { get; set; }
 
         [ForeignKey("GameBookAction")]
-        public int GameBookActionId { get; set; }
+        public int? GameBookActionId { get; set; } // Optional action association
         public virtual GameBookAction GameBookAction { get; set; }
+
         public int? Target { get; set; } // Nullable target reference
     }
 }
