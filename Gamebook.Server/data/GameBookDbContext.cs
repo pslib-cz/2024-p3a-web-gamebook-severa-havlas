@@ -15,87 +15,35 @@ namespace Gamebook.Server.Data
         public DbSet<ItemPosition> ItemPositions { get; set; }
         public DbSet<NPC> NPCs { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<Dialog> Dialogs { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Room and Connection relationship configuration
-            modelBuilder.Entity<Connection>()
-                .HasOne<Room>()
-                .WithMany(r => r.ConnectionsFrom)
-                .HasForeignKey(c => c.FromRoomId)
+
+
+            // Room -> NPC relationship
+            modelBuilder.Entity<NPC>()
+                .HasOne(n => n.CurrentRoom) // Explicit navigation for Room
+                .WithMany(r => r.NPCs)      // Room can have many NPCs
+                .HasForeignKey(n => n.CurrentRoomId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Connection>()
-                .HasOne<Room>()
-                .WithMany(r => r.ConnectionsTo)
-                .HasForeignKey(c => c.ToRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Other configurations remain unchanged
-            modelBuilder.Entity<ActionType>()
-                .HasKey(a => a.ActionTypeId);
-
-
-
-            
-
-
-            modelBuilder.Entity<GameBookAction>()
-                  .HasKey(i => i.ActionId);
-
-          
-
-
-          
-
-
+            // Room -> Item relationship
             modelBuilder.Entity<Item>()
-                .HasKey(i => i.ItemId);
+                .HasOne(i => i.RequiredRoom) // Explicit navigation for Room
+                .WithMany(r => r.RequiredItems)
+                .HasForeignKey(i => i.RequiredRoomId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-          
-
-            modelBuilder.Entity<ItemPosition>()
-                .HasKey(ip => ip.ItemPositionId);
-
+            // ItemPosition -> Room relationship
             modelBuilder.Entity<ItemPosition>()
                 .HasOne(ip => ip.Room)
                 .WithMany(r => r.ItemPositions)
-                .HasForeignKey(ip => ip.RoomId);
+                .HasForeignKey(ip => ip.RoomId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ItemPosition>()
-                .HasOne(ip => ip.Item)
-                .WithMany();
-
-            modelBuilder.Entity<NPC>()
-                .HasKey(n => n.NPCId);
-
-            modelBuilder.Entity<NPC>()
-                .HasOne<GameBookAction>(n => n.Action)
-                .WithMany();
-
-
-            modelBuilder.Entity<Room>()
-                .HasKey(r => r.RoomId);
-
-            modelBuilder.Entity<Room>()
-                .HasMany(r => r.Items)
-                .WithMany();
-
-            modelBuilder.Entity<Room>()
-                .HasMany(r => r.NPCs)
-                .WithMany();
-
-            modelBuilder.Entity<Room>()
-                .HasMany(r => r.RequiredItems)
-                .WithMany();
-
-            modelBuilder.Entity<Room>()
-                .HasMany(r => r.RequiredNPCs)
-                .WithMany();
-
-            modelBuilder.Entity<Room>()
-                .HasMany(r => r.RequiredActions)
-                .WithMany();
+            base.OnModelCreating(modelBuilder);
         }
 
     }

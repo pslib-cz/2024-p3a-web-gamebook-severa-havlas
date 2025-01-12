@@ -11,12 +11,16 @@ namespace Gamebook.Server.models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        [ForeignKey("Dialog")]
-        public virtual ICollection<Dialog> Dialogs { get; set; } // Dialogs associated with the NPC
+        public virtual ICollection<Dialog> Dialogs { get; set; } // No ForeignKey attribute here
 
         [ForeignKey("GameBookAction")]
         public int? ActionId { get; set; }
         public virtual GameBookAction Action { get; set; }
+
+        // Explicit Room reference
+        [ForeignKey("CurrentRoom")]
+        public int? CurrentRoomId { get; set; }
+        public virtual Room CurrentRoom { get; set; }
 
         public int? Target { get; set; }
     }

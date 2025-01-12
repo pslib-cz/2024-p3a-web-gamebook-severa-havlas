@@ -21,7 +21,7 @@ namespace Gamebook.Server.Controllers
         {
             _context = context;
         }
-
+        /*
         [HttpGet]
         [Route("{id}/image")]
         public async Task<IActionResult> GetRoomImage(int id)
@@ -384,6 +384,6 @@ namespace Gamebook.Server.Controllers
             public required string Text { get; set; } // Description of the room
             public IFormFile Img { get; set; }        // Image file (uploaded by user)
         }
-
+        */
     }
 }
