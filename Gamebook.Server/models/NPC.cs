@@ -22,6 +22,10 @@ namespace Gamebook.Server.models
         public int? CurrentRoomId { get; set; }
         public virtual Room CurrentRoom { get; set; }
 
+        [ForeignKey("RequiredRoom")]
+        public int? RequiredRoomId { get; set; }
+        public virtual Room RequiredRoom { get; set; }
+
         public int? Target { get; set; }
     }
 }

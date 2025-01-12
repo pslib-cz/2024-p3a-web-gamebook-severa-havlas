@@ -13,9 +13,7 @@ namespace Gamebook.Server.models
         public int? NPCId { get; set; } // Optional reference to NPC
         public virtual NPC NPC { get; set; }
 
-        [ForeignKey("Room")]
-        public int? RoomId { get; set; } // Optional reference to Room
-        public virtual Room Room { get; set; }
+   
 
         [ForeignKey("GameBookAction")]
         public int? ActionId { get; set; } // Optional reference to Action

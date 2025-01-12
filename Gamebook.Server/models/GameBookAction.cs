@@ -23,6 +23,14 @@ namespace Gamebook.Server.models
         public string MiniGameType { get; set; } // Type of mini-game (e.g., "Puzzle", "Quiz")
         public string MiniGameData { get; set; } // Data or configuration for the mini-game
 
+        [ForeignKey("RequiredRoom")]
+        public int? RequiredRoomId { get; set; }
+        public virtual Room RequiredRoom { get; set; }
+
+        [ForeignKey("CurrentRoom")]
+        public int? CurrentRoomId { get; set; }
+        public virtual Room CurrentRoom { get; set; }
+
         // Navigation property
         public virtual ICollection<Dialog> Dialogs { get; set; }
     }

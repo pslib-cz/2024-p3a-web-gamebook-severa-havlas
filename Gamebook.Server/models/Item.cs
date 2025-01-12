@@ -16,8 +16,13 @@ namespace Gamebook.Server.models
         public virtual GameBookAction GameBookAction { get; set; }
 
 
+        [ForeignKey("CurrentRoomId")]
+        public int? CurrentRoomId { get; set; }
+        public virtual Room CurrentRoom { get; set; }
+
+
         // Room association for Required Items (if needed)
-        [ForeignKey("RequiredRoom")]
+        [ForeignKey("RequiredRoomId")]
         public int? RequiredRoomId { get; set; }
         public virtual Room RequiredRoom { get; set; }
         public int? Target { get; set; } // Nullable target reference

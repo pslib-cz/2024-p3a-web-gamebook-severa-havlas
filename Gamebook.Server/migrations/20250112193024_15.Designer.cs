@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20250112174027_14")]
-    partial class _14
+    [Migration("20250112193024_15")]
+    partial class _15
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,9 +70,6 @@ namespace Gamebook.Server.Migrations
                     b.Property<int?>("ParentDialogId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("RoomId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -85,8 +82,6 @@ namespace Gamebook.Server.Migrations
 
                     b.HasIndex("ParentDialogId");
 
-                    b.HasIndex("RoomId");
-
                     b.ToTable("Dialogs");
                 });
 
@@ -97,6 +92,9 @@ namespace Gamebook.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ActionTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CurrentRoomId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -123,9 +121,16 @@ namespace Gamebook.Server.Migrations
                     b.Property<int?>("ReqProgress")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("RequiredRoomId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ActionId");
 
                     b.HasIndex("ActionTypeId");
+
+                    b.HasIndex("CurrentRoomId");
+
+                    b.HasIndex("RequiredRoomId");
 
                     b.ToTable("Actions");
                 });
@@ -134,6 +139,9 @@ namespace Gamebook.Server.Migrations
                 {
                     b.Property<int>("ItemId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CurrentRoomId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -154,6 +162,8 @@ namespace Gamebook.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ItemId");
+
+                    b.HasIndex("CurrentRoomId");
 
                     b.HasIndex("GameBookActionId");
 
@@ -209,6 +219,9 @@ namespace Gamebook.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("RequiredRoomId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("Target")
                         .HasColumnType("INTEGER");
 
@@ -217,6 +230,8 @@ namespace Gamebook.Server.Migrations
                     b.HasIndex("ActionId");
 
                     b.HasIndex("CurrentRoomId");
+
+                    b.HasIndex("RequiredRoomId");
 
                     b.ToTable("NPCs");
                 });
@@ -247,15 +262,15 @@ namespace Gamebook.Server.Migrations
             modelBuilder.Entity("Gamebook.Server.models.Connection", b =>
                 {
                     b.HasOne("Gamebook.Server.models.Room", "FromRoom")
-                        .WithMany()
+                        .WithMany("ConnectionsFrom")
                         .HasForeignKey("FromRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Gamebook.Server.models.Room", "ToRoom")
-                        .WithMany()
+                        .WithMany("ConnectionsTo")
                         .HasForeignKey("ToRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("FromRoom");
@@ -277,17 +292,11 @@ namespace Gamebook.Server.Migrations
                         .WithMany("ChildDialogs")
                         .HasForeignKey("ParentDialogId");
 
-                    b.HasOne("Gamebook.Server.models.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId");
-
                     b.Navigation("GameBookAction");
 
                     b.Navigation("NPC");
 
                     b.Navigation("ParentDialog");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Gamebook.Server.models.GameBookAction", b =>
@@ -298,11 +307,30 @@ namespace Gamebook.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Gamebook.Server.models.Room", "CurrentRoom")
+                        .WithMany("TriggerActions")
+                        .HasForeignKey("CurrentRoomId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Gamebook.Server.models.Room", "RequiredRoom")
+                        .WithMany("RequiredActions")
+                        .HasForeignKey("RequiredRoomId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("ActionType");
+
+                    b.Navigation("CurrentRoom");
+
+                    b.Navigation("RequiredRoom");
                 });
 
             modelBuilder.Entity("Gamebook.Server.models.Item", b =>
                 {
+                    b.HasOne("Gamebook.Server.models.Room", "CurrentRoom")
+                        .WithMany("Items")
+                        .HasForeignKey("CurrentRoomId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Gamebook.Server.models.GameBookAction", "GameBookAction")
                         .WithMany()
                         .HasForeignKey("GameBookActionId");
@@ -311,6 +339,8 @@ namespace Gamebook.Server.Migrations
                         .WithMany("RequiredItems")
                         .HasForeignKey("RequiredRoomId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CurrentRoom");
 
                     b.Navigation("GameBookAction");
 
@@ -328,7 +358,7 @@ namespace Gamebook.Server.Migrations
                     b.HasOne("Gamebook.Server.models.Room", "Room")
                         .WithMany("ItemPositions")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Item");
@@ -347,9 +377,16 @@ namespace Gamebook.Server.Migrations
                         .HasForeignKey("CurrentRoomId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Gamebook.Server.models.Room", "RequiredRoom")
+                        .WithMany("RequiredNPCs")
+                        .HasForeignKey("RequiredRoomId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Action");
 
                     b.Navigation("CurrentRoom");
+
+                    b.Navigation("RequiredRoom");
                 });
 
             modelBuilder.Entity("Gamebook.Server.models.ActionType", b =>
@@ -374,11 +411,23 @@ namespace Gamebook.Server.Migrations
 
             modelBuilder.Entity("Gamebook.Server.models.Room", b =>
                 {
+                    b.Navigation("ConnectionsFrom");
+
+                    b.Navigation("ConnectionsTo");
+
                     b.Navigation("ItemPositions");
+
+                    b.Navigation("Items");
 
                     b.Navigation("NPCs");
 
+                    b.Navigation("RequiredActions");
+
                     b.Navigation("RequiredItems");
+
+                    b.Navigation("RequiredNPCs");
+
+                    b.Navigation("TriggerActions");
                 });
 #pragma warning restore 612, 618
         }
