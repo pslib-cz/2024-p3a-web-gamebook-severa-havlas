@@ -13,7 +13,7 @@ const JigsawPuzzle: React.FC = () => {
   const [pieces, setPieces] = useState<PuzzlePiece[]>([]);
   const gridSize = 3; // 3x3 grid
   const pieceSize = 100; // 100px by 100px pieces
-  const imageSrc = "https://localhost:7058/api/Rooms/9/image"; // Replace with your image URL
+  const imageSrc = "https://localhost:7058/api/Rooms/1/image"; // Replace with your image URL
   const snapThreshold = 100; // Snap into place if within 15px of correct position
 
   useEffect(() => {

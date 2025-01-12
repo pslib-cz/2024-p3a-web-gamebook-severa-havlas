@@ -76,12 +76,26 @@ namespace Gamebook.Server.Controllers
         // POST: api/ActionTypes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ActionType>> PostActionType(ActionType actionType)
+        public async Task<ActionResult<ActionType>> PostActionType(PostActionTypeDto actionTypeDto)
         {
+            // Map the DTO to the ActionType entity
+            var actionType = new ActionType
+            {
+                Name = actionTypeDto.Name
+            };
+
+            // Add to context and save changes
             _context.ActionTypes.Add(actionType);
             await _context.SaveChangesAsync();
 
+            // Return the created resource
             return CreatedAtAction("GetActionType", new { id = actionType.ActionTypeId }, actionType);
+        }
+
+        // DTO class
+        public class PostActionTypeDto
+        {
+            public string Name { get; set; }
         }
 
         // DELETE: api/ActionTypes/5

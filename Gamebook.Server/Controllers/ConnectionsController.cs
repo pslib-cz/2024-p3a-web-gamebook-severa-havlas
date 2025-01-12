@@ -76,12 +76,46 @@ namespace Gamebook.Server.Controllers
         // POST: api/Connections
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Connection>> PostConnection(Connection connection)
+        public async Task<ActionResult<Connection>> PostConnection([FromBody] ConnectionDto connectionData)
         {
+            // Validate input
+            if (connectionData == null || connectionData.FromRoomId == 0 || connectionData.ToRoomId == 0)
+            {
+                return BadRequest("Invalid input. Both FromRoomId and ToRoomId must be provided.");
+            }
+
+            // Fetch Rooms from database
+            var fromRoom = await _context.Rooms.FindAsync(connectionData.FromRoomId);
+            var toRoom = await _context.Rooms.FindAsync(connectionData.ToRoomId);
+
+            // Check if Rooms exist
+            if (fromRoom == null || toRoom == null)
+            {
+                return NotFound("One or both of the specified rooms do not exist.");
+            }
+
+            // Create new connection
+            var connection = new Connection
+            {
+                FromRoomId = connectionData.FromRoomId,
+                ToRoomId = connectionData.ToRoomId,
+                FromRoom = fromRoom,
+                ToRoom = toRoom
+            };
+
+            // Add connection to database
             _context.Connections.Add(connection);
             await _context.SaveChangesAsync();
 
+            // Return created connection
             return CreatedAtAction("GetConnection", new { id = connection.ConnectionId }, connection);
+        }
+
+        // DTO class for incoming JSON
+        public class ConnectionDto
+        {
+            public int FromRoomId { get; set; }
+            public int ToRoomId { get; set; }
         }
 
         // DELETE: api/Connections/5
