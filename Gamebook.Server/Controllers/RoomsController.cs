@@ -135,15 +135,16 @@ namespace Gamebook.Server.Controllers
                 return NotFound();
             }
 
-            // Return only the required properties
+            // Return only the IDs of the required properties
             return new
             {
-
-                RequiredItems = room.RequiredItems,
-                RequiredNPCs = room.RequiredNPCs,
-                RequiredActions = room.RequiredActions
+                RequiredItems = room.RequiredItems.Select(item => item.ItemId), // Assuming ItemId exists in Item class
+                RequiredNPCs = room.RequiredNPCs.Select(npc => npc.NPCId),     // Assuming NPCId exists in NPC class
+                RequiredActions = room.RequiredActions.Select(action => action.ActionId) // Assuming ActionId exists in GameBookAction class
             };
         }
+
+
         // PATCH: api/Rooms/{id}/UpdateRequirements
         [HttpPatch("{id}/UpdateRequirements")]
         public async Task<IActionResult> UpdateRoomRequirements(

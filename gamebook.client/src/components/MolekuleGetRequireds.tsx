@@ -79,7 +79,7 @@ const GetRequireds: React.FC<GetRequiredsProps> = ({ roomId }) => {
             {roomData.requiredActions.length > 0 ? (
                 <ul>
                     {roomData.requiredActions.map((action, index) => (
-                        <li key={index}>{action.actionId}</li>
+                        <li key={index}>{action.ActionId}</li>
                     ))}
                 </ul>
             ) : (

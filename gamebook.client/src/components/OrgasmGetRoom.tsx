@@ -35,7 +35,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
         // Pokud má místnost URL obrázku, nastavíme jej jako pozadí
         if (data.imgUrl && onBackgroundImageChange) {
-          onBackgroundImageChange(`https://localhost:7058${data.imgUrl}`);
+          //onBackgroundImageChange(`https://localhost:7058${data.imgUrl}`);
         }
       } catch (error) {
         console.error(error);

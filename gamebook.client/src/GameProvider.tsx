@@ -1,14 +1,20 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 
+interface PlayerItem {
+  itemId: number;
+  itemName: string;
+  quantity: number;
+}
+
 // Define the shape of your context
 type GameContextType = {
   roomId: string | null;
   setRoomId: (id: string | null) => void;
   player: {
-    items: Record<string, number>; // Items with numeric values
+    items: PlayerItem[]; // Array of PlayerItem objects
   };
-  setPlayerItems: (update: (prevItems: Record<string, number>) => Record<string, number>) => void;
+  setPlayerItems: (update: (prevItems: PlayerItem[]) => PlayerItem[]) => void;
 };
 
 // Create the context with a default value
@@ -16,7 +22,7 @@ export const GameContext = createContext<GameContextType>({
   roomId: "1",
   setRoomId: () => {},
   player: {
-    items: {},
+    items: [],
   },
   setPlayerItems: () => {},
 });
@@ -24,8 +30,8 @@ export const GameContext = createContext<GameContextType>({
 // Create a Provider component to wrap your app
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [roomId, setRoomId] = useState<string | null>(null);
-  const [player, setPlayer] = useState<{ items: Record<string, number> }>({
-    items: {}, // Default empty items
+  const [player, setPlayer] = useState<{ items: PlayerItem[] }>({
+    items: [], // Default empty array of items
   });
   const location = useLocation();
 
@@ -35,12 +41,13 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const response = await fetch("https://localhost:7058/api/items");
         const data = await response.json();
-
-        const items = data.reduce((acc: Record<string, number>, item: { name: string }) => {
-          acc[item.name] = 0; // Default quantity of 0
-          return acc;
-        }, {});
-
+    
+        const items = data.map((item: { itemId: number; itemName: string }) => ({
+          itemId: item.itemId,
+          itemName: item.itemName,
+          quantity: 0, // Default quantity of 0
+        }));
+    
         setPlayer((prev) => ({
           ...prev,
           items,
@@ -61,7 +68,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [location]); // Runs every time the location changes
 
   // Function to update player's items
-  const setPlayerItems = (update: (prevItems: Record<string, number>) => Record<string, number>) => {
+  const setPlayerItems = (update: (prevItems: PlayerItem[]) => PlayerItem[]) => {
     setPlayer((prev) => ({
       ...prev,
       items: update(prev.items),

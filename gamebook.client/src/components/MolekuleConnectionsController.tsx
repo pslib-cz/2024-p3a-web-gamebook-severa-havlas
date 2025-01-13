@@ -16,6 +16,11 @@ type RoomRequirements = {
 type ConnectionViewerProps = {
   roomId: string;
 };
+interface PlayerItem {
+  itemId: number;
+  itemName: string;
+  quantity: number;
+}
 
 const ConnectionViewer2: React.FC<ConnectionViewerProps> = ({ roomId }) => {
   const { setRoomId, player } = useGameContext();
@@ -45,27 +50,29 @@ const ConnectionViewer2: React.FC<ConnectionViewerProps> = ({ roomId }) => {
         const states: Record<number, boolean> = {};
         for (const connection of data) {
           const toRoomId = connection.toRoomId;
-
+        
           const reqResponse = await fetch(
             `https://localhost:7058/api/Rooms/Required/${toRoomId}`
           );
-
+        
           if (!reqResponse.ok) {
             throw new Error(
               `Error fetching room requirements for room ${toRoomId}: ${reqResponse.status}`
             );
           }
-
+        
           const requirements: RoomRequirements = await reqResponse.json();
-
-          // Check for missing items by ensuring the item exists AND its quantity > 0
-          const missingItems = requirements.requiredItems.filter(
-            (item) =>
-              !player.items[item.name] || Number(player.items[item.name]) <= 0
-          );
-
+        
+          const missingItems = requirements.requiredItems.filter((requiredItem) => {
+            const playerItem = player.items.find(
+              (item) => item.itemId === requiredItem.itemId
+            );
+            return !playerItem || playerItem.quantity <= 0;
+          });
+        
           states[toRoomId] = missingItems.length === 0; // Enable button only if no items are missing
         }
+        
 
         setButtonStates(states);
       } catch (err) {
@@ -100,11 +107,14 @@ const ConnectionViewer2: React.FC<ConnectionViewerProps> = ({ roomId }) => {
       }
 
       // Check for missing items by ensuring the item exists AND its quantity > 0
-      const missingItems = requirements.requiredItems.filter(
-        (item) =>
-          !player.items[item.name] || Number(player.items[item.name]) <= 0
-      );
-
+      const missingItems = requirements.requiredItems.filter((requiredItem) => {
+        const playerItem = player.items.find(
+          (item) => item.itemId === requiredItem.itemId
+        );
+        return !playerItem || playerItem.quantity <= 0;
+      });
+      
+        console.log("Missing items:", missingItems);
       if (missingItems.length > 0) {
         alert(
           `You are missing the following items: ${missingItems
@@ -143,7 +153,7 @@ const ConnectionViewer2: React.FC<ConnectionViewerProps> = ({ roomId }) => {
             </p>
             <button
               onClick={() => handleNavigation(connection.toRoomId)}
-              disabled={!buttonStates[connection.toRoomId]} // Disable button if requirements aren't met
+              
             >
               Go to Room {connection.toRoomId}
             </button>

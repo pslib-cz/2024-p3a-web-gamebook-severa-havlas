@@ -23,6 +23,12 @@ type RoomContent = {
   itemPositions: ItemPosition[];
 };
 
+type PlayerItem = {
+  itemId: number;
+  itemName: string;
+  quantity: number;
+};
+
 type RoomContentViewerProps = {
   roomId: string; // Room ID passed from the parent component
 };
@@ -73,11 +79,32 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
       return;
     }
   
-    // Add or increment item in player's inventory
-    setPlayerItems((prevItems: Record<string, number>) => ({
-      ...prevItems,
-      [pickedItem.name]: (prevItems[pickedItem.name] || 0) + 1,
-    }));
+    // Add or increment the item in the player's inventory
+    setPlayerItems((prevItems: PlayerItem[]) => {
+      const itemIndex = prevItems.findIndex((item) => item.itemId === pickedItem.itemId);
+  
+      if (itemIndex >= 0) {
+        // Increment quantity if the item already exists
+        const updatedItems = [...prevItems];
+        updatedItems[itemIndex] = {
+          ...updatedItems[itemIndex],
+          quantity: updatedItems[itemIndex].quantity + 1,
+        };
+        return updatedItems;
+      } else {
+        // Add the item if it doesn't exist
+        return [
+          ...prevItems,
+          {
+            itemId: pickedItem.itemId,
+            itemName: pickedItem.name,
+            quantity: 1,
+          },
+        ];
+      }
+    });
+  
+    console.log("Player's inventory after picking up the item:", player.items);
   
     console.log(`Picked up: ${pickedItem.name}`);
   };

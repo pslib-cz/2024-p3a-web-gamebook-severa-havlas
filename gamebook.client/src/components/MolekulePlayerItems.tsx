@@ -2,23 +2,18 @@ import React from "react";
 import { useGameContext } from "../GameProvider";
 
 export const PlayerItems = () => {
-  const { player, setPlayerItems } = useGameContext();
-
- 
+  const { player } = useGameContext();
 
   return (
     <div>
       <h1>Player Items</h1>
       <ul>
-        {Object.entries(player.items).map(([itemName, quantity]) => (
-          <li key={itemName}>
-            {itemName}: {quantity}
+        {player.items.map((item) => (
+          <li key={item.itemId}>
+            {item.itemName}: {item.quantity}
           </li>
         ))}
       </ul>
-
     </div>
   );
 };
-
-
