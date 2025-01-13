@@ -8,7 +8,7 @@ type Connection = {
 };
 
 type RoomRequirements = {
-  requiredItems: { itemId: number; name: string; description: string }[];
+  requiredItems: number[]; // Array of item IDs
   requiredNPCs: any[];
   requiredActions: any[];
 };
@@ -65,7 +65,7 @@ const ConnectionViewer2: React.FC<ConnectionViewerProps> = ({ roomId }) => {
         
           const missingItems = requirements.requiredItems.filter((requiredItem) => {
             const playerItem = player.items.find(
-              (item) => item.itemId === requiredItem.itemId
+              (item) => item.itemId === requiredItem
             );
             return !playerItem || playerItem.quantity <= 0;
           });
@@ -90,13 +90,13 @@ const ConnectionViewer2: React.FC<ConnectionViewerProps> = ({ roomId }) => {
       const response = await fetch(
         `https://localhost:7058/api/Rooms/Required/${toRoomId}`
       );
-
+  
       if (!response.ok) {
         throw new Error(`Error fetching room requirements: ${response.status}`);
       }
-
+  
       const requirements: RoomRequirements = await response.json();
-
+  
       if (
         (!requirements.requiredItems || requirements.requiredItems.length === 0) &&
         (!requirements.requiredNPCs || requirements.requiredNPCs.length === 0) &&
@@ -105,25 +105,24 @@ const ConnectionViewer2: React.FC<ConnectionViewerProps> = ({ roomId }) => {
         setRoomId(String(toRoomId));
         return;
       }
-
-      // Check for missing items by ensuring the item exists AND its quantity > 0
-      const missingItems = requirements.requiredItems.filter((requiredItem) => {
+  
+      // Compare itemIds to RequiredItemIds
+      const missingItemIds = requirements.requiredItems.filter((requiredItemId) => {
         const playerItem = player.items.find(
-          (item) => item.itemId === requiredItem.itemId
+          (item) => item.itemId === requiredItemId
         );
         return !playerItem || playerItem.quantity <= 0;
       });
-      
-        console.log("Missing items:", missingItems);
-      if (missingItems.length > 0) {
+  
+      console.log("Missing item IDs:", missingItemIds);
+  
+      if (missingItemIds.length > 0) {
         alert(
-          `You are missing the following items: ${missingItems
-            .map((item) => item.name)
-            .join(", ")}`
+          `You are missing the following items: ${missingItemIds.join(", ")}`
         );
         return;
       }
-
+  
       setRoomId(String(toRoomId));
     } catch (err) {
       setError((err as Error).message);

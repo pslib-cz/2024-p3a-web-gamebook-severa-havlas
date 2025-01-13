@@ -42,9 +42,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const response = await fetch("https://localhost:7058/api/items");
         const data = await response.json();
     
-        const items = data.map((item: { itemId: number; itemName: string }) => ({
+        const items = data.map((item: { itemId: number; name: string }) => ({
           itemId: item.itemId,
-          itemName: item.itemName,
+          itemName: item.name,
           quantity: 0, // Default quantity of 0
         }));
     
