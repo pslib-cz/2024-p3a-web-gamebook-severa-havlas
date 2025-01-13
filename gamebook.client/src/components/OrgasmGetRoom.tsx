@@ -4,12 +4,13 @@ import ConnectionsViewer from "./MolekuleConnectionViewer";
 import GetRequireds from "./MolekuleGetRequireds";
 import ConnectionViewer2 from "./MolekuleConnectionsController";
 import RoomContentViewer from "./MolekuleGetRoomContent";
+
 type RoomDetailsInputProps = {
   id: string;
+  onBackgroundImageChange?: (imageUrl: string) => void;
 };
 
-const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
- 
+const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageChange }) => {
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,6 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
         if (!response.ok) throw new Error("Failed to fetch room");
 
         const data: Room = await response.json();
-        // Provide default values for `items` and `npcs` if they are missing
         setRoom({
           ...data,
           connectionsTo: data.connectionsTo || [],
@@ -32,6 +32,11 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
           items: data.items || [],
           npcs: data.npcs || [],
         });
+
+        // Pokud má místnost URL obrázku, nastavíme jej jako pozadí
+        if (data.imgUrl && onBackgroundImageChange) {
+          onBackgroundImageChange(`https://localhost:7058${data.imgUrl}`);
+        }
       } catch (error) {
         console.error(error);
         setError("Error fetching room.");
@@ -41,40 +46,33 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id }) => {
     };
 
     fetchRoom();
-  }, [id]);
+  }, [id, onBackgroundImageChange]);
 
   if (loading) return <div>Loading...</div>;
-
   if (error) return <div>{error}</div>;
-
   if (!room) return <div>Room not found.</div>;
 
   return (
-    
     <div>
       <h1>{room.name}</h1>
-      <img src={"https://localhost:7058"+room.imgUrl} alt={room.name} width={400} />
+      <img src={`https://localhost:7058${room.imgUrl}`} alt={room.name} width={400} />
       <p>{room.text}</p>
       <h2>ConnectionsTo</h2>
-   <ConnectionsViewer id={id} />
-   <h2>Requireds</h2>
-   <GetRequireds roomId={id} />
+      <ConnectionsViewer id={id} />
+      <h2>Requireds</h2>
+      <GetRequireds roomId={id} />
       <h2>Items</h2>
-      
-      
       <ul>
         {room.items.map((item) => (
           <li key={item.itemId}>{item.name}</li>
         ))}
       </ul>
-      <h2>Ťaoání</h2>
+      <h2>Řízení</h2>
       <ConnectionViewer2 roomId={id} />
       <h2>Content</h2>
-        <RoomContentViewer roomId={id} />
-        
+      <RoomContentViewer roomId={id} />
       {JSON.stringify(room)}
     </div>
-    
   );
 };
 

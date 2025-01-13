@@ -1,0 +1,24 @@
+.textEditor.collapsed {
+    max-width: 200px;
+    padding: 10px 0;
+    transform: translateX(-80%);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.textEditor {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.text-editor.collapsed h2,
+.text-editor.collapsed .toolbar,
+.text-editor.collapsed textarea {
+    display: none;
+}

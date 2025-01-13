@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../App.css";
+import styles from"./TextEditor.module.css";
 
 const TextEditor = () => {
   const [text, setText] = useState(""); // State to store the text
@@ -31,15 +31,15 @@ const TextEditor = () => {
   const toggleEditor = () => setIsCollapsed((prev) => !prev);
 
   return (
-    <div className={`text-editor ${isCollapsed ? "collapsed" : ""}`}>
-      <button className="toggle-button" onClick={toggleEditor}>
+    <div className={`${styles.textEditor} ${isCollapsed ? styles.collapsed : ""}`}>
+      <button className={styles.toggleButton} onClick={toggleEditor}>
         {isCollapsed ? "Open Editor" : "X"}
       </button>
 
       {!isCollapsed && (
         <div>
           <h2>Simple Text Editor</h2>
-          <div className="toolbar">
+          <div className={styles.toolbar}>
             <button onClick={toggleBold} className={bold ? "active" : ""}>
               Bold
             </button>

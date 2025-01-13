@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../App.css";
+import styles from "./Checklist.module.css";
 
 type Person = {
   id: number; // Row number
@@ -65,7 +65,7 @@ const correctPairs = [
   { name: "Finn van der Nordhagen", fate: "Alive" },
 ];
 
-const ObraDinnTable = () => {
+const Checklist = () => {
   const [people, setPeople] = useState<Person[]>(Array.from({ length: 19 }, (_, i) => ({
     id: i + 1,
     name: "",
@@ -135,7 +135,7 @@ const ObraDinnTable = () => {
   return (
     <div className="table-container" style={{ width: collapsed ? "50px" : "auto" }}>
       <button
-        className="collapse-button"
+        className={styles.collapsedButton}
         onClick={() => setCollapsed(!collapsed)}
         style={{
           width: "50px",
@@ -148,7 +148,7 @@ const ObraDinnTable = () => {
 
       {!collapsed && (
         <>
-          <h2>Obra Dinn Table</h2>
+          <h2>Checklist</h2>
           <table>
             <thead>
               <tr>
@@ -211,4 +211,4 @@ const ObraDinnTable = () => {
   );
 };
 
-export default ObraDinnTable;
+export default Checklist;
