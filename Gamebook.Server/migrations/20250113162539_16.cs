@@ -5,7 +5,7 @@
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _15 : Migration
+    public partial class _16 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,7 +50,6 @@ namespace Gamebook.Server.Migrations
                     ReqNPC = table.Column<int>(type: "INTEGER", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     ReqAction = table.Column<int>(type: "INTEGER", nullable: true),
-                    MiniGameType = table.Column<string>(type: "TEXT", nullable: false),
                     MiniGameData = table.Column<string>(type: "TEXT", nullable: false),
                     RequiredRoomId = table.Column<int>(type: "INTEGER", nullable: true),
                     CurrentRoomId = table.Column<int>(type: "INTEGER", nullable: true)
@@ -114,8 +113,10 @@ namespace Gamebook.Server.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     GameBookActionId = table.Column<int>(type: "INTEGER", nullable: true),
                     CurrentRoomId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Img = table.Column<byte[]>(type: "BLOB", nullable: true),
                     RequiredRoomId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Target = table.Column<int>(type: "INTEGER", nullable: true)
+                    Target = table.Column<int>(type: "INTEGER", nullable: true),
+                    Price = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -150,6 +151,7 @@ namespace Gamebook.Server.Migrations
                     ActionId = table.Column<int>(type: "INTEGER", nullable: true),
                     CurrentRoomId = table.Column<int>(type: "INTEGER", nullable: true),
                     RequiredRoomId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Img = table.Column<byte[]>(type: "BLOB", nullable: true),
                     Target = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>

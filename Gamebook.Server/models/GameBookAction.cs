@@ -19,8 +19,6 @@ namespace Gamebook.Server.models
         public string Description { get; set; }
         public int? ReqAction { get; set; }
 
-        // Mini-game properties
-        public string MiniGameType { get; set; } // Type of mini-game (e.g., "Puzzle", "Quiz")
         public string MiniGameData { get; set; } // Data or configuration for the mini-game
 
         [ForeignKey("RequiredRoom")]
@@ -32,7 +30,7 @@ namespace Gamebook.Server.models
         public virtual Room CurrentRoom { get; set; }
 
         // Navigation property
-        public virtual ICollection<Dialog> Dialogs { get; set; }
+        public virtual ICollection<Dialog>? Dialogs { get; set; }
     }
 
 }

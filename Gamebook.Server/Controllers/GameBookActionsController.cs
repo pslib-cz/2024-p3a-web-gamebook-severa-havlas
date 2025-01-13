@@ -42,73 +42,9 @@ namespace Gamebook.Server.Controllers
 
             return gameBookAction;
         }
-        /*
-        [HttpPatch("{ActionId}")]
-        public async Task<IActionResult> UpdateOptions(int ActionId, [FromBody] UpdateOptionsDTO dto)
-        {
-            if (dto == null || ActionId <= 0 || dto.OptionIds == null || !dto.OptionIds.Any())
-            {
-                return BadRequest("Invalid data.");
-            }
 
-            // Find the GameBookAction by its ID
-            var action = await _context.Actions
-                .Include(a => a.Options)
-                .FirstOrDefaultAsync(a => a.ActionId == ActionId);
 
-            if (action == null)
-            {
-                return NotFound($"Action with ID {ActionId} not found.");
-            }
 
-            // Fetch the options from the database using the provided OptionIds
-            var options = await _context.Options
-                .Where(o => dto.OptionIds.Contains(o.OptionId))
-                .ToListAsync();
-
-            if (options.Count != dto.OptionIds.Count)
-            {
-                return BadRequest("One or more OptionIds are invalid.");
-            }
-
-            // Update the options for the action
-            action.Options = options;
-
-            // Explicitly mark entity as modified
-            _context.Entry(action).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-
-                // Reload navigation properties
-                await _context.Entry(action).Reference(a => a.ActionType).LoadAsync();
-                await _context.Entry(action).Collection(a => a.Options).LoadAsync();
-
-                return Ok(new
-                {
-                    action.ActionId,
-                    action.ActionTypeId,
-                    ActionType = new { action.ActionType.ActionTypeId, action.ActionType.Name },
-                    Options = action.Options.Select(o => new { o.OptionId, o.Label, o.Text, o.NextActionId }),
-                    action.ReqItem,
-                    action.ReqProgress,
-                    action.ReqNPC,
-                    action.Description,
-                    action.ReqAction
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
-        public class UpdateOptionsDTO
-        {
-            
-            public ICollection<int> OptionIds { get; set; } // List of option IDs to associate with the action
-        }
 
 
         // POST: api/GameBookActions
@@ -128,12 +64,8 @@ namespace Gamebook.Server.Controllers
             var gameBookAction = new GameBookAction
             {
                 ActionTypeId = dto.ActionTypeId,
-                Options = dto.Options,
-                ReqItem = dto.ReqItem,
-                ReqProgress = dto.ReqProgress,
-                ReqNPC = dto.ReqNPC,
                 Description = dto.Description,
-                ReqAction = dto.ReqAction
+                MiniGameData = dto.MiniGameData // Map the new MiniGameData property
             };
 
             // Save to database
@@ -142,75 +74,73 @@ namespace Gamebook.Server.Controllers
 
             return Ok();
         }
+
+        // DTO Definition
         public class GameBookActionCreateDto
         {
             public int ActionTypeId { get; set; }
-            public ICollection<Option> Options { get; set; }
-            public int? ReqItem { get; set; }
-            public int? ReqProgress { get; set; }
-            public int? ReqNPC { get; set; }
             public string Description { get; set; }
-            public int? ReqAction { get; set; }
+            public string MiniGameData { get; set; } // Data or configuration for the mini-game
         }
 
-      
-      
+        /*
 
-        // DELETE: api/GameBookActions/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGameBookAction(int id)
-        {
-            var gameBookAction = await _context.Actions.FindAsync(id);
-            if (gameBookAction == null)
-            {
-                return NotFound();
-            }
 
-            _context.Actions.Remove(gameBookAction);
-            await _context.SaveChangesAsync();
+          // DELETE: api/GameBookActions/5
+          [HttpDelete("{id}")]
+          public async Task<IActionResult> DeleteGameBookAction(int id)
+          {
+              var gameBookAction = await _context.Actions.FindAsync(id);
+              if (gameBookAction == null)
+              {
+                  return NotFound();
+              }
 
-            return NoContent();
-        }
-        [HttpGet("GetGameBookActionByNPCId/{NPCId}")]
-        public async Task<ActionResult<IEnumerable<GameBookAction>>> GetGameBookActionsByNPCId(int NPCId)
-        {
-            // Find game book actions based on ReqNPC
-            var actions = await _context.Actions
-                .Where(gba => gba.ReqNPC == NPCId)
-                .Include(gba => gba.ActionType)  // Include ActionType if needed
-                .Include(gba => gba.Options)     // Include Options if needed
-                .ToListAsync();
+              _context.Actions.Remove(gameBookAction);
+              await _context.SaveChangesAsync();
 
-            if (actions == null || !actions.Any())
-            {
-                return NotFound($"No actions found for NPCId: {NPCId}");
-            }
+              return NoContent();
+          }
+          [HttpGet("GetGameBookActionByNPCId/{NPCId}")]
+          public async Task<ActionResult<IEnumerable<GameBookAction>>> GetGameBookActionsByNPCId(int NPCId)
+          {
+              // Find game book actions based on ReqNPC
+              var actions = await _context.Actions
+                  .Where(gba => gba.ReqNPC == NPCId)
+                  .Include(gba => gba.ActionType)  // Include ActionType if needed
+                  .Include(gba => gba.Options)     // Include Options if needed
+                  .ToListAsync();
 
-            return Ok(actions);
-        }
+              if (actions == null || !actions.Any())
+              {
+                  return NotFound($"No actions found for NPCId: {NPCId}");
+              }
 
-        // GET: api/GameBookActions/GetGameBookActionByItemId/{ItemId}
-        [HttpGet("GetGameBookActionByItemId/{ItemId}")]
-        public async Task<ActionResult<IEnumerable<GameBookAction>>> GetGameBookActionsByItemId(int ItemId)
-        {
-            // Find game book actions based on ReqItem
-            var actions = await _context.Actions
-                .Where(gba => gba.ReqItem == ItemId)
-                .Include(gba => gba.ActionType)  // Include ActionType if needed
-                .Include(gba => gba.Options)     // Include Options if needed
-                .ToListAsync();
+              return Ok(actions);
+          }
 
-            if (actions == null || !actions.Any())
-            {
-                return NotFound($"No actions found for ItemId: {ItemId}");
-            }
+          // GET: api/GameBookActions/GetGameBookActionByItemId/{ItemId}
+          [HttpGet("GetGameBookActionByItemId/{ItemId}")]
+          public async Task<ActionResult<IEnumerable<GameBookAction>>> GetGameBookActionsByItemId(int ItemId)
+          {
+              // Find game book actions based on ReqItem
+              var actions = await _context.Actions
+                  .Where(gba => gba.ReqItem == ItemId)
+                  .Include(gba => gba.ActionType)  // Include ActionType if needed
+                  .Include(gba => gba.Options)     // Include Options if needed
+                  .ToListAsync();
 
-            return Ok(actions);
-        }
-        private bool GameBookActionExists(int id)
-        {
-            return _context.Actions.Any(e => e.ActionId == id);
-        }
-        */
+              if (actions == null || !actions.Any())
+              {
+                  return NotFound($"No actions found for ItemId: {ItemId}");
+              }
+
+              return Ok(actions);
+          }
+          private bool GameBookActionExists(int id)
+          {
+              return _context.Actions.Any(e => e.ActionId == id);
+          }
+          */
     }
 }

@@ -26,6 +26,7 @@ namespace Gamebook.Server.models
         public int? RequiredRoomId { get; set; }
         public virtual Room RequiredRoom { get; set; }
 
+        public byte[]? Img { get; set; }
         public int? Target { get; set; }
     }
 }

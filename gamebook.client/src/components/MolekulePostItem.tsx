@@ -76,6 +76,7 @@ const ItemForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="item-form">
+      <h1>Create New Item</h1>
       <div>
         <label htmlFor="name">Name</label>
         <input

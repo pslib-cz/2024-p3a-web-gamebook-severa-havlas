@@ -20,11 +20,12 @@ namespace Gamebook.Server.models
         public int? CurrentRoomId { get; set; }
         public virtual Room CurrentRoom { get; set; }
 
-
+        public byte[]? Img { get; set; }
         // Room association for Required Items (if needed)
         [ForeignKey("RequiredRoomId")]
         public int? RequiredRoomId { get; set; }
         public virtual Room RequiredRoom { get; set; }
         public int? Target { get; set; } // Nullable target reference
+        public int? Price { get; set; } // Nullable price
     }
 }

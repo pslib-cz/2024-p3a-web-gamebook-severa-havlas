@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20250112193024_15")]
-    partial class _15
+    [Migration("20250113162539_16")]
+    partial class _16
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,10 +105,6 @@ namespace Gamebook.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("MiniGameType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int?>("ReqAction")
                         .HasColumnType("INTEGER");
 
@@ -151,9 +147,15 @@ namespace Gamebook.Server.Migrations
                     b.Property<int?>("GameBookActionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<byte[]>("Img")
+                        .HasColumnType("BLOB");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("Price")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("RequiredRoomId")
                         .HasColumnType("INTEGER");
@@ -214,6 +216,9 @@ namespace Gamebook.Server.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Img")
+                        .HasColumnType("BLOB");
 
                     b.Property<string>("Name")
                         .IsRequired()
