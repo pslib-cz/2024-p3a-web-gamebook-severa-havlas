@@ -31,33 +31,30 @@ const TextEditor = () => {
   const toggleEditor = () => setIsCollapsed((prev) => !prev);
 
   return (
-    <div className={`${styles.textEditor} ${isCollapsed ? styles.collapsed : ""}`}>
-      <button className={styles.toggleButton} onClick={toggleEditor}>
-        {isCollapsed ? "Open Editor" : "X"}
-      </button>
+    <div className={`${styles.textEditor} ${isCollapsed ? styles.collapsed : styles.expanded}`}>
+        <button className={styles.toggleButton} onClick={toggleEditor} disabled={isCollapsed}>
+          {isCollapsed ? "→" : "←"}
+        </button>
 
-      {!isCollapsed && (
-        <div>
-          <h2>Simple Text Editor</h2>
-          <div className={styles.toolbar}>
-            <button onClick={toggleBold} className={bold ? "active" : ""}>
-              Bold
-            </button>
-            <button onClick={toggleItalic} className={italic ? "active" : ""}>
-              Italic
-            </button>
-            <button onClick={toggleUnderline} className={underline ? "active" : ""}>
-              Underline
-            </button>
+        <div className={styles.editorContent}>
+           <h2>Simple Text Editor</h2>
+           <div className={styles.toolbar}>
+             <button onClick={toggleBold} className={bold ? styles.active : ""}>
+                Bold
+              </button>
+             <button onClick={toggleItalic} className={italic ? styles.active : ""}>
+               Italic
+             </button>
+              <button onClick={toggleUnderline} className={underline ? styles.active : ""}>
+                Underline             </button>
           </div>
           <textarea
-            value={text}
+           value={text}
             onChange={handleTextChange}
             style={getStyle()}
-            placeholder="Type here..."
+           placeholder="Type here..."
           />
         </div>
-      )}
     </div>
   );
 };

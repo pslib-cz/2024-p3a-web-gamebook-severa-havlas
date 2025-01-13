@@ -12,22 +12,16 @@ import styles from "./page.module.css";
 const Page = () => {
   const { id } = useParams();
   const { roomId, setRoomId } = useGameContext();
-  const pageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setRoomId(id ?? null);
   }, [id, setRoomId]);
 
-  const handleBackgroundImageChange = (imageUrl: string) => {
-    if (pageRef.current) {
-      pageRef.current.style.setProperty("--background-url", `url(${imageUrl})`);
-    }
-  };
 
   return (
-    <div ref={pageRef} className={styles.page} data-background>
+    <div className={styles.page}>
       {roomId ? (
-        <RoomDetails id={roomId} onBackgroundImageChange={handleBackgroundImageChange} />
+        <RoomDetails id={roomId} />
       ) : (
         <div>Room not found</div>
       )}

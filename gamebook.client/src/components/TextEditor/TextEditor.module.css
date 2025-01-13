@@ -1,24 +1,100 @@
-.textEditor.collapsed {
-    max-width: 200px;
-    padding: 10px 0;
-    transform: translateX(-80%);
-    overflow: hidden;
-    white-space: nowrap;
-}
-
 .textEditor {
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-    position: relative;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    transition: transform 0.3s ease-in-out;
-}
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url('../../assets/TextEditor.webp') no-repeat center center;
+    background-size: cover;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .textEditor.collapsed {
+    transform: translateX(-100%);
+  }
 
-.text-editor.collapsed h2,
-.text-editor.collapsed .toolbar,
-.text-editor.collapsed textarea {
-    display: none;
-}
+  .textEditor.expanded {
+    transform: translateX(0);
+  }
+  
+  .toggleButton {
+    position: absolute;
+    top: 20px;
+    right: -40px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .toggleButton:hover {
+    background: rgba(255, 255, 255, 0.8);
+  }
+  
+  .toggleButton:disabled {
+    background: #333;
+    cursor: not-allowed;
+  }
+
+  .editorContent {
+    padding: 20px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 10px; 
+    margin-bottom: 10px;
+  }
+  
+  .toolbar button {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .toolbar button.active {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  textarea {
+    width: 100%;
+    height: 150px; 
+    background: white;
+    color: black;
+    border: none;
+    padding: 10px;
+    resize: none;
+  }
+  
+  @media (min-width: 768px) {
+    .textEditor {
+      position: static;
+        width: auto;
+        height: auto;
+        box-shadow: none;
+        transform: none;
+    }
+
+    .toggleButton {
+        display: none;
+    }
+
+    .editorContent{
+        max-width: 800px;
+        margin: 0 auto;
+    }
+  }
+  
