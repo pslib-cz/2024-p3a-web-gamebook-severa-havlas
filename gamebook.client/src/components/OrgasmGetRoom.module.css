@@ -19,3 +19,7 @@
     overflow-y: auto;
 
 }
+
+li {
+    list-style-type: none;
+}

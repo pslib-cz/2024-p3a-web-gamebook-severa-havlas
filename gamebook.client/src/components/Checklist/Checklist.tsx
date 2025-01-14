@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ChecklistImage from "../../assets/checklist.webp";
 import styles from "./Checklist.module.css";
 
 type Person = {
@@ -72,7 +73,7 @@ const Checklist = () => {
     fate: "",
   })));
 
-  const [collapsed, setCollapsed] = useState(false);
+  const [isClosed, setIsClosed] = useState(true);
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
   const [confirmedPairs, setConfirmedPairs] = useState<Set<number>>(new Set());
 
@@ -132,24 +133,17 @@ const Checklist = () => {
       .map((person) => person.name)
   );
 
+  const toggleChecklist = () => setIsClosed((prev) => !prev);
+
   return (
-    <div className="table-container" style={{ width: collapsed ? "50px" : "auto" }}>
-      <button
-        className={styles.collapsedButton}
-        onClick={() => setCollapsed(!collapsed)}
-        style={{
-          width: "50px",
-          height: "50px",
-          transform: collapsed ? "rotate(180deg)" : "none",
-        }}
-      >
-        {collapsed ? "→" : "←"}
+    <>
+      <button className={styles.toggleButton} onClick={toggleChecklist} >
+        <img className={styles.image} src={ChecklistImage} />
       </button>
 
-      {!collapsed && (
-        <>
+      <div className={`${styles.checklistContent} ${isClosed ? styles.closed : styles.expanded}`}>
           <h2>Checklist</h2>
-          <table>
+          <table className={styles.table}>
             <thead>
               <tr>
                 <th>#</th>
@@ -205,9 +199,8 @@ const Checklist = () => {
               ))}
             </tbody>
           </table>
-        </>
-      )}
-    </div>
+        </div>
+    </>
   );
 };
 

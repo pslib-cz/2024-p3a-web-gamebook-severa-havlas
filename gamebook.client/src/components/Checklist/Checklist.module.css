@@ -1,0 +1,70 @@
+.toggleButton {
+    position: absolute;
+    top: 260px;
+    right: 0;
+    width: 90px;
+    background-color: burlywood;
+    border: 1px solid black;
+    border-radius: 20px 0 0 20px;
+    z-index: 1;
+  }
+  
+  .checklistContent {
+    background-image: url('../../assets/TextEditor.webp');
+    background-size: cover;
+  }
+  
+  .checklistContent.closed {
+      display: none;
+  }
+  
+  .checklistContent.expanded {
+      display: block;
+      padding: 20px 0;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(100vw - 100vh);
+      height: 100vh;
+      overflow-y: auto;
+  }
+  
+  .checklistContent h2 {
+    color: black;
+    font-style: italic;
+  }
+  
+  body:has(.checklistContent.expanded) {
+      overflow: hidden;
+  }
+  
+  .image { 
+    height: 60px;
+    aspect-ratio: 1 / 1;
+    left: 0;
+  }
+
+  .table {
+    width: 80%;
+    background: none;
+    border-collapse: collapse;
+    color: black;
+    margin: 0 0 30px 0;
+  }
+
+  .table th, td { 
+    padding: 8px;
+    text-align: center;
+  }
+
+select {    
+    width: 90%;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid black;
+    border-radius: 4px;
+    cursor: pointer;
+    color: black;
+    background: none;
+}
+

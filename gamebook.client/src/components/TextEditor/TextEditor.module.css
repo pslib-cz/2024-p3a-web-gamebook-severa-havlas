@@ -1,4 +1,66 @@
-.textEditor {
+.toggleButton {
+  position: absolute;
+  top: 160px;
+  right: 0;
+  width: 90px;
+  background-color: burlywood;
+  border: 1px solid black;
+  border-radius: 20px 0 0 20px;
+  z-index: 1;
+}
+
+.editorContent {
+  background-image: url('../../assets/TextEditor.webp');
+  background-size: cover;
+}
+
+.editorContent.closed {
+    display: none;
+}
+
+.editorContent.expanded {
+    display: block;
+    padding: 20px 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(100vw - 100vh);
+    height: 100vh;
+}
+
+.editorContent h2 {
+  color: black;
+  font-style: italic;
+}
+
+body:has(.editorContent.expanded) {
+    overflow: hidden;
+}
+
+.image { 
+  height: 60px;
+  aspect-ratio: 1 / 1;
+  left: 0;
+}
+
+.textarea {
+  height: 75%;
+  width: 75%;
+  background: none;
+  color: black;
+  font-style: italic;
+}
+
+/* textarea {
+  width: 100%;
+  height: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+} */
+/* .textEditor {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,11 +75,11 @@
   }
   
   .textEditor.closed {
-    transform: translateX(-100%);
+    display: none;
   }
 
   .textEditor.expanded {
-    transform: translateX(0);
+    display: block;
   }
   
   .toggleButton {
@@ -99,4 +161,4 @@
         margin: 0 auto;
     }
   }
-  
+   */
