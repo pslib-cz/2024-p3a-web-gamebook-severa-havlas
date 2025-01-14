@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./pages/Home";
 import Admin from "./pages/admin";
 import Page from "./pages/page";
-import Map from "./pages/Map";
+import Map from "./components/MolekuleMap";
 import MolekuleMapViewer from './components/MolekuleMapViewer';
 import GameProvider from "./GameProvider";
 

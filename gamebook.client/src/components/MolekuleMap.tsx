@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
-
+import mapImage from "../assets/Map.webp";
+import styles from "./MolekuleMap.module.css";
 
 const Map = () => {
   return (
-    <body>
+    <>
       <main>
-      <Link to="/Page/12">Mapa</Link>
+        <Link className={styles.link} to="/Page/12">
+          <img className={styles.image} src={mapImage} alt="Mapa" />
+        </Link>
       </main>
-    </body>
+    </>
   );
 }
 

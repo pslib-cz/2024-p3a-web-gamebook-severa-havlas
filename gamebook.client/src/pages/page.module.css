@@ -3,5 +3,19 @@
     flex-direction: column;
   }
   
+.link {
+  color: white;
+  text-decoration: none;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: .3rem;
+  border: 2px solid white;
+  border-radius: 10px;
+}
 
+.link:hover {
+  background-color: white;
+  color: black;
+}
   

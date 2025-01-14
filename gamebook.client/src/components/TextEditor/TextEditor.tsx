@@ -3,7 +3,7 @@ import styles from"./TextEditor.module.css";
 
 const TextEditor = () => {
   const [text, setText] = useState(""); // State to store the text
-  const [isCollapsed, setIsCollapsed] = useState(false); // State to show/hide editor
+  const [isClosed, setIsClosed] = useState(false); // State to show/hide editor
 
   // Handler to update the text
   const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -11,12 +11,12 @@ const TextEditor = () => {
   };
 
   // Toggle the collapsed state
-  const toggleEditor = () => setIsCollapsed((prev) => !prev);
+  const toggleEditor = () => setIsClosed((prev) => !prev);
 
   return (
-    <div className={`${styles.textEditor} ${isCollapsed ? styles.collapsed : styles.expanded}`}>
-        <button className={styles.toggleButton} onClick={toggleEditor} disabled={isCollapsed}>
-          {isCollapsed ? "→" : "←"}
+    <div className={`${styles.textEditor} ${isClosed ? styles.closed : styles.expanded}`}>
+        <button className={styles.toggleButton} onClick={toggleEditor} disabled={isClosed}>
+          {isClosed ? "→" : "←"}
         </button>
 
         <div className={styles.editorContent}>

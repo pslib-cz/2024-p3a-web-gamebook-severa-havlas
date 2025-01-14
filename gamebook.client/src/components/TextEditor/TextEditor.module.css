@@ -12,7 +12,7 @@
     font-style: italic;
   }
   
-  .textEditor.collapsed {
+  .textEditor.closed {
     transform: translateX(-100%);
   }
 

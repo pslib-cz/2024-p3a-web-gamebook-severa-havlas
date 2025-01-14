@@ -5,8 +5,9 @@
 
 .image {
     height: 100vh;
-    aspect-ratio: 1/1;
-    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: sticky;
+    top: 0;
 }
 
 .description {
@@ -14,5 +15,7 @@
     flex-direction: column;
     background-color: burlywood;
     border: 5px 0px 0px 0px solid black;
+    width: 100%;
+    overflow-y: auto;
 
 }

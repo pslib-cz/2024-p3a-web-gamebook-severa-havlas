@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Room } from "../types/types";
-import ConnectionsViewer from "./MolekuleConnectionViewer";
 import GetRequireds from "./MolekuleGetRequireds";
 import ConnectionViewer2 from "./MolekuleConnectionsController";
 import RoomContentViewer from "./MolekuleGetRoomContent";
@@ -55,7 +54,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
   return (
     <div className={styles.room}>
-      <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} width={400} />
+      <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} />
       <div className={styles.description}>
         <h1>{room.name}</h1>
         <p>{room.text}</p>
