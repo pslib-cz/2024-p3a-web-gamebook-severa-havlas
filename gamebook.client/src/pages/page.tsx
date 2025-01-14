@@ -24,7 +24,7 @@ const Page = () => {
         <div>Room not found</div>
       )}
       <TextEditor />
-      {/*<Checklist />*/}
+      <Checklist />
       <Map />
       <Link className={styles.link} to="/">Ukončit Hru</Link>
     </div>
