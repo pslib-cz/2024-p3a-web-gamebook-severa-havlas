@@ -47,42 +47,47 @@ namespace Gamebook.Server.Controllers
         // POST: api/NPCs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> CreateNPC([FromBody] NPCDto npcDto)
+        public async Task<IActionResult> CreateNPC([FromForm] NPCDTO npcDto)
         {
             if (npcDto == null)
             {
-                return BadRequest("NPC data is required.");
+                return BadRequest("NPC data is null.");
             }
 
-            // Validate that the Action exists
-            var action = await _context.Actions
-                .FirstOrDefaultAsync(a => a.ActionId == npcDto.Action);
-
-            if (action == null)
+            // Check if an image is provided and convert it to byte array if present
+            byte[]? imgBytes = null;
+            if (npcDto.Img != null && npcDto.Img.Length > 0)
             {
-                return NotFound($"Action with ID {npcDto.Action} {npcDto.Name} not found.");
+                using (var memoryStream = new MemoryStream())
+                {
+                    await npcDto.Img.CopyToAsync(memoryStream);
+                    imgBytes = memoryStream.ToArray();
+                }
             }
 
-            // Create the NPC entity
-            var npc = new NPC
+            // Create new NPC entity
+            var newNPC = new NPC
             {
                 Name = npcDto.Name,
                 Description = npcDto.Description,
-                Action = action
+                Img = imgBytes, // Set the image as byte array
+                Target = npcDto.Target
             };
 
-            // Add the NPC to the database
-            _context.NPCs.Add(npc);
+            // Add the new NPC to the database
+            _context.NPCs.Add(newNPC);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetNPC), new { id = npc.NPCId }, npc);
+            // Return the created NPC object
+            return Ok();
         }
 
-        public class NPCDto
+        public class NPCDTO
         {
             public string Name { get; set; }
             public string Description { get; set; }
-            public int Action { get; set; }
+            public IFormFile Img { get; set; }
+            public int? Target { get; set; }
         }
 
         // DELETE: api/NPCs/5

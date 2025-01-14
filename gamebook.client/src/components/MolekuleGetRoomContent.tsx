@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useGameContext } from "../GameProvider";
+import NpcInteraction from "./MolekuleHandleNPC"; // Import the NpcInteraction component
 
 type NPC = {
   npcId: number;
@@ -18,7 +19,7 @@ type ItemPosition = {
 };
 
 type RoomContent = {
-  npcs: NPC[];
+  npCs: NPC[];
   items: Item[];
   itemPositions: ItemPosition[];
 };
@@ -37,6 +38,7 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
   const [roomContent, setRoomContent] = useState<RoomContent | null>(null); // Room content state
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
+  const [selectedNpcId, setSelectedNpcId] = useState<number | null>(null); // Selected NPC ID
 
   const { player, setPlayerItems } = useGameContext(); // Access game context
 
@@ -70,21 +72,18 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
     fetchRoomContent();
   }, [roomId]); // Re-run fetch when roomId changes
 
-  // Function to handle picking up an item
   const handlePickUpItem = (itemId: number) => {
     const pickedItem = roomContent?.items.find((item) => item.itemId === itemId);
-  
+
     if (!pickedItem) {
       console.error(`Item with ID ${itemId} not found.`);
       return;
     }
-  
-    // Add or increment the item in the player's inventory
+
     setPlayerItems((prevItems: PlayerItem[]) => {
       const itemIndex = prevItems.findIndex((item) => item.itemId === pickedItem.itemId);
-  
+
       if (itemIndex >= 0) {
-        // Increment quantity if the item already exists
         const updatedItems = [...prevItems];
         updatedItems[itemIndex] = {
           ...updatedItems[itemIndex],
@@ -92,7 +91,6 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
         };
         return updatedItems;
       } else {
-        // Add the item if it doesn't exist
         return [
           ...prevItems,
           {
@@ -103,9 +101,7 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
         ];
       }
     });
-  
-    console.log("Player's inventory after picking up the item:", player.items);
-  
+
     console.log(`Picked up: ${pickedItem.name}`);
   };
 
@@ -126,11 +122,22 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
           <h3>Room Content:</h3>
           <div>
             <strong>NPCs:</strong>
-            {roomContent.npcs?.length > 0 ? (
+            {roomContent.npCs?.length > 0 ? (
               <ul>
-                {roomContent.npcs.map((npc) => (
-                  <li key={npc.npcId}>
-                    {npc.npcId} - {npc.name}
+                {roomContent.npCs.map((npC) => (
+                  <li key={npC.npcId}>
+                    <NpcInteraction npcId={npC.npcId} />
+                    {npC.npcId} - {npC.name}{" "}
+                    <button
+                      onClick={() => setSelectedNpcId(npC.npcId)}
+                      style={{
+                        marginLeft: "10px",
+                        padding: "5px 10px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Interact
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -178,6 +185,13 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomId }) => {
               <p>No Item Positions in this room.</p>
             )}
           </div>
+
+          {selectedNpcId && (
+            <div style={{ marginTop: "20px" }}>
+              <h3>Interact with NPC</h3>
+              <NpcInteraction npcId={selectedNpcId} />
+            </div>
+          )}
         </div>
       ) : (
         !loading && !error && <p>No room content available. Please try again.</p>

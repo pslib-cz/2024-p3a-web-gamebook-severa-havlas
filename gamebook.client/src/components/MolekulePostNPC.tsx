@@ -1,116 +1,115 @@
-import React, { useState, useEffect } from 'react';
-
-interface NPC {
-  
-  Name: string;
-  Description: string;
-  Action: number; // Changed to number type for GameBookAction
-  Target?: number;
-}
+import React, { useState } from 'react';
 
 const CreateNPCForm: React.FC = () => {
-  const [name, setName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [gamebookactionId, setGamebookactionId] = useState<string>(''); // Text input for number, but treated as string
-  const [error, setError] = useState<string>('');
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+    const [name, setName] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [target, setTarget] = useState<number | string>('');
+    const [img, setImg] = useState<File | null>(null);
+    const [message, setMessage] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Effect to handle form reset after successful NPC creation
-  useEffect(() => {
-    if (isSuccess) {
-      setName('');
-      setDescription('');
-      setGamebookactionId('');
-    }
-  }, [isSuccess]);
+    // Handle form submission
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+        if (!name || !description) {
+            setMessage('Name and Description are required.');
+            return;
+        }
 
-    const actionId = parseInt(gamebookactionId, 10);
+        // Create FormData object to send the form data including file
+        const formData = new FormData();
+        formData.append('Name', name);
+        formData.append('Description', description);
+        if (img) {
+            formData.append('Img', img);
+        }
+        if (target) {
+            formData.append('Target', target.toString());
+        }
 
-    // Ensure the actionId is a valid number (e.g., 1, 2, 3)
-    if (![1, 2, 3].includes(actionId)) {
-      setError('Please enter a valid GameBook Action ID (1, 2, or 3).');
-      return;
-    }
+        setIsLoading(true);
+        try {
+            const response = await fetch('https://localhost:7058/api/NPCs', {
+                method: 'POST',
+                body: formData, // send the FormData with the file included
+            });
 
-    const newNPC: NPC = {
-      
-      Name: name,
-      Description: description,
-      Action: actionId,
+            if (response.ok) {
+                const data = await response.json();
+                setMessage(`NPC created successfully with ID: ${data.npcId}`);
+            } else {
+                const errorData = await response.json();
+                setMessage('Error creating NPC: ' + (errorData.message || 'Unknown error'));
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                setMessage('Error: ' + error.message);
+            } else {
+                setMessage('An unknown error occurred.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    try {
-      const response = await fetch('https://localhost:7058/api/NPCs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newNPC),
-      });
-
-      if (!response.ok) {
-        throw new Error('An error occurred while creating NPC.');
-      }
-
-      const createdNPC = await response.json();
-      console.log('NPC created:', createdNPC);
-
-      setIsSuccess(true);
-      setError('');
-    } catch (err: any) {
-      setIsSuccess(false);
-      setError(err.message || 'An error occurred while creating NPC.');
-    }
-  };
-
-  return (
-    <div>
-      <h2>Create NPC</h2>
-      <form onSubmit={handleSubmit}>
+    return (
         <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+            <h2>Create New NPC</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="name">Name:</label>
+                    <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="description">Description:</label>
+                    <textarea
+                        id="description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="target">Target (Optional):</label>
+                    <input
+                        type="number"
+                        id="target"
+                        value={target}
+                        onChange={(e) => setTarget(e.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="img">Image (Optional):</label>
+                    <input
+                        type="file"
+                        id="img"
+                        accept="image/*"
+                        onChange={(e) => {
+                            if (e.target.files) {
+                                setImg(e.target.files[0]);
+                            }
+                        }}
+                    />
+                </div>
+
+                <button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Creating NPC...' : 'Create NPC'}
+                </button>
+            </form>
+
+            {message && <p>{message}</p>}
         </div>
-
-        <div>
-          <label htmlFor="description">Description:</label>
-          <input
-            type="text"
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="gamebookactionId">Gamebook Action ID:</label>
-          <input
-            type="number"
-            id="gamebookactionId"
-            value={gamebookactionId}
-            onChange={(e) => setGamebookactionId(e.target.value)}
-            required
-          />
-          <small>Enter a valid GameBook Action ID: 1, 2, or 3</small>
-        </div>
-
-        <button type="submit">Create NPC</button>
-      </form>
-
-      {isSuccess && <p style={{ color: 'green' }}>NPC created successfully!</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
-  );
+    );
 };
 
 export default CreateNPCForm;

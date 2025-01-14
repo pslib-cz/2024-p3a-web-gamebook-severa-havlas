@@ -22,6 +22,7 @@ import GameBookActionsPostComponent from "../components/MolekulePostAction";
 import UpdateOptions from "../components/MolekulePatchActionOptions";
 import PostOption from "../components/MolekulePostOption";
 import FetchOptions from "../components/MolekulePatchOptions";
+import PostDialogForm from "../components/MolekulePostDialog";
 const Admin = () => {
 
    
@@ -54,6 +55,7 @@ const Admin = () => {
         <UpdateOptions />
         <PostOption />
         <FetchOptions />
+        <PostDialogForm />
         </>
     );
 

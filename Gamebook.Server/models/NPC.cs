@@ -11,6 +11,8 @@ namespace Gamebook.Server.models
         public string Name { get; set; }
         public string Description { get; set; }
 
+
+        
         public virtual ICollection<Dialog> Dialogs { get; set; } // No ForeignKey attribute here
 
         [ForeignKey("GameBookAction")]
