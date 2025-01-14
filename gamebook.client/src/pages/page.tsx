@@ -4,9 +4,7 @@ import RoomDetails from "../components/OrgasmGetRoom";
 import { useGameContext } from "../GameProvider";
 import TextEditor from "../components/TextEditor/TextEditor";
 import Checklist from "../components/Checklist/Checklist";
-import JigsawPuzzle from "../components/MolekuleJigsawPuzzle";
-import LightsOutPuzzle from "../components/MolekuleLightsOutPuzzle";
-import LockCombinationPuzzle from "../components/MolekuleLockPuzzle";
+import Map from "../components/MolekuleMap";
 import styles from "./page.module.css";
 
 const Page = () => {
@@ -27,9 +25,7 @@ const Page = () => {
       )}
       <TextEditor />
       <Checklist />
-      <JigsawPuzzle />
-      <LightsOutPuzzle />
-      <LockCombinationPuzzle numberOfDials={9} maxDialValue={9} />
+      <Map />
       <Link to="/">Ukončit Hru</Link>
     </div>
   );

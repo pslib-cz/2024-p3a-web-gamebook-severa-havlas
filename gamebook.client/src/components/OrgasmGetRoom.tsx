@@ -4,6 +4,7 @@ import ConnectionsViewer from "./MolekuleConnectionViewer";
 import GetRequireds from "./MolekuleGetRequireds";
 import ConnectionViewer2 from "./MolekuleConnectionsController";
 import RoomContentViewer from "./MolekuleGetRoomContent";
+import styles from "./OrgasmGetRoom.module.css";
 
 type RoomDetailsInputProps = {
   id: string;
@@ -53,25 +54,24 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   if (!room) return <div>Room not found.</div>;
 
   return (
-    <div>
-      <h1>{room.name}</h1>
-      <img src={`https://localhost:7058${room.imgUrl}`} alt={room.name} width={400} />
-      <p>{room.text}</p>
-      <h2>ConnectionsTo</h2>
-      <ConnectionsViewer id={id} />
-      <h2>Requireds</h2>
-      <GetRequireds roomId={id} />
-      <h2>Items</h2>
-      <ul>
-        {room.items.map((item) => (
-          <li key={item.itemId}>{item.name}</li>
-        ))}
-      </ul>
-      <h2>Řízení</h2>
-      <ConnectionViewer2 roomId={id} />
-      <h2>Content</h2>
-      <RoomContentViewer roomId={id} />
-      {JSON.stringify(room)}
+    <div className={styles.room}>
+      <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} width={400} />
+      <div className={styles.description}>
+        <h1>{room.name}</h1>
+        <p>{room.text}</p>
+        <h2>Requireds</h2>
+        <GetRequireds roomId={id} />
+        <h2>Items</h2>
+        <ul>
+          {room.items.map((item) => (
+            <li key={item.itemId}>{item.name}</li>
+          ))}
+        </ul>
+        <h2>Řízení</h2>
+        <ConnectionViewer2 roomId={id} />
+        <h2>Content</h2>
+        <RoomContentViewer roomId={id} />
+      </div>
     </div>
   );
 };
