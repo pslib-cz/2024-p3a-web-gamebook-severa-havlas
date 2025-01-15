@@ -5,6 +5,7 @@ import { useGameContext } from "../GameProvider";
 import TextEditor from "../components/TextEditor/TextEditor";
 import Map from "../components/MolekuleMap";
 import styles from "./page.module.css";
+import Checklist from "../components/Checklist/Checklist";
 
 const Page = () => {
   const { id } = useParams(); // Room ID from the URL
@@ -19,6 +20,7 @@ const Page = () => {
         <div>Room not found</div>
       )}
       <TextEditor />
+      <Checklist />
       <Map />
       <Link className={styles.link} to="/">Ukončit Hru</Link>
     </div>
