@@ -6,7 +6,7 @@ const Map = () => {
   return (
     <>
       <main>
-        <Link className={styles.link} to="/Page/12">
+        <Link className={styles.link} to="/Page/8">
           <img className={styles.image} src={mapImage} alt="Mapa" />
         </Link>
       </main>

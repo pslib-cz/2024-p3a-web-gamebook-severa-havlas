@@ -8,7 +8,7 @@ const Home = () => {
        <Link className={styles.admin} to="/Admin">Admin</Link>
       <h1>Název_Gamebooku</h1>
       <h3>Vyřeš tajemství ztracené výpravy</h3>
-      <Link className={styles.button} to="/Page/4">Nová hra</Link>
+      <Link className={styles.button} to="/Page/1">Nová hra</Link>
       </main>
     </body>
   );
