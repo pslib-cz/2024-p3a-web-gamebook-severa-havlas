@@ -42,36 +42,7 @@ namespace Gamebook.Server.Controllers
             return actionType;
         }
 
-        // PUT: api/ActionTypes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionType(int id, ActionType actionType)
-        {
-            if (id != actionType.ActionTypeId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(actionType).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ActionTypeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+       
 
         // POST: api/ActionTypes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

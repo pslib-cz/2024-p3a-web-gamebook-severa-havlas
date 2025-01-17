@@ -8,12 +8,12 @@ namespace Gamebook.Server.models
         [Key]
         public int ConnectionId { get; set; }
 
-        [ForeignKey("FromRoom")]
-        public int FromRoomId { get; set; }
-        public virtual Room FromRoom { get; set; }
+        public int FromRoomId { get; set; } // FromRoom reference (no ForeignKey attribute here)
+        public virtual ConnectionPosition ConnectionPosition { get; set; }
 
-        [ForeignKey("ToRoom")]
-        public int ToRoomId { get; set; }
+        public int ToRoomId { get; set; } // ToRoom reference
         public virtual Room ToRoom { get; set; }
+
+        public byte[]? Img { get; set; }
     }
 }

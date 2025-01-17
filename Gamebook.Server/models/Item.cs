@@ -12,20 +12,20 @@ namespace Gamebook.Server.models
         public string Description { get; set; }
 
         [ForeignKey("GameBookAction")]
-        public int? GameBookActionId { get; set; } // Optional action association
+        public int? GameBookActionId { get; set; }
         public virtual GameBookAction GameBookAction { get; set; }
 
-
-        [ForeignKey("CurrentRoomId")]
-        public int? CurrentRoomId { get; set; }
-        public virtual Room CurrentRoom { get; set; }
+        [ForeignKey("ItemPosition")]
+        public int ItemPositionId { get; set; } // Foreign key for the one-to-one relationship
+        public virtual ItemPosition ItemPosition { get; set; }
 
         public byte[]? Img { get; set; }
-        // Room association for Required Items (if needed)
+
         [ForeignKey("RequiredRoomId")]
         public int? RequiredRoomId { get; set; }
         public virtual Room RequiredRoom { get; set; }
-        public int? Target { get; set; } // Nullable target reference
-        public int? Price { get; set; } // Nullable price
+
+        public int? Target { get; set; }
+        public int? Price { get; set; }
     }
 }

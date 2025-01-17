@@ -42,37 +42,8 @@ namespace Gamebook.Server.Controllers
             return connection;
         }
 
-        // PUT: api/Connections/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutConnection(int id, Connection connection)
-        {
-            if (id != connection.ConnectionId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(connection).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ConnectionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
+      
+        /*
         // POST: api/Connections
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -117,6 +88,7 @@ namespace Gamebook.Server.Controllers
             public int FromRoomId { get; set; }
             public int ToRoomId { get; set; }
         }
+        */
 
         // DELETE: api/Connections/5
         [HttpDelete("{id}")]

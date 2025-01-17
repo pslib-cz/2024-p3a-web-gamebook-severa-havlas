@@ -51,7 +51,7 @@ namespace Gamebook.Server.Controllers
 
             return Ok(rooms);
         }
-
+        /*
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetRoomById(int id)
@@ -78,7 +78,7 @@ namespace Gamebook.Server.Controllers
 
             return Ok(room);
         }
-
+        
 
 
 
@@ -118,7 +118,7 @@ namespace Gamebook.Server.Controllers
 
             return Ok(room);
         }
-
+        */
         // GET: api/Rooms/5
         // GET: api/Rooms/5
         [HttpGet("Required/{id}")]
@@ -211,6 +211,7 @@ namespace Gamebook.Server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        /*
         [HttpPatch("{id}/updateRoomContent")]
         public async Task<IActionResult> UpdateRoomContent(
     int id,
@@ -267,7 +268,7 @@ namespace Gamebook.Server.Controllers
                         }
                     }
                 }
-
+        
                 // Add ItemPositions
                 if (updateDto.ItemPositions != null && updateDto.ItemPositions.Any())
                 {
@@ -342,6 +343,8 @@ namespace Gamebook.Server.Controllers
             // Return the room content
             return Ok(roomContentDto);
         }
+        */
+
         public class RoomContentDto
         {
             public List<NPCDto> NPCs { get; set; }

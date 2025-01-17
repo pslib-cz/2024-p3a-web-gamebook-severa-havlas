@@ -42,36 +42,7 @@ namespace Gamebook.Server.Controllers
             return itemPosition;
         }
 
-        // PUT: api/ItemPositions/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutItemPosition(int id, ItemPosition itemPosition)
-        {
-            if (id != itemPosition.ItemPositionId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(itemPosition).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemPositionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+       
 
         // POST: api/ItemPositions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

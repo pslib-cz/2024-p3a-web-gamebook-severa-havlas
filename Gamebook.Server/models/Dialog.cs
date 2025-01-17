@@ -25,5 +25,6 @@ namespace Gamebook.Server.models
         public virtual ICollection<Dialog> ChildDialogs { get; set; } // Navigation property
 
         public string Text { get; set; } // Dialog text
+        public string Label { get; set; }
     }
 }

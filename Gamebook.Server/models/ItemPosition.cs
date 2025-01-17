@@ -9,12 +9,10 @@ namespace Gamebook.Server.models
         public int ItemPositionId { get; set; }
 
         [ForeignKey("Room")]
-        public int RoomId { get; set; } // Reference to the room
+        public int RoomId { get; set; }
         public virtual Room Room { get; set; }
 
-        [ForeignKey("Item")]
-        public int ItemId { get; set; } // Reference to the item
-        public virtual Item Item { get; set; }
+        public virtual Item Item { get; set; } // Reverse navigation property
 
         public int X { get; set; } // X position
         public int Y { get; set; } // Y position
