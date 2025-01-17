@@ -3,7 +3,7 @@ import { Room } from "../../types/types";
 import GetRequireds from "../Requireds/GetRequireds";
 import ConnectionViewer2 from "../Connections/ConnectionsController";
 import RoomContentViewer from "./GetRoomContent";
-import styles from "./OrgasmGetRoom.module.css";
+import styles from "./GetRoom.module.css";
 
 type RoomDetailsInputProps = {
   id: string;
