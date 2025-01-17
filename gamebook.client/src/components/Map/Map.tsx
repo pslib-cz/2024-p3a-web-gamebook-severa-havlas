@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import mapImage from "../assets/Map.webp";
-import styles from "./MolekuleMap.module.css";
+import mapImage from "../../assets/Map.webp";
+import styles from "./Map.module.css";
 
 const Map = () => {
   return (

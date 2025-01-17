@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ItemPosition } from "../types/types"; // Importing your type
+import { ItemPosition } from "../../types/types"; // Importing your type
 
 const UpdateRoomContentForm: React.FC = () => {
   const [roomId, setRoomId] = useState<string>(""); // Room ID as string for input

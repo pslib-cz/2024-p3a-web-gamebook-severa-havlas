@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Connection } from "../types/types";
-import { useGameContext } from "../GameProvider";
+import { Connection } from "../../types/types";
+import { useGameContext } from "../../GameProvider";
 
 type ConnectionViewerInputProps = {
   id: string; // The room ID for fetching connections

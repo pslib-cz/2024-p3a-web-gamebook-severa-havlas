@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useGameContext } from "../GameProvider";
-import NpcInteraction from "./MolekuleHandleNPC"; // Import the NpcInteraction component
+import { useGameContext } from "../../GameProvider";
+import NpcInteraction from "../NPC/HandleNPC"; // Import the NpcInteraction component
 
 type NPC = {
   npcId: number;

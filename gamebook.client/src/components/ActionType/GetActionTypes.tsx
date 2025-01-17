@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ActionType } from '../types/types';
+import { ActionType } from '../../types/types';
 export const ActionTypeList = () => {
   const [actionTypes, setActionTypes] = useState<ActionType[]>([]);
 

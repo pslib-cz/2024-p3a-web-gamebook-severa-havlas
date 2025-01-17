@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Graph } from "react-d3-graph";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGameContext } from '../GameProvider';
+import { useGameContext } from '../../GameProvider';
 
 interface Room {
   roomId: number;

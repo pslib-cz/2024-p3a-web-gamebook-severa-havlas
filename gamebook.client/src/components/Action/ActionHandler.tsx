@@ -1,6 +1,6 @@
 import React from "react";
-import { ActionTypeEnum } from "./AtomActionTypeMapping";
-import { actionComponentMap } from "./AtomActionTypeMapping";
+import { ActionTypeEnum } from "../ActionType/ActionTypeMapping";
+import { actionComponentMap } from "../ActionType/ActionTypeMapping";
 
 interface GameBookAction {
   ActionId: number;

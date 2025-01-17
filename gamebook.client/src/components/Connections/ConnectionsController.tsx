@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useGameContext } from "../GameProvider";
+import { useGameContext } from "../../GameProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 type Connection = {
   connectionId: number;

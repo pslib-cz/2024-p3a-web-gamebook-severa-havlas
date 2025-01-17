@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import RoomDetails from "../components/OrgasmGetRoom";
+import RoomDetails from "..//components/Room/GetRoom";
 import { useGameContext } from "../GameProvider";
 import TextEditor from "../components/TextEditor/TextEditor";
-import Map from "../components/MolekuleMap";
+import Map from "../components/Map/Map";
 import styles from "./page.module.css";
 import Checklist from "../components/Checklist/Checklist";
 

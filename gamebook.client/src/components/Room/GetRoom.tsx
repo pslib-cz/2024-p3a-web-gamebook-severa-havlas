@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Room } from "../types/types";
-import GetRequireds from "./MolekuleGetRequireds";
-import ConnectionViewer2 from "./MolekuleConnectionsController";
-import RoomContentViewer from "./MolekuleGetRoomContent";
+import { Room } from "../../types/types";
+import GetRequireds from "../Requireds/GetRequireds";
+import ConnectionViewer2 from "../Connections/ConnectionsController";
+import RoomContentViewer from "./GetRoomContent";
 import styles from "./OrgasmGetRoom.module.css";
 
 type RoomDetailsInputProps = {

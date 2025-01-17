@@ -1,28 +1,25 @@
 import { Link } from "react-router-dom";
 import React, { useState } from 'react';
-import CreateRoom from "../components/MolekulePostRoomForm";
-import RoomList from "../components/MolekuleGetRooms";
-import RoomDetails from "../components/OrgasmGetRoom";
-import CreateNPCForm from "../components/MolekulePostNPC";
+import CreateRoom from "../components/Room/PostRoomForm";
+import RoomList from "../components/Room/GetRooms";
+import RoomDetails from "../components/Room/GetRoom";
+import CreateNPCForm from "../components/NPC/PostNPC";
 
 
-import PostConnection from "../components/MolekulePostConnection";
+import PostConnection from "../components/Connections/PostConnection";
 import AtomForm from "../components/AtomForm";
-import MolekuleGetConnections from "../components/MolekuleGetConectionList";
-import ItemForm from "../components/MolekulePostItem";
-import ActionTypeForm from "../components/MolekulePostActionType";
-import {ActionTypeList} from "../components/MolekuleGetActionTypes";
-import { PlayerItems } from "../components/MolekulePlayerItems";
-import RoomRequirementsForm from "../components/MolekulePatchRequireds";
-import ItemsList from "../components/MolekuleGetItems";
-import UpdateRoomContentForm from "../components/MolekulePatchRoomContent";
-import GraphComponent from "../components/MolekuleMapViewer";
-import GameBookActionsComponent from "../components/MolekuleGetActions";
-import GameBookActionsPostComponent from "../components/MolekulePostAction";
-import UpdateOptions from "../components/MolekulePatchActionOptions";
-import PostOption from "../components/MolekulePostOption";
-import FetchOptions from "../components/MolekulePatchOptions";
-import PostDialogForm from "../components/MolekulePostDialog";
+import MolekuleGetConnections from "../components/Connections/GetConectionList";
+import ItemForm from "../components/Item/PostItem";
+import ActionTypeForm from "../components/ActionType/PostActionType";
+import {ActionTypeList} from "../components/ActionType/GetActionTypes";
+import { PlayerItems } from "../components/Item/PlayerItems";
+import RoomRequirementsForm from "../components/Requireds/PatchRequireds";
+import ItemsList from "../components/Item/GetItems";
+import UpdateRoomContentForm from "../components/Room/PatchRoomContent";
+import GraphComponent from "../components/Map/MapViewer";
+import GameBookActionsComponent from "../components/Action/GetActions";
+import GameBookActionsPostComponent from "../components/Action/PostAction";
+import PostDialogForm from "../components/Dialog/MolekulePostDialog";
 const Admin = () => {
 
    
@@ -52,9 +49,6 @@ const Admin = () => {
         <CreateNPCForm />
         <GameBookActionsComponent />
         <GameBookActionsPostComponent />
-        <UpdateOptions />
-        <PostOption />
-        <FetchOptions />
         <PostDialogForm />
         </>
     );

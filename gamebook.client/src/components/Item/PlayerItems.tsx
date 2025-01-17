@@ -1,5 +1,5 @@
 import React from "react";
-import { useGameContext } from "../GameProvider";
+import { useGameContext } from "../../GameProvider";
 
 export const PlayerItems = () => {
   const { player } = useGameContext();

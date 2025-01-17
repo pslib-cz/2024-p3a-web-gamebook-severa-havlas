@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./pages/Home";
 import Admin from "./pages/admin";
 import Page from "./pages/page";
-import Map from "./components/MolekuleMap";
-import MolekuleMapViewer from './components/MolekuleMapViewer';
+import Map from "./components/Map/Map";
+import MolekuleMapViewer from './components/Map/MapViewer';
 import GameProvider from "./GameProvider";
 
 const App = () => {

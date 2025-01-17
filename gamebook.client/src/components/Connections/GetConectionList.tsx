@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Connection } from "../types/types";
+import { Connection } from "../../types/types";
 
 const ConnectionsList: React.FC = () => {
   const [connections, setConnections] = useState<Connection[]>([]);
