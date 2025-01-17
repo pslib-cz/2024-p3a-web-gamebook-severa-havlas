@@ -16,18 +16,25 @@ namespace Gamebook.Server.models
         public virtual ICollection<NPC> RequiredNPCs { get; set; }
         public virtual ICollection<GameBookAction> RequiredActions { get; set; }
 
-        public virtual ICollection<Connection> ConnectionsFrom { get; set; } // Connections originating from this room
+        public virtual ICollection<Progress> Progress { get; set; }
+
+        public virtual ICollection<ConnectionPosition> ConnectionsFrom { get; set; } // Connections originating from this room
         public virtual ICollection<Connection> ConnectionsTo { get; set; }   // Connections leading to this room
 
 
         public virtual ICollection<NPC> NPCs { get; set; }
-        public virtual ICollection<Item> Items { get; set; }
+        public virtual ICollection<ItemPosition> Items { get; set; }
         public virtual ICollection<GameBookAction> TriggerActions { get; set; }
 
 
-        public virtual ICollection<ItemPosition> ItemPositions { get; set; }
+        
+       
     }
 
 
+  
 
+   
+
+  
 }

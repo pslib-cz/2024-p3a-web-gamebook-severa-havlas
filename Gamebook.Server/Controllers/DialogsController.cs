@@ -76,36 +76,7 @@ namespace Gamebook.Server.Controllers
             public string Text { get; set; }
         }
 
-        // PUT: api/Dialogs/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDialog(int id, Dialog dialog)
-        {
-            if (id != dialog.DialogId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(dialog).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DialogExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+       
 
 
         [HttpPost]

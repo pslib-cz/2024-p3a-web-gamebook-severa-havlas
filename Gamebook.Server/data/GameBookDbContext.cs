@@ -17,6 +17,9 @@ namespace Gamebook.Server.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Dialog> Dialogs { get; set; }
 
+        public DbSet<ConnectionPosition> ConnectionPositions { get; set; }
+        public DbSet<Progress> Progress { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,58 +27,90 @@ namespace Gamebook.Server.Data
 
             base.OnModelCreating(modelBuilder);
 
-            // Connection configuration
-            modelBuilder.Entity<Connection>()
-                .HasOne(c => c.FromRoom)
-                .WithMany(r => r.ConnectionsFrom)
-                .HasForeignKey(c => c.FromRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
+      
 
             modelBuilder.Entity<Connection>()
                 .HasOne(c => c.ToRoom)
                 .WithMany(r => r.ConnectionsTo)
                 .HasForeignKey(c => c.ToRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // GameBookAction -> RequiredRoom
             modelBuilder.Entity<GameBookAction>()
                 .HasOne(gba => gba.RequiredRoom)
                 .WithMany(r => r.RequiredActions) // Assuming RequiredActions holds actions requiring the room
                 .HasForeignKey(gba => gba.RequiredRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // GameBookAction -> CurrentRoom
             modelBuilder.Entity<GameBookAction>()
                 .HasOne(gba => gba.CurrentRoom)
                 .WithMany(r => r.TriggerActions) // Assuming TriggerActions holds actions triggered in the room
                 .HasForeignKey(gba => gba.CurrentRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Item relationships
-            modelBuilder.Entity<Item>()
-                .HasOne(i => i.CurrentRoom)
-                .WithMany(r => r.Items) // Assuming ItemPositions represents items in the room
-                .HasForeignKey(i => i.CurrentRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
+          
+
+            modelBuilder.Entity<ItemPosition>()
+                .HasOne(ip => ip.Room)
+                .WithMany()
+                .HasForeignKey(ip => ip.RoomId);
+            modelBuilder.Entity<Connection>()
+       .HasOne(c => c.ConnectionPosition) // Navigation property in Connection
+       .WithOne(cp => cp.Connection)     // Navigation property in ConnectionPosition
+       .HasForeignKey<ConnectionPosition>(cp => cp.FromRoomId); // Dependent's foreign key
+
+            // Configure the Room relationship for ConnectionPosition
+            modelBuilder.Entity<ConnectionPosition>()
+                .HasOne(cp => cp.Room) // Navigation property in ConnectionPosition
+                .WithMany()            // No inverse property
+                .HasForeignKey(cp => cp.RoomId);
 
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.RequiredRoom)
                 .WithMany(r => r.RequiredItems)
                 .HasForeignKey(i => i.RequiredRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // NPC relationships
             modelBuilder.Entity<NPC>()
                 .HasOne(i => i.CurrentRoom)
                 .WithMany(r => r.NPCs) // Assuming NPCs represents NPCs in the room
                 .HasForeignKey(i => i.CurrentRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<NPC>()
                 .HasOne(i => i.RequiredRoom)
                 .WithMany(r => r.RequiredNPCs)
                 .HasForeignKey(i => i.RequiredRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ConnectionPosition>()
+        .HasOne(cp => cp.Room)
+        .WithMany(r => r.ConnectionsFrom)
+        .HasForeignKey(cp => cp.RoomId);
+
+            // Configure the one-to-one relationship between Connection and ConnectionPosition
+            modelBuilder.Entity<Connection>()
+                .HasOne(c => c.ConnectionPosition)
+                .WithOne(cp => cp.Connection)
+                .HasForeignKey<ConnectionPosition>(cp => cp.FromRoomId);
+
+            modelBuilder.Entity<ItemPosition>()
+       .HasOne(ip => ip.Room)
+       .WithMany(r => r.Items)
+       .HasForeignKey(ip => ip.RoomId);
+
+            modelBuilder.Entity<Item>()
+       .HasOne(i => i.ItemPosition)
+       .WithOne(ip => ip.Item)
+       .HasForeignKey<Item>(i => i.ItemPositionId); // Use ItemPositionId as the foreign key
+
+            // Configure ItemPosition to Room relationship
+            modelBuilder.Entity<ItemPosition>()
+                .HasOne(ip => ip.Room)
+                .WithMany(r => r.Items)
+                .HasForeignKey(ip => ip.RoomId);
         }
 
     }

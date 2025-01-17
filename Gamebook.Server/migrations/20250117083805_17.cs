@@ -5,7 +5,7 @@
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _16 : Migration
+    public partial class _17 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,13 +68,13 @@ namespace Gamebook.Server.Migrations
                         column: x => x.CurrentRoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Actions_Rooms_RequiredRoomId",
                         column: x => x.RequiredRoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,60 +84,59 @@ namespace Gamebook.Server.Migrations
                     ConnectionId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     FromRoomId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ToRoomId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ToRoomId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Img = table.Column<byte[]>(type: "BLOB", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Connections", x => x.ConnectionId);
                     table.ForeignKey(
-                        name: "FK_Connections_Rooms_FromRoomId",
-                        column: x => x.FromRoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Connections_Rooms_ToRoomId",
                         column: x => x.ToRoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Items",
+                name: "ItemPositions",
                 columns: table => new
                 {
-                    ItemId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ItemPositionId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    GameBookActionId = table.Column<int>(type: "INTEGER", nullable: true),
-                    CurrentRoomId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Img = table.Column<byte[]>(type: "BLOB", nullable: true),
-                    RequiredRoomId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Target = table.Column<int>(type: "INTEGER", nullable: true),
-                    Price = table.Column<int>(type: "INTEGER", nullable: true)
+                    RoomId = table.Column<int>(type: "INTEGER", nullable: false),
+                    X = table.Column<int>(type: "INTEGER", nullable: false),
+                    Y = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Items", x => x.ItemId);
+                    table.PrimaryKey("PK_ItemPositions", x => x.ItemPositionId);
                     table.ForeignKey(
-                        name: "FK_Items_Actions_GameBookActionId",
-                        column: x => x.GameBookActionId,
-                        principalTable: "Actions",
-                        principalColumn: "ActionId");
+                        name: "FK_ItemPositions_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Progress",
+                columns: table => new
+                {
+                    ProgressId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Value = table.Column<int>(type: "INTEGER", nullable: false),
+                    CurrentRoomId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Progress", x => x.ProgressId);
                     table.ForeignKey(
-                        name: "FK_Items_Rooms_CurrentRoomId",
+                        name: "FK_Progress_Rooms_CurrentRoomId",
                         column: x => x.CurrentRoomId,
                         principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Items_Rooms_RequiredRoomId",
-                        column: x => x.RequiredRoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "RoomId");
                 });
 
             migrationBuilder.CreateTable(
@@ -167,38 +166,75 @@ namespace Gamebook.Server.Migrations
                         column: x => x.CurrentRoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_NPCs_Rooms_RequiredRoomId",
                         column: x => x.RequiredRoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemPositions",
+                name: "ConnectionPositions",
                 columns: table => new
                 {
-                    ItemPositionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ConnectionPositionId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     RoomId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ItemId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FromRoomId = table.Column<int>(type: "INTEGER", nullable: false),
                     X = table.Column<int>(type: "INTEGER", nullable: false),
                     Y = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ItemPositions", x => x.ItemPositionId);
+                    table.PrimaryKey("PK_ConnectionPositions", x => x.ConnectionPositionId);
                     table.ForeignKey(
-                        name: "FK_ItemPositions_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "ItemId",
+                        name: "FK_ConnectionPositions_Connections_FromRoomId",
+                        column: x => x.FromRoomId,
+                        principalTable: "Connections",
+                        principalColumn: "ConnectionId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ItemPositions_Rooms_RoomId",
+                        name: "FK_ConnectionPositions_Rooms_RoomId",
                         column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    ItemId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    GameBookActionId = table.Column<int>(type: "INTEGER", nullable: true),
+                    ItemPositionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Img = table.Column<byte[]>(type: "BLOB", nullable: true),
+                    RequiredRoomId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Target = table.Column<int>(type: "INTEGER", nullable: true),
+                    Price = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.ItemId);
+                    table.ForeignKey(
+                        name: "FK_Items_Actions_GameBookActionId",
+                        column: x => x.GameBookActionId,
+                        principalTable: "Actions",
+                        principalColumn: "ActionId");
+                    table.ForeignKey(
+                        name: "FK_Items_ItemPositions_ItemPositionId",
+                        column: x => x.ItemPositionId,
+                        principalTable: "ItemPositions",
+                        principalColumn: "ItemPositionId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Items_Rooms_RequiredRoomId",
+                        column: x => x.RequiredRoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
                         onDelete: ReferentialAction.Cascade);
@@ -213,7 +249,8 @@ namespace Gamebook.Server.Migrations
                     NPCId = table.Column<int>(type: "INTEGER", nullable: true),
                     ActionId = table.Column<int>(type: "INTEGER", nullable: true),
                     ParentDialogId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Text = table.Column<string>(type: "TEXT", nullable: false)
+                    Text = table.Column<string>(type: "TEXT", nullable: false),
+                    Label = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -251,9 +288,15 @@ namespace Gamebook.Server.Migrations
                 column: "RequiredRoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Connections_FromRoomId",
-                table: "Connections",
-                column: "FromRoomId");
+                name: "IX_ConnectionPositions_FromRoomId",
+                table: "ConnectionPositions",
+                column: "FromRoomId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ConnectionPositions_RoomId",
+                table: "ConnectionPositions",
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Connections_ToRoomId",
@@ -276,24 +319,20 @@ namespace Gamebook.Server.Migrations
                 column: "ParentDialogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemPositions_ItemId",
-                table: "ItemPositions",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ItemPositions_RoomId",
                 table: "ItemPositions",
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_CurrentRoomId",
-                table: "Items",
-                column: "CurrentRoomId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Items_GameBookActionId",
                 table: "Items",
                 column: "GameBookActionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_ItemPositionId",
+                table: "Items",
+                column: "ItemPositionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_RequiredRoomId",
@@ -314,25 +353,36 @@ namespace Gamebook.Server.Migrations
                 name: "IX_NPCs_RequiredRoomId",
                 table: "NPCs",
                 column: "RequiredRoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Progress_CurrentRoomId",
+                table: "Progress",
+                column: "CurrentRoomId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Connections");
+                name: "ConnectionPositions");
 
             migrationBuilder.DropTable(
                 name: "Dialogs");
 
             migrationBuilder.DropTable(
-                name: "ItemPositions");
+                name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "Progress");
+
+            migrationBuilder.DropTable(
+                name: "Connections");
 
             migrationBuilder.DropTable(
                 name: "NPCs");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "ItemPositions");
 
             migrationBuilder.DropTable(
                 name: "Actions");

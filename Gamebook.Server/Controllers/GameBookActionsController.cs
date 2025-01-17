@@ -83,7 +83,7 @@ namespace Gamebook.Server.Controllers
             public string MiniGameData { get; set; } // Data or configuration for the mini-game
         }
 
-        /*
+        
 
 
           // DELETE: api/GameBookActions/5
@@ -101,46 +101,9 @@ namespace Gamebook.Server.Controllers
 
               return NoContent();
           }
-          [HttpGet("GetGameBookActionByNPCId/{NPCId}")]
-          public async Task<ActionResult<IEnumerable<GameBookAction>>> GetGameBookActionsByNPCId(int NPCId)
-          {
-              // Find game book actions based on ReqNPC
-              var actions = await _context.Actions
-                  .Where(gba => gba.ReqNPC == NPCId)
-                  .Include(gba => gba.ActionType)  // Include ActionType if needed
-                  .Include(gba => gba.Options)     // Include Options if needed
-                  .ToListAsync();
+         
 
-              if (actions == null || !actions.Any())
-              {
-                  return NotFound($"No actions found for NPCId: {NPCId}");
-              }
-
-              return Ok(actions);
-          }
-
-          // GET: api/GameBookActions/GetGameBookActionByItemId/{ItemId}
-          [HttpGet("GetGameBookActionByItemId/{ItemId}")]
-          public async Task<ActionResult<IEnumerable<GameBookAction>>> GetGameBookActionsByItemId(int ItemId)
-          {
-              // Find game book actions based on ReqItem
-              var actions = await _context.Actions
-                  .Where(gba => gba.ReqItem == ItemId)
-                  .Include(gba => gba.ActionType)  // Include ActionType if needed
-                  .Include(gba => gba.Options)     // Include Options if needed
-                  .ToListAsync();
-
-              if (actions == null || !actions.Any())
-              {
-                  return NotFound($"No actions found for ItemId: {ItemId}");
-              }
-
-              return Ok(actions);
-          }
-          private bool GameBookActionExists(int id)
-          {
-              return _context.Actions.Any(e => e.ActionId == id);
-          }
-          */
+       
+          
     }
 }
