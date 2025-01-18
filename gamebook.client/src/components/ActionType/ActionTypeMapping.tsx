@@ -1,4 +1,4 @@
-import { DialogueAction } from "../Dialog/AtomDIalogue";
+import { DialogueAction } from "../Dialog/DIalogue";
 import { GameBookAction } from "../../types/types"; // Adjust the import path as necessary
 
 export enum ActionTypeEnum {

@@ -1,15 +1,54 @@
 .exit {
     color: white;
     text-decoration: none;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: .3rem;
-    border: 2px solid white;
-    border-radius: 10px;
+    margin-left: auto;
+    padding: 0.6em 1.2em;
+    border-radius: 0;
 }
 
 .exit:hover {
+    background-color: grey;
+    color: white;
+}
+
+
+.nav {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: black;
+}
+
+.nav button {
+    background: none;
+    border-radius: 0;
+    position: relative;
+}
+
+.nav button::after {
+    content: ''; 
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0; 
+    height: 2px;
+    background-color: black;
+    transition: width 0.3s ease; 
+}
+
+.nav button.active::after {
+    width: 100%; 
+}
+
+.nav button:hover {
+    background-color: grey;
+}
+
+.nav button.active {
     background-color: white;
     color: black;
 }
+
+
