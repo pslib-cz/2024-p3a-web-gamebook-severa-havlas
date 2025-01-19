@@ -81,44 +81,66 @@ namespace Gamebook.Server.Controllers
         
 
 
-
+        */
 
 
         [HttpPost]
-        
         public async Task<IActionResult> CreateRoom([FromForm] RoomCreateDto roomDto)
         {
+            // Validate input
+            if (roomDto == null)
+                return BadRequest("Room data is required.");
+
+            if (string.IsNullOrWhiteSpace(roomDto.Name))
+                return BadRequest("Room name is required.");
+
+            if (string.IsNullOrWhiteSpace(roomDto.Text))
+                return BadRequest("Room description is required.");
+
             if (roomDto.Img == null || roomDto.Img.Length == 0)
                 return BadRequest("Image is required.");
 
-            // Convert image to byte array
-            using var memoryStream = new MemoryStream();
-            await roomDto.Img.CopyToAsync(memoryStream);
-            var imgBytes = memoryStream.ToArray();
-
-            // Create Room object
-            var room = new Room
+            try
             {
-                Name = roomDto.Name,
-                Text = roomDto.Text,
-                Img = imgBytes,
-                Items = new List<Item>(), // Initialize collections if needed
-                NPCs = new List<NPC>(),
-                ItemPositions = new List<ItemPosition>(),
-                ConnectionsFrom = new List<Connection>(),
-                ConnectionsTo = new List<Connection>(),
-                RequiredItems = new List<Item>(),
-                RequiredNPCs = new List<NPC>(),
-                RequiredActions = new List<GameBookAction>()
-            };
+                // Convert image to byte array
+                byte[] imgBytes;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await roomDto.Img.CopyToAsync(memoryStream);
+                    imgBytes = memoryStream.ToArray();
+                }
 
-            // Save room to database (assuming EF Core)
-            _context.Rooms.Add(room);
-            await _context.SaveChangesAsync();
+                // Create Room object
+                var room = new Room
+                {
+                    Name = roomDto.Name,
+                    Text = roomDto.Text,
+                    Img = imgBytes,
+                  
+                    NPCs = new List<NPC>(),
+                    Items = new List<ItemPosition>(),
+                    ConnectionsFrom = new List<ConnectionPosition>(),
+                    ConnectionsTo = new List<Connection>(),
+                    RequiredItems = new List<Item>(),
+                    RequiredNPCs = new List<NPC>(),
+                    RequiredActions = new List<GameBookAction>()
+                };
 
-            return Ok(room);
+                // Save room to database
+                _context.Rooms.Add(room);
+                await _context.SaveChangesAsync();
+
+                // Return success response
+                return Ok();// Adjust GetRoomById if needed
+            }
+            catch (Exception ex)
+            {
+                // Log the error (optional)
+                // _logger.LogError(ex, "Error creating room");
+                return StatusCode(500, "An error occurred while creating the room. Please try again.");
+            }
         }
-        */
+
         // GET: api/Rooms/5
         // GET: api/Rooms/5
         [HttpGet("Required/{id}")]
