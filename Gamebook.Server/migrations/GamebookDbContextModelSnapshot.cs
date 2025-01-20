@@ -177,7 +177,7 @@ namespace Gamebook.Server.Migrations
                     b.Property<byte[]>("Img")
                         .HasColumnType("BLOB");
 
-                    b.Property<int>("ItemPositionId")
+                    b.Property<int?>("ItemPositionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -397,9 +397,7 @@ namespace Gamebook.Server.Migrations
 
                     b.HasOne("Gamebook.Server.models.ItemPosition", "ItemPosition")
                         .WithOne("Item")
-                        .HasForeignKey("Gamebook.Server.models.Item", "ItemPositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Gamebook.Server.models.Item", "ItemPositionId");
 
                     b.HasOne("Gamebook.Server.models.Room", "RequiredRoom")
                         .WithMany("RequiredItems")

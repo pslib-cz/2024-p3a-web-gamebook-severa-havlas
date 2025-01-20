@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20250117083805_17")]
-    partial class _17
+    [Migration("20250120202856_18")]
+    partial class _18
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,7 +180,7 @@ namespace Gamebook.Server.Migrations
                     b.Property<byte[]>("Img")
                         .HasColumnType("BLOB");
 
-                    b.Property<int>("ItemPositionId")
+                    b.Property<int?>("ItemPositionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -400,9 +400,7 @@ namespace Gamebook.Server.Migrations
 
                     b.HasOne("Gamebook.Server.models.ItemPosition", "ItemPosition")
                         .WithOne("Item")
-                        .HasForeignKey("Gamebook.Server.models.Item", "ItemPositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Gamebook.Server.models.Item", "ItemPositionId");
 
                     b.HasOne("Gamebook.Server.models.Room", "RequiredRoom")
                         .WithMany("RequiredItems")

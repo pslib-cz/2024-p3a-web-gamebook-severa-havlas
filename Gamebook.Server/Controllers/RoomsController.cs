@@ -51,12 +51,11 @@ namespace Gamebook.Server.Controllers
 
             return Ok(rooms);
         }
-        /*
+
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetRoomById(int id)
         {
-            
             var room = await _context.Rooms
                 .Where(r => r.RoomId == id)
                 .Select(r => new
@@ -65,9 +64,29 @@ namespace Gamebook.Server.Controllers
                     r.Name,
                     r.Text,
                     ImgUrl = $"/api/rooms/{r.RoomId}/image", // Provide URL to fetch the image
-                    Items = r.Items.Select(i => new { i.ItemId, i.Name }), // Optional: Include related data
+
+                    // Related data
+                    RequiredItems = r.RequiredItems.Select(ri => new { ri.ItemId, ri.Name }),
+                    RequiredNPCs = r.RequiredNPCs.Select(rn => new { rn.NPCId, rn.Name }),
+                    RequiredActions = r.RequiredActions.Select(ra => new { ra.ActionId}),
+
+                    Progress = r.Progress.Select(p => new { p.ProgressId }),
+
+                    ConnectionsFrom = r.ConnectionsFrom.Select(cf => new
+                    {
+                        cf.ConnectionPositionId,
+                       
+                    }),
+
+                    ConnectionsTo = r.ConnectionsTo.Select(ct => new
+                    {
+                        ct.ConnectionId,
+                       
+                    }),
+
                     NPCs = r.NPCs.Select(n => new { n.NPCId, n.Name }),
-                   
+                    Items = r.Items.Select(i => new { i.ItemPositionId, i.Item }),
+                    TriggerActions = r.TriggerActions.Select(ta => new { ta.ActionId})
                 })
                 .FirstOrDefaultAsync();
 
@@ -78,10 +97,10 @@ namespace Gamebook.Server.Controllers
 
             return Ok(room);
         }
-        
 
 
-        */
+
+
 
 
         [HttpPost]

@@ -5,7 +5,7 @@
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _17 : Migration
+    public partial class _18 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -212,7 +212,7 @@ namespace Gamebook.Server.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     GameBookActionId = table.Column<int>(type: "INTEGER", nullable: true),
-                    ItemPositionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ItemPositionId = table.Column<int>(type: "INTEGER", nullable: true),
                     Img = table.Column<byte[]>(type: "BLOB", nullable: true),
                     RequiredRoomId = table.Column<int>(type: "INTEGER", nullable: true),
                     Target = table.Column<int>(type: "INTEGER", nullable: true),
@@ -230,8 +230,7 @@ namespace Gamebook.Server.Migrations
                         name: "FK_Items_ItemPositions_ItemPositionId",
                         column: x => x.ItemPositionId,
                         principalTable: "ItemPositions",
-                        principalColumn: "ItemPositionId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ItemPositionId");
                     table.ForeignKey(
                         name: "FK_Items_Rooms_RequiredRoomId",
                         column: x => x.RequiredRoomId,

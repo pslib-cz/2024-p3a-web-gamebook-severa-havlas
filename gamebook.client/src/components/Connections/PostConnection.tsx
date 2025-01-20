@@ -3,37 +3,47 @@ import React, { useState } from 'react';
 const PostConnection: React.FC = () => {
   const [fromRoomId, setFromRoomId] = useState<number | ''>('');
   const [toRoomId, setToRoomId] = useState<number | ''>('');
+  const [x, setX] = useState<number | ''>(''); // X position
+  const [y, setY] = useState<number | ''>(''); // Y position
+  const [img, setImg] = useState<File | null>(null); // Image file
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string>('');
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setImg(event.target.files[0]);
+    }
+  };
+
   const handleSubmit = async () => {
-    if (!fromRoomId || !toRoomId) {
-      setMessage('Both FromRoomId and ToRoomId are required.');
+    if (!fromRoomId || !toRoomId || x === '' || y === '') {
+      setMessage('FromRoomId, ToRoomId, X, and Y are required.');
       return;
     }
-
-    const connectionData = {
-      fromRoomId: fromRoomId,
-      toRoomId: toRoomId,
-    };
-
+  
+    const formData = new FormData();
+    formData.append('fromRoomId', fromRoomId.toString());
+    formData.append('toRoomId', toRoomId.toString());
+    formData.append('x', x.toString());
+    formData.append('y', y.toString());
+    if (img) {
+      formData.append('img', img); // Append the image file
+    }
+  
     try {
       setLoading(true);
       setMessage('');
-
+  
       const response = await fetch('https://localhost:7058/api/Connections', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(connectionData),
+        body: formData, // Use FormData as the request body
       });
-
+  
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'Failed to create the connection.');
       }
-
+  
       const result = await response.json();
       setMessage(`Connection created successfully! ConnectionId: ${result.connectionId}`);
     } catch (error: any) {
@@ -64,6 +74,32 @@ const PostConnection: React.FC = () => {
             value={toRoomId}
             onChange={(e) => setToRoomId(parseInt(e.target.value) || '')}
           />
+        </label>
+      </div>
+      <div>
+        <label>
+          X Position:
+          <input
+            type="number"
+            value={x}
+            onChange={(e) => setX(parseInt(e.target.value) || '')}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Y Position:
+          <input
+            type="number"
+            value={y}
+            onChange={(e) => setY(parseInt(e.target.value) || '')}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Image:
+          <input type="file" accept="image/*" onChange={handleFileChange} />
         </label>
       </div>
       <button onClick={handleSubmit} disabled={loading}>

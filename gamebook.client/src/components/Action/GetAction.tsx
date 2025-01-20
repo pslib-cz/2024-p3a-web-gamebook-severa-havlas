@@ -6,16 +6,13 @@ interface ActionType {
   name: string; // Adjust this according to your actual ActionType model
 }
 
-interface Option {
-  id: number; // Adjust this according to your actual Option model
-  name: string; // Example field
-}
+
 
 interface GameBookAction {
   actionId: number;
   actionTypeId: number;
   actionType: ActionType;
-  options: Option[];
+
   reqItem?: number;
   reqProgress?: number;
   reqNPC?: number;
@@ -68,13 +65,7 @@ const GameBookActionComponent: React.FC<{ id: number }> = ({ id }) => {
           <p><strong>Required Action:</strong> {gameBookAction.reqAction ?? "None"}</p>
           <h3>Options:</h3>
           <ul>
-            {gameBookAction.options.length > 0 ? (
-              gameBookAction.options.map(option => (
-                <li key={option.id}>{option.name}</li>
-              ))
-            ) : (
-              <p>No options available.</p>
-            )}
+         
           </ul>
         </div>
       )}

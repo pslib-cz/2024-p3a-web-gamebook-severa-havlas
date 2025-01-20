@@ -8,7 +8,7 @@ namespace Gamebook.Server.models
         [Key]
         public int ConnectionId { get; set; }
 
-        public int FromRoomId { get; set; } // FromRoom reference (no ForeignKey attribute here)
+        public int FromRoomId { get; set; } 
         public virtual ConnectionPosition ConnectionPosition { get; set; }
 
         public int ToRoomId { get; set; } // ToRoom reference

@@ -42,12 +42,12 @@ namespace Gamebook.Server.Controllers
             return connection;
         }
 
-      
-        /*
+
+
         // POST: api/Connections
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Connection>> PostConnection([FromBody] ConnectionDto connectionData)
+        public async Task<ActionResult<Connection>> PostConnection([FromForm] ConnectionDto connectionData) // Use [FromForm] to bind form data
         {
             // Validate input
             if (connectionData == null || connectionData.FromRoomId == 0 || connectionData.ToRoomId == 0)
@@ -65,16 +65,39 @@ namespace Gamebook.Server.Controllers
                 return NotFound("One or both of the specified rooms do not exist.");
             }
 
-            // Create new connection
+            // Handle the image file
+            byte[]? imageBytes = null;
+            if (connectionData.Img != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await connectionData.Img.CopyToAsync(memoryStream);
+                    imageBytes = memoryStream.ToArray();
+                }
+            }
+
+            // Create ConnectionPosition
+            var connectionPosition = new ConnectionPosition
+            {
+                RoomId = connectionData.FromRoomId,
+                X = connectionData.X,
+                Y = connectionData.Y
+            };
+
+            // Add ConnectionPosition to database
+            _context.ConnectionPositions.Add(connectionPosition);
+            await _context.SaveChangesAsync();
+
+            // Create new Connection
             var connection = new Connection
             {
                 FromRoomId = connectionData.FromRoomId,
                 ToRoomId = connectionData.ToRoomId,
-                FromRoom = fromRoom,
-                ToRoom = toRoom
+                ConnectionPosition = connectionPosition,
+                Img = imageBytes
             };
 
-            // Add connection to database
+            // Add Connection to database
             _context.Connections.Add(connection);
             await _context.SaveChangesAsync();
 
@@ -82,13 +105,17 @@ namespace Gamebook.Server.Controllers
             return CreatedAtAction("GetConnection", new { id = connection.ConnectionId }, connection);
         }
 
-        // DTO class for incoming JSON
+
+
         public class ConnectionDto
         {
             public int FromRoomId { get; set; }
+            public int X { get; set; } // X position
+            public int Y { get; set; } // Y position 
             public int ToRoomId { get; set; }
+            public IFormFile? Img { get; set; }
         }
-        */
+
 
         // DELETE: api/Connections/5
         [HttpDelete("{id}")]
