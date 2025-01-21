@@ -43,7 +43,7 @@ namespace Gamebook.Server.Controllers
         }
 
 
-
+        
         // POST: api/Connections
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -76,24 +76,17 @@ namespace Gamebook.Server.Controllers
                 }
             }
 
-            // Create ConnectionPosition
-            var connectionPosition = new ConnectionPosition
-            {
-                RoomId = connectionData.FromRoomId,
-                X = connectionData.X,
-                Y = connectionData.Y
-            };
+          
 
-            // Add ConnectionPosition to database
-            _context.ConnectionPositions.Add(connectionPosition);
-            await _context.SaveChangesAsync();
+      
 
             // Create new Connection
             var connection = new Connection
             {
                 FromRoomId = connectionData.FromRoomId,
                 ToRoomId = connectionData.ToRoomId,
-                ConnectionPosition = connectionPosition,
+                X = connectionData.X,
+                Y = connectionData.Y,
                 Img = imageBytes
             };
 
@@ -105,7 +98,7 @@ namespace Gamebook.Server.Controllers
             return CreatedAtAction("GetConnection", new { id = connection.ConnectionId }, connection);
         }
 
-
+        
 
         public class ConnectionDto
         {

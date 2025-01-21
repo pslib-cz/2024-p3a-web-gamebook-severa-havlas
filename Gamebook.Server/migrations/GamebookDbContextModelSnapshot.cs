@@ -46,9 +46,20 @@ namespace Gamebook.Server.Migrations
                     b.Property<int>("ToRoomId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ToRoomRoomId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("X")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Y")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ConnectionId");
 
                     b.HasIndex("ToRoomId");
+
+                    b.HasIndex("ToRoomRoomId");
 
                     b.ToTable("Connections");
                 });
@@ -59,12 +70,6 @@ namespace Gamebook.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FromRoomId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("X")
                         .HasColumnType("INTEGER");
 
@@ -72,11 +77,6 @@ namespace Gamebook.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ConnectionPositionId");
-
-                    b.HasIndex("FromRoomId")
-                        .IsUnique();
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("ConnectionPositions");
                 });
@@ -315,32 +315,21 @@ namespace Gamebook.Server.Migrations
 
             modelBuilder.Entity("Gamebook.Server.models.Connection", b =>
                 {
-                    b.HasOne("Gamebook.Server.models.Room", "ToRoom")
-                        .WithMany("ConnectionsTo")
+                    b.HasOne("Gamebook.Server.models.Room", "Room")
+                        .WithMany("ConnectionsFrom")
                         .HasForeignKey("ToRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ToRoom");
-                });
-
-            modelBuilder.Entity("Gamebook.Server.models.ConnectionPosition", b =>
-                {
-                    b.HasOne("Gamebook.Server.models.Connection", "Connection")
-                        .WithOne("ConnectionPosition")
-                        .HasForeignKey("Gamebook.Server.models.ConnectionPosition", "FromRoomId")
+                    b.HasOne("Gamebook.Server.models.Room", "ToRoom")
+                        .WithMany("ConnectionsTo")
+                        .HasForeignKey("ToRoomRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Gamebook.Server.models.Room", "Room")
-                        .WithMany("ConnectionsFrom")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Connection");
 
                     b.Navigation("Room");
+
+                    b.Navigation("ToRoom");
                 });
 
             modelBuilder.Entity("Gamebook.Server.models.Dialog", b =>
@@ -457,12 +446,6 @@ namespace Gamebook.Server.Migrations
             modelBuilder.Entity("Gamebook.Server.models.ActionType", b =>
                 {
                     b.Navigation("GameBookActions");
-                });
-
-            modelBuilder.Entity("Gamebook.Server.models.Connection", b =>
-                {
-                    b.Navigation("ConnectionPosition")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Gamebook.Server.models.Dialog", b =>

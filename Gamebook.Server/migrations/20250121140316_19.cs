@@ -5,7 +5,7 @@
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _18 : Migration
+    public partial class _19 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,6 +21,20 @@ namespace Gamebook.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ActionTypes", x => x.ActionTypeId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ConnectionPositions",
+                columns: table => new
+                {
+                    ConnectionPositionId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    X = table.Column<int>(type: "INTEGER", nullable: false),
+                    Y = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ConnectionPositions", x => x.ConnectionPositionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +99,9 @@ namespace Gamebook.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FromRoomId = table.Column<int>(type: "INTEGER", nullable: false),
                     ToRoomId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ToRoomRoomId = table.Column<int>(type: "INTEGER", nullable: false),
+                    X = table.Column<int>(type: "INTEGER", nullable: true),
+                    Y = table.Column<int>(type: "INTEGER", nullable: true),
                     Img = table.Column<byte[]>(type: "BLOB", nullable: true)
                 },
                 constraints: table =>
@@ -93,6 +110,12 @@ namespace Gamebook.Server.Migrations
                     table.ForeignKey(
                         name: "FK_Connections_Rooms_ToRoomId",
                         column: x => x.ToRoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Connections_Rooms_ToRoomRoomId",
+                        column: x => x.ToRoomRoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
                         onDelete: ReferentialAction.Cascade);
@@ -170,34 +193,6 @@ namespace Gamebook.Server.Migrations
                     table.ForeignKey(
                         name: "FK_NPCs_Rooms_RequiredRoomId",
                         column: x => x.RequiredRoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ConnectionPositions",
-                columns: table => new
-                {
-                    ConnectionPositionId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RoomId = table.Column<int>(type: "INTEGER", nullable: false),
-                    FromRoomId = table.Column<int>(type: "INTEGER", nullable: false),
-                    X = table.Column<int>(type: "INTEGER", nullable: false),
-                    Y = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ConnectionPositions", x => x.ConnectionPositionId);
-                    table.ForeignKey(
-                        name: "FK_ConnectionPositions_Connections_FromRoomId",
-                        column: x => x.FromRoomId,
-                        principalTable: "Connections",
-                        principalColumn: "ConnectionId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ConnectionPositions_Rooms_RoomId",
-                        column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
                         onDelete: ReferentialAction.Cascade);
@@ -287,20 +282,14 @@ namespace Gamebook.Server.Migrations
                 column: "RequiredRoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConnectionPositions_FromRoomId",
-                table: "ConnectionPositions",
-                column: "FromRoomId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ConnectionPositions_RoomId",
-                table: "ConnectionPositions",
-                column: "RoomId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Connections_ToRoomId",
                 table: "Connections",
                 column: "ToRoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Connections_ToRoomRoomId",
+                table: "Connections",
+                column: "ToRoomRoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dialogs_ActionId",
@@ -366,6 +355,9 @@ namespace Gamebook.Server.Migrations
                 name: "ConnectionPositions");
 
             migrationBuilder.DropTable(
+                name: "Connections");
+
+            migrationBuilder.DropTable(
                 name: "Dialogs");
 
             migrationBuilder.DropTable(
@@ -373,9 +365,6 @@ namespace Gamebook.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Progress");
-
-            migrationBuilder.DropTable(
-                name: "Connections");
 
             migrationBuilder.DropTable(
                 name: "NPCs");

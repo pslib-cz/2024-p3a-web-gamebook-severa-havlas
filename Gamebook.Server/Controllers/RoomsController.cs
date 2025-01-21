@@ -74,7 +74,7 @@ namespace Gamebook.Server.Controllers
 
                     ConnectionsFrom = r.ConnectionsFrom.Select(cf => new
                     {
-                        cf.ConnectionPositionId,
+                        cf.ConnectionId,
                        
                     }),
 
@@ -138,7 +138,7 @@ namespace Gamebook.Server.Controllers
                   
                     NPCs = new List<NPC>(),
                     Items = new List<ItemPosition>(),
-                    ConnectionsFrom = new List<ConnectionPosition>(),
+                    ConnectionsFrom = new List<Connection>(),
                     ConnectionsTo = new List<Connection>(),
                     RequiredItems = new List<Item>(),
                     RequiredNPCs = new List<NPC>(),
