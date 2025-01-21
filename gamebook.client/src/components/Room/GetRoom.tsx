@@ -59,7 +59,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         <h1>{room.name}</h1>
         <p>{room.text}</p>
         <h2>Requireds</h2>
-        <GetRequireds roomId={id} />
+        
         <h2>Items</h2>
         <ul>
           {room.items.map((item) => (
@@ -70,6 +70,8 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         <ConnectionViewer2 roomId={id} />
         <h2>Content</h2>
         <RoomContentViewer roomId={id} />
+
+        {JSON.stringify(room)}
       </div>
     </div>
   );

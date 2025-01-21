@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {requireds, Item, NPC, GameBookAction} from "../../types/types"
 import { data } from "react-router-dom";
+
 type GetRequiredsProps = {
 
     roomId: string;

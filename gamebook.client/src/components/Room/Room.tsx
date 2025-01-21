@@ -2,6 +2,7 @@ import RoomRequirementsForm from "../Requireds/PatchRequireds";
 import RoomList from "./GetRooms";
 import UpdateRoomContentForm from "./PatchRoomContent";
 import CreateRoom from "./PostRoomForm";
+import PostItemPosition from "../ItemPosition/PostItemPosition";
 
 const Room = () => {
     return (
@@ -10,6 +11,7 @@ const Room = () => {
             <RoomRequirementsForm />
             <UpdateRoomContentForm />
             <RoomList />
+            <PostItemPosition />
         </>
     );
 }
