@@ -51,6 +51,8 @@ namespace Gamebook.Server.Controllers
 
             return Ok(rooms);
         }
+       
+
 
         [HttpGet]
         [Route("{id}")]
@@ -163,7 +165,7 @@ namespace Gamebook.Server.Controllers
         // GET: api/Rooms/5
         // GET: api/Rooms/5
         [HttpGet("Required/{id}")]
-        public async Task<ActionResult<object>> GetRoom(int id)
+        public async Task<ActionResult<object>> GetRoomReq(int id)
         {
             var room = await _context.Rooms
                 .Include(r => r.RequiredItems)
@@ -252,11 +254,11 @@ namespace Gamebook.Server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        /*
+
         [HttpPatch("{id}/updateRoomContent")]
         public async Task<IActionResult> UpdateRoomContent(
-    int id,
-    [FromBody] RoomContentUpdateDto updateDto)
+     int id,
+     [FromBody] RoomContentDto updateDto)
         {
             // Validate input
             if (updateDto == null)
@@ -266,9 +268,8 @@ namespace Gamebook.Server.Controllers
 
             // Find the room
             var room = await _context.Rooms
-                .Include(r => r.Items)
                 .Include(r => r.NPCs)
-                .Include(r => r.ItemPositions)
+                .Include(r => r.TriggerActions)
                 .FirstOrDefaultAsync(r => r.RoomId == id);
 
             if (room == null)
@@ -278,11 +279,11 @@ namespace Gamebook.Server.Controllers
 
             try
             {
-                // Add NPCs
-                if (updateDto.NPCs != null && updateDto.NPCs.Any())
+                // Update NPCs
+                if (updateDto.NPCIds != null && updateDto.NPCIds.Any())
                 {
                     var npcsToAdd = await _context.NPCs
-                        .Where(npc => updateDto.NPCs.Contains(npc.NPCId))
+                        .Where(npc => updateDto.NPCIds.Contains(npc.NPCId))
                         .ToListAsync();
 
                     foreach (var npc in npcsToAdd)
@@ -294,42 +295,18 @@ namespace Gamebook.Server.Controllers
                     }
                 }
 
-                // Add Items
-                if (updateDto.Items != null && updateDto.Items.Any())
+                // Update TriggerActions
+                if (updateDto.triggerActionIds != null && updateDto.triggerActionIds.Any())
                 {
-                    var itemsToAdd = await _context.Items
-                        .Where(item => updateDto.Items.Contains(item.ItemId))
+                    var actionsToAdd = await _context.Actions
+                        .Where(action => updateDto.triggerActionIds.Contains(action.ActionId))
                         .ToListAsync();
 
-                    foreach (var item in itemsToAdd)
+                    foreach (var action in actionsToAdd)
                     {
-                        if (!room.Items.Contains(item))
+                        if (!room.TriggerActions.Contains(action))
                         {
-                            room.Items.Add(item);
-                        }
-                    }
-                }
-        
-                // Add ItemPositions
-                if (updateDto.ItemPositions != null && updateDto.ItemPositions.Any())
-                {
-                    foreach (var itemPositionDto in updateDto.ItemPositions)
-                    {
-                        // Create and add new ItemPosition if it doesn't already exist
-                        var itemPosition = new ItemPosition
-                        {
-                            X = itemPositionDto.X,
-                            Y = itemPositionDto.Y,
-                            ItemId = itemPositionDto.ItemId,
-                            RoomId = id
-                        };
-
-                        if (!room.ItemPositions.Any(ip =>
-                            ip.X == itemPosition.X &&
-                            ip.Y == itemPosition.Y &&
-                            ip.ItemId == itemPosition.ItemId))
-                        {
-                            room.ItemPositions.Add(itemPosition);
+                            room.TriggerActions.Add(action);
                         }
                     }
                 }
@@ -344,6 +321,7 @@ namespace Gamebook.Server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        /*
         [HttpGet("{roomId}/RoomContent")]
         public async Task<IActionResult> GetRoomContent(int roomId)
         {
@@ -351,7 +329,7 @@ namespace Gamebook.Server.Controllers
             var room = await _context.Rooms
                 .Include(r => r.NPCs)
                 .Include(r => r.Items)
-                .Include(r => r.ItemPositions)
+               
                 .FirstOrDefaultAsync(r => r.RoomId == roomId);
 
             // Check if the room exists
@@ -388,9 +366,9 @@ namespace Gamebook.Server.Controllers
 
         public class RoomContentDto
         {
-            public List<NPCDto> NPCs { get; set; }
-            public List<ItemDto> Items { get; set; }
-            public List<ItemPositionDto> ItemPositions { get; set; }
+            public List<int> NPCIds { get; set; }
+            public List<int> triggerActionIds { get; set; }
+           
         }
         public class NPCDto
         {
@@ -398,11 +376,7 @@ namespace Gamebook.Server.Controllers
             public string Name { get; set; }
         }
 
-        public class ItemDto
-        {
-            public int ItemId { get; set; }
-            public string Name { get; set; }
-        }
+     
         public class RoomContentUpdateDto
         {
             public List<int>? NPCs { get; set; } // IDs of NPCs to add

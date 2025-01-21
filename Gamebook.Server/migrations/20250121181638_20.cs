@@ -5,7 +5,7 @@
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _19 : Migration
+    public partial class _20 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -99,7 +99,6 @@ namespace Gamebook.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FromRoomId = table.Column<int>(type: "INTEGER", nullable: false),
                     ToRoomId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ToRoomRoomId = table.Column<int>(type: "INTEGER", nullable: false),
                     X = table.Column<int>(type: "INTEGER", nullable: true),
                     Y = table.Column<int>(type: "INTEGER", nullable: true),
                     Img = table.Column<byte[]>(type: "BLOB", nullable: true)
@@ -108,17 +107,17 @@ namespace Gamebook.Server.Migrations
                 {
                     table.PrimaryKey("PK_Connections", x => x.ConnectionId);
                     table.ForeignKey(
+                        name: "FK_Connections_Rooms_FromRoomId",
+                        column: x => x.FromRoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Connections_Rooms_ToRoomId",
                         column: x => x.ToRoomId,
                         principalTable: "Rooms",
                         principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Connections_Rooms_ToRoomRoomId",
-                        column: x => x.ToRoomRoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "RoomId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -282,14 +281,14 @@ namespace Gamebook.Server.Migrations
                 column: "RequiredRoomId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Connections_FromRoomId",
+                table: "Connections",
+                column: "FromRoomId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Connections_ToRoomId",
                 table: "Connections",
                 column: "ToRoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Connections_ToRoomRoomId",
-                table: "Connections",
-                column: "ToRoomRoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dialogs_ActionId",

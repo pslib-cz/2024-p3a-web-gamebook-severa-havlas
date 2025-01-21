@@ -27,13 +27,19 @@ namespace Gamebook.Server.Data
 
             base.OnModelCreating(modelBuilder);
 
-      
+
+
+            modelBuilder.Entity<Connection>()
+          .HasOne(c => c.Room)
+          .WithMany(r => r.ConnectionsFrom)
+          .HasForeignKey(c => c.FromRoomId)
+          .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
             modelBuilder.Entity<Connection>()
                 .HasOne(c => c.ToRoom)
                 .WithMany(r => r.ConnectionsTo)
                 .HasForeignKey(c => c.ToRoomId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
             // GameBookAction -> RequiredRoom
             modelBuilder.Entity<GameBookAction>()
@@ -58,11 +64,7 @@ namespace Gamebook.Server.Data
 
 
 
-            // Configure the Room relationship for ConnectionPosition
-            modelBuilder.Entity<Connection>()
-                .HasOne(cp => cp.Room) // Navigation property in ConnectionPosition
-                .WithMany()            // No inverse property
-                .HasForeignKey(cp => cp.FromRoomId);
+ 
 
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.RequiredRoom)
@@ -83,12 +85,6 @@ namespace Gamebook.Server.Data
                 .HasForeignKey(i => i.RequiredRoomId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Connection>()
-        .HasOne(cp => cp.Room)
-        .WithMany(r => r.ConnectionsFrom)
-        .HasForeignKey(cp => cp.ToRoomId);
-
-            // Configure the one-to-one relationship between Connection and ConnectionPosition
             
 
             modelBuilder.Entity<ItemPosition>()

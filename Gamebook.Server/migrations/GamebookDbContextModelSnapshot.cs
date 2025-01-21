@@ -46,9 +46,6 @@ namespace Gamebook.Server.Migrations
                     b.Property<int>("ToRoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ToRoomRoomId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("X")
                         .HasColumnType("INTEGER");
 
@@ -57,9 +54,9 @@ namespace Gamebook.Server.Migrations
 
                     b.HasKey("ConnectionId");
 
-                    b.HasIndex("ToRoomId");
+                    b.HasIndex("FromRoomId");
 
-                    b.HasIndex("ToRoomRoomId");
+                    b.HasIndex("ToRoomId");
 
                     b.ToTable("Connections");
                 });
@@ -317,14 +314,14 @@ namespace Gamebook.Server.Migrations
                 {
                     b.HasOne("Gamebook.Server.models.Room", "Room")
                         .WithMany("ConnectionsFrom")
-                        .HasForeignKey("ToRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("FromRoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Gamebook.Server.models.Room", "ToRoom")
                         .WithMany("ConnectionsTo")
-                        .HasForeignKey("ToRoomRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ToRoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Room");

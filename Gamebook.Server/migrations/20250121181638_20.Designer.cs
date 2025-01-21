@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20250121140316_19")]
-    partial class _19
+    [Migration("20250121181638_20")]
+    partial class _20
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,9 +49,6 @@ namespace Gamebook.Server.Migrations
                     b.Property<int>("ToRoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ToRoomRoomId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("X")
                         .HasColumnType("INTEGER");
 
@@ -60,9 +57,9 @@ namespace Gamebook.Server.Migrations
 
                     b.HasKey("ConnectionId");
 
-                    b.HasIndex("ToRoomId");
+                    b.HasIndex("FromRoomId");
 
-                    b.HasIndex("ToRoomRoomId");
+                    b.HasIndex("ToRoomId");
 
                     b.ToTable("Connections");
                 });
@@ -320,14 +317,14 @@ namespace Gamebook.Server.Migrations
                 {
                     b.HasOne("Gamebook.Server.models.Room", "Room")
                         .WithMany("ConnectionsFrom")
-                        .HasForeignKey("ToRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("FromRoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Gamebook.Server.models.Room", "ToRoom")
                         .WithMany("ConnectionsTo")
-                        .HasForeignKey("ToRoomRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ToRoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Room");
