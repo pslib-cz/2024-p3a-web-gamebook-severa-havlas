@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Room } from "../../types/types";
+
 import GetRequireds from "../Requireds/GetRequireds";
 import ConnectionViewer2 from "../Connections/ConnectionsController";
 import RoomContentViewer from "./GetRoomContent";
@@ -8,6 +8,50 @@ import styles from "./GetRoom.module.css";
 type RoomDetailsInputProps = {
   id: string;
   onBackgroundImageChange?: (imageUrl: string) => void;
+};
+
+type RoomContentViewerProps = {
+  roomContent: {
+    npCs: { npcId: number; name: string }[];
+    items: {
+      itemPositionId: number;
+      roomId: number;
+      x: number;
+      y: number;
+      itemId: number;
+      item: {
+        itemId: number;
+        name: string;
+        description: string;
+      } | null;
+    }[];
+  };
+};
+
+export type Room = {
+  roomId: number;
+  imgUrl: string; 
+  name: string; // Name of the room
+  text: string; // Description of the room
+
+  // Relationships
+  items: {
+    itemPositionId: number;
+    roomId: number;
+    x: number;
+    y: number;
+    itemId: number;
+    item: {
+      itemId: number;
+      name: string;
+      description: string;
+    } | null;
+  }[]; // Collection of items in the room
+  npcs: { npcId: number; name: string }[]; // Collection of NPCs in the room
+
+  // Connections
+  connectionsFrom: { connectionId: number; toRoomId: number; description: string }[]; // Connections originating from this room
+  connectionsTo: { connectionId: number; fromRoomId: number; description: string }[]; // Connections leading to this room
 };
 
 const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageChange }) => {
@@ -33,9 +77,9 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
           npcs: data.npcs || [],
         });
 
-        // Pokud má místnost URL obrázku, nastavíme jej jako pozadí
+        // Set background image if URL is present
         if (data.imgUrl && onBackgroundImageChange) {
-          //onBackgroundImageChange(`https://localhost:7058${data.imgUrl}`);
+          onBackgroundImageChange(`https://localhost:7058${data.imgUrl}`);
         }
       } catch (error) {
         console.error(error);
@@ -52,6 +96,19 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   if (error) return <div>{error}</div>;
   if (!room) return <div>Room not found.</div>;
 
+  // Transform room data for RoomContentViewer
+  const roomContent: RoomContentViewerProps["roomContent"] = {
+    npCs: room.npcs.map((npc) => ({ npcId: npc.npcId, name: npc.name })),
+    items: room.items.map((item) => ({
+      itemPositionId: item.itemPositionId,
+      roomId: item.roomId,
+      x: item.x,
+      y: item.y,
+      itemId: item.itemId,
+      item: item.item ? { ...item.item } : null,
+    })),
+  };
+
   return (
     <div className={styles.room}>
       <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} />
@@ -63,13 +120,13 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         <h2>Items</h2>
         <ul>
           {room.items.map((item) => (
-            <li key={item.itemId}>{item.name}</li>
+            <li key={item.itemPositionId}>{item.item ? item.item.name : "Unknown item"}</li>
           ))}
         </ul>
         <h2>Řízení</h2>
         <ConnectionViewer2 roomId={id} />
         <h2>Content</h2>
-        <RoomContentViewer roomId={id} />
+        <RoomContentViewer roomContent={roomContent} />
 
         {JSON.stringify(room)}
       </div>

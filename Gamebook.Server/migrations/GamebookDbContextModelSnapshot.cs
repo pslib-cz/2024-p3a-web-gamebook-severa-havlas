@@ -208,6 +208,9 @@ namespace Gamebook.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ItemId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("RoomId")
                         .HasColumnType("INTEGER");
 

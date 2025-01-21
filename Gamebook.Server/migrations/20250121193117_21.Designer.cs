@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20250121181638_20")]
-    partial class _20
+    [Migration("20250121193117_21")]
+    partial class _21
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,6 +209,9 @@ namespace Gamebook.Server.Migrations
                 {
                     b.Property<int>("ItemPositionId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("RoomId")

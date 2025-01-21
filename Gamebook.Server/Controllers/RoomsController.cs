@@ -70,27 +70,32 @@ namespace Gamebook.Server.Controllers
                     // Related data
                     RequiredItems = r.RequiredItems.Select(ri => new { ri.ItemId, ri.Name }),
                     RequiredNPCs = r.RequiredNPCs.Select(rn => new { rn.NPCId, rn.Name }),
-                    RequiredActions = r.RequiredActions.Select(ra => new { ra.ActionId}),
+                    RequiredActions = r.RequiredActions.Select(ra => new { ra.ActionId }),
 
                     Progress = r.Progress.Select(p => new { p.ProgressId }),
 
-                    ConnectionsFrom = r.ConnectionsFrom.Select(cf => new
-                    {
-                        cf.ConnectionId,
-                       
-                    }),
-
-                    ConnectionsTo = r.ConnectionsTo.Select(ct => new
-                    {
-                        ct.ConnectionId,
-                       
-                    }),
-
                     NPCs = r.NPCs.Select(n => new { n.NPCId, n.Name }),
-                    Items = r.Items.Select(i => new { i.ItemPositionId, i.Item }),
-                    TriggerActions = r.TriggerActions.Select(ta => new { ta.ActionId})
+
+                    Items = r.Items.Select(ip => new
+                    {
+                        ip.ItemPositionId,
+                        ip.RoomId,
+                        ip.X,
+                        ip.Y,
+                        ip.ItemId,
+
+                        Item = ip.Item != null ? new
+                        {
+                            ip.Item.ItemId,
+                            ip.Item.Name,
+                            ip.Item.Description // Add other properties of Item if needed
+                        } : null // Handle cases where ip.Item is null
+                    }),
+
+                    TriggerActions = r.TriggerActions.Select(ta => new { ta.ActionId })
                 })
                 .FirstOrDefaultAsync();
+
 
             if (room == null)
             {

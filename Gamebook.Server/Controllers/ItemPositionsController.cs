@@ -97,6 +97,7 @@ namespace Gamebook.Server.Controllers
             {
                 RoomId = createItemDto.RoomId,
                 Room = room,
+                ItemId = createItemDto.ItemId,
                 Item = item,
                 X = createItemDto.X,
                 Y = createItemDto.Y
