@@ -42,7 +42,34 @@ namespace Gamebook.Server.Controllers
             return nPC;
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutNPC(int id, NPC nPC)
+        {
+            if (id != nPC.NPCId)
+            {
+                return BadRequest();
+            }
 
+            _context.Entry(nPC).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!NPCExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         // POST: api/NPCs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

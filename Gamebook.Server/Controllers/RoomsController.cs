@@ -34,6 +34,39 @@ namespace Gamebook.Server.Controllers
 
             return File(room.Img, "image/jpeg"); // Adjust the MIME type as needed
         }
+        private bool RoomExists(int id)
+        {
+            return _context.Rooms.Any(e => e.RoomId == id);
+        }
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRoom(int id, Room room)
+        {
+            if (id != room.RoomId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(room).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RoomExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         [HttpGet]
         

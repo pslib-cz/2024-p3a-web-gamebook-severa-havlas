@@ -43,7 +43,34 @@ namespace Gamebook.Server.Controllers
             return gameBookAction;
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutGameBookAction(int id, GameBookAction gameBookAction)
+        {
+            if (id != gameBookAction.ActionId)
+            {
+                return BadRequest();
+            }
 
+            _context.Entry(gameBookAction).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!GameBookActionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
 
 
@@ -101,9 +128,12 @@ namespace Gamebook.Server.Controllers
 
               return NoContent();
           }
-         
 
-       
-          
+        private bool GameBookActionExists(int id)
+        {
+            return _context.Actions.Any(e => e.ActionId == id);
+        }
+
+
     }
 }

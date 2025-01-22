@@ -55,6 +55,36 @@ namespace Gamebook.Server.Controllers
 
             public int? Target { get; set; } // Nullable field
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutItem(int id, Item item)
+        {
+            if (id != item.ItemId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(item).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateItem([FromBody] ItemCreateDto itemDto)
         {
