@@ -41,8 +41,12 @@ const GameBookActionComponent: React.FC<{ id: number }> = ({ id }) => {
 
         const data: GameBookAction = await response.json();
         setGameBookAction(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
