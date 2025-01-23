@@ -42,8 +42,35 @@ namespace Gamebook.Server.Controllers
             return connection;
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutConnection(int id, Connection connection)
+        {
+            if (id != connection.ConnectionId)
+            {
+                return BadRequest();
+            }
 
-        
+            _context.Entry(connection).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ConnectionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Connections
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -131,6 +158,8 @@ namespace Gamebook.Server.Controllers
         [HttpGet("GetFromConnection/{FromRoomId}")]
         public async Task<ActionResult<IEnumerable<Connection>>> GetConnectionsByFromRoomId(int FromRoomId)
         {
+
+
             // Find the connections based on FromRoomId
             var connections = await _context.Connections
                 .Where(c => c.FromRoomId == FromRoomId)
@@ -144,6 +173,7 @@ namespace Gamebook.Server.Controllers
 
             return Ok(connections);
         }
+
         [HttpGet("GetToConnection/{ToRoomId}")]
         public async Task<ActionResult<IEnumerable<Connection>>> GetConnectionsByToRoomId(int ToRoomId)
         {
