@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Gamebook.Server.Data;
 using Gamebook.Server.models;
+using Newtonsoft.Json;
 
 namespace Gamebook.Server.Controllers
 {
@@ -369,6 +370,80 @@ namespace Gamebook.Server.Controllers
         }
         */
 
+        [HttpGet("{roomId}/Connection")]
+        public async Task<IActionResult> GetRoomConnectionsWithState(int roomId, [FromQuery] string gameState)
+        {
+            try
+            {
+                // Deserialize the gameState JSON string
+                var gameStateData = JsonConvert.DeserializeObject<GameState>(gameState);
+
+                if (gameStateData == null)
+                {
+                    return BadRequest("Invalid gameState format.");
+                }
+
+                // Query the connections where the given roomId matches FromRoomId
+                var connections = await _context.Connections
+                    .Where(c => c.FromRoomId == roomId)
+                    .Include(c => c.ToRoom) // Include the related Room entity for ToRoomId
+                    .ToListAsync();
+
+                // Construct the response with state logic
+                var result = connections.Select(connection =>
+                {
+                    // Get the required items for the "ToRoomId"
+                    var requiredItems = connection.ToRoom.RequiredItems?.Select(item => item.ItemId).ToList() ?? new List<int>();
+
+                    // Check if the player has all required items in sufficient quantity
+                    var hasAllRequiredItems = requiredItems.All(requiredItemId =>
+                        gameStateData.Player.Items.Any(playerItem =>
+                            playerItem.ItemId == requiredItemId && playerItem.Quantity >= 1));
+
+                    // Return the connection with the state property
+                    return new
+                    {
+                        connection.FromRoomId,
+                        connection.ToRoomId,
+                        connection.X,
+                        connection.Y,
+                        connection.Img,
+                        State = hasAllRequiredItems // true if all required items are present, false otherwise
+                    };
+                });
+
+                return Ok(result);
+            }
+            catch (JsonException ex)
+            {
+                return BadRequest($"Error deserializing gameState: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+    }
+
+    // Define a GameState model to deserialize gameState JSON
+    public class GameState
+    {
+        public string RoomId { get; set; }
+        public PlayerState Player { get; set; }
+    }
+
+    public class PlayerState
+    {
+        public List<PlayerItem> Items { get; set; }
+    }
+
+    public class PlayerItem
+    {
+        public int ItemId { get; set; }
+        public string ItemName { get; set; }
+        public int Quantity { get; set; }
+    }
+
         public class RoomContentDto
         {
             public List<int> NPCIds { get; set; }
@@ -409,5 +484,4 @@ namespace Gamebook.Server.Controllers
             public IFormFile Img { get; set; }        // Image file (uploaded by user)
         }
        
-    }
 }
