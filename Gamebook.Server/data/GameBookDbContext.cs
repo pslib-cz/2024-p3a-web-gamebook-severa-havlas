@@ -27,13 +27,19 @@ namespace Gamebook.Server.Data
 
             base.OnModelCreating(modelBuilder);
 
-      
+
+
+            modelBuilder.Entity<Connection>()
+          .HasOne(c => c.Room)
+          .WithMany(r => r.ConnectionsFrom)
+          .HasForeignKey(c => c.FromRoomId)
+          .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
             modelBuilder.Entity<Connection>()
                 .HasOne(c => c.ToRoom)
                 .WithMany(r => r.ConnectionsTo)
                 .HasForeignKey(c => c.ToRoomId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
             // GameBookAction -> RequiredRoom
             modelBuilder.Entity<GameBookAction>()
@@ -55,16 +61,10 @@ namespace Gamebook.Server.Data
                 .HasOne(ip => ip.Room)
                 .WithMany()
                 .HasForeignKey(ip => ip.RoomId);
-            modelBuilder.Entity<Connection>()
-       .HasOne(c => c.ConnectionPosition) // Navigation property in Connection
-       .WithOne(cp => cp.Connection)     // Navigation property in ConnectionPosition
-       .HasForeignKey<ConnectionPosition>(cp => cp.FromRoomId); // Dependent's foreign key
 
-            // Configure the Room relationship for ConnectionPosition
-            modelBuilder.Entity<ConnectionPosition>()
-                .HasOne(cp => cp.Room) // Navigation property in ConnectionPosition
-                .WithMany()            // No inverse property
-                .HasForeignKey(cp => cp.RoomId);
+
+
+ 
 
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.RequiredRoom)
@@ -85,16 +85,7 @@ namespace Gamebook.Server.Data
                 .HasForeignKey(i => i.RequiredRoomId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ConnectionPosition>()
-        .HasOne(cp => cp.Room)
-        .WithMany(r => r.ConnectionsFrom)
-        .HasForeignKey(cp => cp.RoomId);
-
-            // Configure the one-to-one relationship between Connection and ConnectionPosition
-            modelBuilder.Entity<Connection>()
-                .HasOne(c => c.ConnectionPosition)
-                .WithOne(cp => cp.Connection)
-                .HasForeignKey<ConnectionPosition>(cp => cp.FromRoomId);
+            
 
             modelBuilder.Entity<ItemPosition>()
        .HasOne(ip => ip.Room)

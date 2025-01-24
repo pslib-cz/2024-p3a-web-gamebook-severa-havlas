@@ -16,7 +16,7 @@ namespace Gamebook.Server.models
         public virtual GameBookAction GameBookAction { get; set; }
 
         [ForeignKey("ItemPosition")]
-        public int ItemPositionId { get; set; } // Foreign key for the one-to-one relationship
+        public int? ItemPositionId { get; set; } 
         public virtual ItemPosition ItemPosition { get; set; }
 
         public byte[]? Img { get; set; }

@@ -12,6 +12,9 @@ namespace Gamebook.Server.models
         public int RoomId { get; set; }
         public virtual Room Room { get; set; }
 
+
+        [ForeignKey("item")]
+        public int ItemId { get; set; }
         public virtual Item Item { get; set; } // Reverse navigation property
 
         public int X { get; set; } // X position

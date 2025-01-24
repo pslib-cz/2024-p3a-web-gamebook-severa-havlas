@@ -1,0 +1,1 @@
+ export let ApiBaseUrl = "https://localhost:7058/"

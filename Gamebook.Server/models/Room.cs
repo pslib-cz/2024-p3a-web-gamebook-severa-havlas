@@ -18,7 +18,7 @@ namespace Gamebook.Server.models
 
         public virtual ICollection<Progress> Progress { get; set; }
 
-        public virtual ICollection<ConnectionPosition> ConnectionsFrom { get; set; } // Connections originating from this room
+        public virtual ICollection<Connection> ConnectionsFrom { get; set; } // Connections originating from this room
         public virtual ICollection<Connection> ConnectionsTo { get; set; }   // Connections leading to this room
 
 

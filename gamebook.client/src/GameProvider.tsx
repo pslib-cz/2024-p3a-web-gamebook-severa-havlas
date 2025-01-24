@@ -14,6 +14,7 @@ type GameContextType = {
     items: PlayerItem[];
   };
   setPlayerItems: (update: (prevItems: PlayerItem[]) => PlayerItem[]) => void;
+  serializeContext: () => string; // New method to serialize the context
 };
 
 export const GameContext = createContext<GameContextType>({
@@ -21,6 +22,7 @@ export const GameContext = createContext<GameContextType>({
   setRoomId: () => {},
   player: { items: [] },
   setPlayerItems: () => {},
+  serializeContext: () => JSON.stringify({ roomId: "1", player: { items: [] } }), // Default implementation
 });
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -52,8 +54,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setPlayer((prev) => ({ ...prev, items: update(prev.items) }));
   };
 
+  const serializeContext = () => {
+    return JSON.stringify({
+      roomId,
+      player,
+    });
+  };
+
   return (
-    <GameContext.Provider value={{ roomId, setRoomId: updateRoomId, player, setPlayerItems }}>
+    <GameContext.Provider value={{ roomId, setRoomId: updateRoomId, player, setPlayerItems, serializeContext }}>
       {children}
     </GameContext.Provider>
   );
