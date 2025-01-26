@@ -102,11 +102,7 @@ namespace Gamebook.Server.Controllers
                     ImgUrl = $"/api/rooms/{r.RoomId}/image", // Provide URL to fetch the image
 
                     // Related data
-                    RequiredItems = r.RequiredItems.Select(ri => new { ri.ItemId, ri.Name }),
-                    RequiredNPCs = r.RequiredNPCs.Select(rn => new { rn.NPCId, rn.Name }),
-                    RequiredActions = r.RequiredActions.Select(ra => new { ra.ActionId }),
-
-                    Progress = r.Progress.Select(p => new { p.ProgressId }),
+                 
 
                     NPCs = r.NPCs.Select(n => new { n.NPCId, n.Name }),
 
@@ -116,7 +112,7 @@ namespace Gamebook.Server.Controllers
                         ip.RoomId,
                         ip.X,
                         ip.Y,
-                        ip.ItemId,
+                        
 
                         Item = ip.Item != null ? new
                         {
@@ -181,9 +177,7 @@ namespace Gamebook.Server.Controllers
                     Items = new List<ItemPosition>(),
                     ConnectionsFrom = new List<Connection>(),
                     ConnectionsTo = new List<Connection>(),
-                    RequiredItems = new List<Item>(),
-                    RequiredNPCs = new List<NPC>(),
-                    RequiredActions = new List<GameBookAction>()
+                 
                 };
 
                 // Save room to database
@@ -203,6 +197,7 @@ namespace Gamebook.Server.Controllers
 
         // GET: api/Rooms/5
         // GET: api/Rooms/5
+        /*
         [HttpGet("Required/{id}")]
         public async Task<ActionResult<object>> GetRoomReq(int id)
         {
@@ -225,7 +220,6 @@ namespace Gamebook.Server.Controllers
                 RequiredActions = room.RequiredActions.Select(action => action.ActionId) // Assuming ActionId exists in GameBookAction class
             };
         }
-
 
         // PATCH: api/Rooms/{id}/UpdateRequirements
         [HttpPatch("{id}/UpdateRequirements")]
@@ -293,7 +287,8 @@ namespace Gamebook.Server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
+        
+        */
         [HttpPatch("{id}/updateRoomContent")]
         public async Task<IActionResult> UpdateRoomContent(
      int id,
@@ -408,11 +403,15 @@ namespace Gamebook.Server.Controllers
         {
             try
             {
+                // Log the received gameState JSON
+                Console.WriteLine($"Received gameState: {gameState}");
+
                 // Deserialize the gameState JSON string
                 var gameStateData = JsonConvert.DeserializeObject<GameState>(gameState);
 
                 if (gameStateData == null)
                 {
+                    Console.WriteLine("Invalid gameState format.");
                     return BadRequest("Invalid gameState format.");
                 }
 
@@ -422,16 +421,22 @@ namespace Gamebook.Server.Controllers
                     .Include(c => c.ToRoom) // Include the related Room entity for ToRoomId
                     .ToListAsync();
 
+                Console.WriteLine($"Found {connections.Count} connections for roomId {roomId}.");
+
                 // Construct the response with state logic
                 var result = connections.Select(connection =>
                 {
                     // Get the required items for the "ToRoomId"
-                    var requiredItems = connection.ToRoom.RequiredItems?.Select(item => item.ItemId).ToList() ?? new List<int>();
+                    var requiredItems = connection.RequiredItems?.Select(item => item.ItemId).ToList() ?? new List<int>();
 
                     // Check if the player has all required items in sufficient quantity
                     var hasAllRequiredItems = requiredItems.All(requiredItemId =>
                         gameStateData.Player.Items.Any(playerItem =>
                             playerItem.ItemId == requiredItemId && playerItem.Quantity >= 1));
+
+                    // Log the state for each connection
+                    Console.WriteLine($"Connection to ToRoomId {connection.ToRoomId}: RequiredItems = [{string.Join(", ", requiredItems)}], " +
+                                      $"PlayerHasAllRequiredItems = {hasAllRequiredItems}");
 
                     // Return the connection with the state property
                     return new
@@ -445,17 +450,23 @@ namespace Gamebook.Server.Controllers
                     };
                 });
 
+                // Log the final result
+                Console.WriteLine($"Result: {JsonConvert.SerializeObject(result, Formatting.Indented)}");
+
                 return Ok(result);
             }
             catch (JsonException ex)
             {
+                Console.WriteLine($"Error deserializing gameState: {ex.Message}");
                 return BadRequest($"Error deserializing gameState: {ex.Message}");
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"An error occurred: {ex.Message}");
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
     }
 
     // Define a GameState model to deserialize gameState JSON

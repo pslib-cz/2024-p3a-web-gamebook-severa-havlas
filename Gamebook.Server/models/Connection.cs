@@ -8,6 +8,12 @@ namespace Gamebook.Server.models
         [Key]
         public int ConnectionId { get; set; }
 
+        public virtual ICollection<Item> RequiredItems { get; set; }
+        public virtual ICollection<NPC> RequiredNPCs { get; set; }
+
+
+        public virtual ICollection<Progress> RequiredProgress { get; set; }
+
         public int FromRoomId { get; set; } // Reference to the room
         public virtual Room Room { get; set; }
 

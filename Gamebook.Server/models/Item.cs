@@ -21,9 +21,9 @@ namespace Gamebook.Server.models
 
         public byte[]? Img { get; set; }
 
-        [ForeignKey("RequiredRoomId")]
-        public int? RequiredRoomId { get; set; }
-        public virtual Room RequiredRoom { get; set; }
+        [ForeignKey("RequiredConnectionId")]
+        public int? RequiredConnectionId { get; set; }
+        public virtual Connection RequiredConnection { get; set; }
 
         public int? Target { get; set; }
         public int? Price { get; set; }

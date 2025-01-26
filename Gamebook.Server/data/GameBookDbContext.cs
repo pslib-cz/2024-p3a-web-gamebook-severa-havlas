@@ -17,7 +17,7 @@ namespace Gamebook.Server.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Dialog> Dialogs { get; set; }
 
-        public DbSet<ConnectionPosition> ConnectionPositions { get; set; }
+     
         public DbSet<Progress> Progress { get; set; }
 
 
@@ -41,13 +41,7 @@ namespace Gamebook.Server.Data
                 .HasForeignKey(c => c.ToRoomId)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
-            // GameBookAction -> RequiredRoom
-            modelBuilder.Entity<GameBookAction>()
-                .HasOne(gba => gba.RequiredRoom)
-                .WithMany(r => r.RequiredActions) // Assuming RequiredActions holds actions requiring the room
-                .HasForeignKey(gba => gba.RequiredRoomId)
-                .OnDelete(DeleteBehavior.Cascade);
-
+        
             // GameBookAction -> CurrentRoom
             modelBuilder.Entity<GameBookAction>()
                 .HasOne(gba => gba.CurrentRoom)
@@ -67,9 +61,9 @@ namespace Gamebook.Server.Data
  
 
             modelBuilder.Entity<Item>()
-                .HasOne(i => i.RequiredRoom)
+                .HasOne(i => i.RequiredConnection)
                 .WithMany(r => r.RequiredItems)
-                .HasForeignKey(i => i.RequiredRoomId)
+                .HasForeignKey(i => i.RequiredConnectionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // NPC relationships
@@ -80,9 +74,9 @@ namespace Gamebook.Server.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<NPC>()
-                .HasOne(i => i.RequiredRoom)
+                .HasOne(i => i.RequiredConnection)
                 .WithMany(r => r.RequiredNPCs)
-                .HasForeignKey(i => i.RequiredRoomId)
+                .HasForeignKey(i => i.RequiredConnectionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             

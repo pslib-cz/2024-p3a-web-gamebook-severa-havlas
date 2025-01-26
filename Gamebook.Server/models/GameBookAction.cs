@@ -21,9 +21,9 @@ namespace Gamebook.Server.models
 
         public string MiniGameData { get; set; } // Data or configuration for the mini-game
 
-        [ForeignKey("RequiredRoom")]
-        public int? RequiredRoomId { get; set; }
-        public virtual Room RequiredRoom { get; set; }
+        [ForeignKey("RequiredConnection")]
+        public int? RequiredConnectionId { get; set; }
+        public virtual Connection RequiredConnection { get; set; }
 
         [ForeignKey("CurrentRoom")]
         public int? CurrentRoomId { get; set; }

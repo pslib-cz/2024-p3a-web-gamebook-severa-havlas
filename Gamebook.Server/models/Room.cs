@@ -12,11 +12,7 @@ namespace Gamebook.Server.models
         public required string Name { get; set; }
         public required string Text { get; set; }
 
-        public virtual ICollection<Item> RequiredItems { get; set; }
-        public virtual ICollection<NPC> RequiredNPCs { get; set; }
-        public virtual ICollection<GameBookAction> RequiredActions { get; set; }
 
-        public virtual ICollection<Progress> Progress { get; set; }
 
         public virtual ICollection<Connection> ConnectionsFrom { get; set; } // Connections originating from this room
         public virtual ICollection<Connection> ConnectionsTo { get; set; }   // Connections leading to this room
