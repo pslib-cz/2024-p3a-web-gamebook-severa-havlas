@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import GetRequireds from "../Requireds/GetRequireds";
 import ConnectionViewer2 from "../Connections/ConnectionsController";
 import RoomContentViewer from "./GetRoomContent";
 import styles from "./GetRoom.module.css";

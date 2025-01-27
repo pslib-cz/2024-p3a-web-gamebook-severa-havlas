@@ -29,7 +29,7 @@ type PlayerItem = {
 const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) => {
   const [selectedNpcId, setSelectedNpcId] = useState<number | null>(null); // Selected NPC ID
 
-  const { player, setPlayerItems } = useGameContext(); // Access game context
+  const { setPlayerItems } = useGameContext(); // Access game context
 
   const handlePickUpItem = (itemId: number, itemName: string) => {
     setPlayerItems((prevItems: PlayerItem[]) => {

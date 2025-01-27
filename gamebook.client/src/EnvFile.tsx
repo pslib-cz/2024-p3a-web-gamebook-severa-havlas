@@ -1,1 +1,1 @@
- export let ApiBaseUrl = "https://localhost:7058/"
+ export const ApiBaseUrl = "https://localhost:7058/"
