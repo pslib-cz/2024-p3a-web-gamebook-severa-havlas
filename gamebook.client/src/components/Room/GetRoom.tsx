@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ConnectionViewer2 from "../Connections/ConnectionsController";
+
 import RoomContentViewer from "./GetRoomContent";
 import styles from "./GetRoom.module.css";
 import {RoomConnections} from "../Connections/BetterConnections";
