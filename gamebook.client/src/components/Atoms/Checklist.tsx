@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ChecklistImage from "../../assets/checklist.webp";
 import styles from "./Checklist.module.css";
 
@@ -74,7 +74,7 @@ const Checklist = () => {
   })));
 
   const [isClosed, setIsClosed] = useState(true);
-  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const [ , setCorrectAnswersCount ] = useState(0);
   const [confirmedPairs, setConfirmedPairs] = useState<Set<number>>(new Set());
 
   const checkIfCorrectPair = (name: string | null, fate: string | null) => {
@@ -101,13 +101,13 @@ const Checklist = () => {
     });
 
     setCorrectAnswersCount(correctCount);
-
     // Pokud je správných odpovědí více než 3 nebo zbývají poslední nezkontrolované řádky
     if (correctCount >= confirmedPairs.size + 3 || correctCount === people.length) {
+      
       setConfirmedPairs((prev) => {
         const updatedPairs = new Set<number>(prev);
         let addedCount = 0;
-
+        
         people.forEach((person) => {
           if (
             !prev.has(person.id) &&
