@@ -155,21 +155,20 @@ namespace Gamebook.Server.Controllers
 
 
         // GET: api/Connections/GetConnection/{FromRoomId}
-        [HttpGet("GetFromConnection/{FromRoomId}")]
+        [HttpGet("{FromRoomId}/GetFromConnection")]
         public async Task<ActionResult<IEnumerable<Connection>>> GetConnectionsByFromRoomId(int FromRoomId)
         {
-
-
-            // Find the connections based on FromRoomId
             var connections = await _context.Connections
-                .Where(c => c.FromRoomId == FromRoomId)
-                .ToListAsync();
-
-            // If no connections are found
-            if (connections == null || !connections.Any())
-            {
-                return NotFound($"No connections found for FromRoomId: {FromRoomId}");
-            }
+                            .Select(connection => new
+                            {
+                                connection.ConnectionId,
+                                connection.X,
+                                connection.Y,
+                                connection.ToRoomId,
+                                connection.FromRoomId,
+                                ImgUrl = $"/api/connections/{connection.ConnectionId}/image" // Provide URL to fetch the image
+                            }).Where(connection => FromRoomId == connection.ToRoomId)
+                            .ToListAsync();
 
             return Ok(connections);
         }

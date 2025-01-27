@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "react-d3-graph": "^2.6.0"
+    "react-d3-graph": "^2.6.0",
+    "react-hook-form": "^7.54.2"
   }
 }
