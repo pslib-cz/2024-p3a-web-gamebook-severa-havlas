@@ -173,6 +173,18 @@ namespace Gamebook.Server.Controllers
 
             return Ok(connections);
         }
+        [HttpGet]
+        [Route("{id}/image")]
+        public async Task<IActionResult> GetRoomImage(int id)
+        {
+            var room = await _context.Rooms.FindAsync(id);
+            if (room == null || room.Img == null)
+            {
+                return NotFound("Image not found.");
+            }
+
+            return File(room.Img, "image/jpeg"); // Adjust the MIME type as needed
+        }
 
         [HttpGet("GetToConnection/{ToRoomId}")]
         public async Task<ActionResult<IEnumerable<Connection>>> GetConnectionsByToRoomId(int ToRoomId)
@@ -193,6 +205,80 @@ namespace Gamebook.Server.Controllers
         private bool ConnectionExists(int id)
         {
             return _context.Connections.Any(e => e.ConnectionId == id);
+        }
+
+        // PATCH: api/Rooms/{id}/UpdateRequirements
+        [HttpPatch("{id}/UpdateRequirements")]
+        public async Task<IActionResult> UpdateRoomRequirements(
+            int id,
+            [FromBody] RoomRequirementsUpdateDto updateDto)
+        {
+            // Validate input
+            if (updateDto == null)
+            {
+                return BadRequest("Invalid request payload.");
+            }
+
+            // Find the room
+            var connection = await _context.Connections
+                .Include(r => r.RequiredItems)
+                .Include(r => r.RequiredNPCs)
+                .Include(r => r.RequiredProgress)
+                .FirstOrDefaultAsync(r => r.ConnectionId == id);
+
+            if (connection == null)
+            {
+                return NotFound($"Room with ID {id} not found.");
+            }
+
+            try
+            {
+                // Update RequiredItems
+                if (updateDto.RequiredItems != null)
+                {
+                    var items = await _context.Items
+                        .Where(item => updateDto.RequiredItems.Contains(item.ItemId))
+                        .ToListAsync();
+
+                    connection.RequiredItems = items;
+                }
+
+                // Update RequiredNPCs
+                if (updateDto.RequiredNPCs != null)
+                {
+                    var npcs = await _context.NPCs
+                        .Where(npc => updateDto.RequiredNPCs.Contains(npc.NPCId))
+                        .ToListAsync();
+
+                    connection.RequiredNPCs = npcs;
+                }
+
+                // Update RequiredActions
+                if (updateDto.RequiredProgress != null)
+                {
+                    var progress = await _context.Progress
+                        .Where(progress => updateDto.RequiredProgress.Contains(progress.ProgressId))
+                        .ToListAsync();
+
+                    connection.RequiredProgress = progress;
+                }
+
+                // Save changes
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                // Handle potential errors
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        public class RoomRequirementsUpdateDto
+        {
+            public List<int>? RequiredItems { get; set; }
+            public List<int>? RequiredNPCs { get; set; }
+            public List<int>? RequiredProgress { get; set; }
         }
     }
 }

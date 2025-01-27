@@ -34,7 +34,7 @@ const RoomRequirementsForm: React.FC = () => {
 
     try {
       const response = await fetch(
-        `https://localhost:7058/api/Rooms/${roomId}/UpdateRequirements`,
+        `https://localhost:7058/api/Connections/${roomId}/UpdateRequirements`,
         {
           method: "PATCH",
           headers: {

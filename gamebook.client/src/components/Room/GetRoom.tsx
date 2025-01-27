@@ -4,7 +4,7 @@ import GetRequireds from "../Requireds/GetRequireds";
 import ConnectionViewer2 from "../Connections/ConnectionsController";
 import RoomContentViewer from "./GetRoomContent";
 import styles from "./GetRoom.module.css";
-
+import {RoomConnections} from "../Connections/BetterConnections";
 type RoomDetailsInputProps = {
   id: string;
   onBackgroundImageChange?: (imageUrl: string) => void;
@@ -124,10 +124,10 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
           ))}
         </ul>
         <h2>Řízení</h2>
-        <ConnectionViewer2 roomId={id} />
+        
         <h2>Content</h2>
         <RoomContentViewer roomContent={roomContent} />
-
+        <RoomConnections />
         {JSON.stringify(room)}
       </div>
     </div>

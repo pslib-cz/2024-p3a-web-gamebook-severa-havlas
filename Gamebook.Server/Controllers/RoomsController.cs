@@ -221,74 +221,7 @@ namespace Gamebook.Server.Controllers
             };
         }
 
-        // PATCH: api/Rooms/{id}/UpdateRequirements
-        [HttpPatch("{id}/UpdateRequirements")]
-        public async Task<IActionResult> UpdateRoomRequirements(
-            int id,
-            [FromBody] RoomRequirementsUpdateDto updateDto)
-        {
-            // Validate input
-            if (updateDto == null)
-            {
-                return BadRequest("Invalid request payload.");
-            }
-
-            // Find the room
-            var room = await _context.Rooms
-                .Include(r => r.RequiredItems)
-                .Include(r => r.RequiredNPCs)
-                .Include(r => r.RequiredActions)
-                .FirstOrDefaultAsync(r => r.RoomId == id);
-
-            if (room == null)
-            {
-                return NotFound($"Room with ID {id} not found.");
-            }
-
-            try
-            {
-                // Update RequiredItems
-                if (updateDto.RequiredItems != null)
-                {
-                    var items = await _context.Items
-                        .Where(item => updateDto.RequiredItems.Contains(item.ItemId))
-                        .ToListAsync();
-
-                    room.RequiredItems = items;
-                }
-
-                // Update RequiredNPCs
-                if (updateDto.RequiredNPCs != null)
-                {
-                    var npcs = await _context.NPCs
-                        .Where(npc => updateDto.RequiredNPCs.Contains(npc.NPCId))
-                        .ToListAsync();
-
-                    room.RequiredNPCs = npcs;
-                }
-
-                // Update RequiredActions
-                if (updateDto.RequiredActions != null)
-                {
-                    var actions = await _context.Actions
-                        .Where(action => updateDto.RequiredActions.Contains(action.ActionId))
-                        .ToListAsync();
-
-                    room.RequiredActions = actions;
-                }
-
-                // Save changes
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                // Handle potential errors
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-        
-        */
+     */
         [HttpPatch("{id}/updateRoomContent")]
         public async Task<IActionResult> UpdateRoomContent(
      int id,
@@ -355,48 +288,7 @@ namespace Gamebook.Server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        /*
-        [HttpGet("{roomId}/RoomContent")]
-        public async Task<IActionResult> GetRoomContent(int roomId)
-        {
-            // Find the room and include related entities (NPCs, Items, ItemPositions)
-            var room = await _context.Rooms
-                .Include(r => r.NPCs)
-                .Include(r => r.Items)
-               
-                .FirstOrDefaultAsync(r => r.RoomId == roomId);
 
-            // Check if the room exists
-            if (room == null)
-            {
-                return NotFound($"Room with ID {roomId} not found.");
-            }
-
-            // Map the data to a DTO to prevent over-fetching
-            var roomContentDto = new RoomContentDto
-            {
-                NPCs = room.NPCs.Select(npc => new NPCDto
-                {
-                    NPCId = npc.NPCId,
-                    Name = npc.Name
-                }).ToList(),
-                Items = room.Items.Select(item => new ItemDto
-                {
-                    ItemId = item.ItemId,
-                    Name = item.Name
-                }).ToList(),
-                ItemPositions = room.ItemPositions.Select(pos => new ItemPositionDto
-                {
-                    ItemId = pos.ItemId,
-                    X = pos.X,
-                    Y = pos.Y
-                }).ToList()
-            };
-
-            // Return the room content
-            return Ok(roomContentDto);
-        }
-        */
 
         [HttpGet("{roomId}/Connection")]
         public async Task<IActionResult> GetRoomConnectionsWithState(int roomId, [FromQuery] string gameState)
@@ -419,6 +311,7 @@ namespace Gamebook.Server.Controllers
                 var connections = await _context.Connections
                     .Where(c => c.FromRoomId == roomId)
                     .Include(c => c.ToRoom) // Include the related Room entity for ToRoomId
+                    .Include(c => c.RequiredItems) // Include the RequiredItems collection
                     .ToListAsync();
 
                 Console.WriteLine($"Found {connections.Count} connections for roomId {roomId}.");
@@ -426,7 +319,7 @@ namespace Gamebook.Server.Controllers
                 // Construct the response with state logic
                 var result = connections.Select(connection =>
                 {
-                    // Get the required items for the "ToRoomId"
+                    // Get the required items for this connection
                     var requiredItems = connection.RequiredItems?.Select(item => item.ItemId).ToList() ?? new List<int>();
 
                     // Check if the player has all required items in sufficient quantity
@@ -445,7 +338,7 @@ namespace Gamebook.Server.Controllers
                         connection.ToRoomId,
                         connection.X,
                         connection.Y,
-                        connection.Img,
+                        ImgUrl = $"/api/connections/{connection.ConnectionId}/image",
                         State = hasAllRequiredItems // true if all required items are present, false otherwise
                     };
                 });
@@ -466,6 +359,7 @@ namespace Gamebook.Server.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
 
     }
 
@@ -514,12 +408,6 @@ namespace Gamebook.Server.Controllers
             public int Y { get; set; } // Y-coordinate of the item's position
         }
 
-        public class RoomRequirementsUpdateDto
-        {
-            public List<int>? RequiredItems { get; set; }
-            public List<int>? RequiredNPCs { get; set; }
-            public List<int>? RequiredActions { get; set; }
-        }
 
         public class RoomCreateDto
         {
