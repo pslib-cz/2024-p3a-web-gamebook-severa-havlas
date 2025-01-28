@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import RoomContentViewer from "./GetRoomContent";
 import styles from "./GetRoom.module.css";
 import {RoomConnections} from "../Connections/BetterConnections";
+import SlidingOverlay from "../Minigames/Overlay";
 type RoomDetailsInputProps = {
   id: string;
   onBackgroundImageChange?: (imageUrl: string) => void;
@@ -10,6 +11,7 @@ type RoomDetailsInputProps = {
 
 type RoomContentViewerProps = {
   roomContent: {
+    
     npCs: { npcId: number; name: string }[];
     items: {
       itemPositionId: number;
@@ -108,7 +110,10 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   };
 
   return (
-    <div className={styles.room}>
+    <>
+      <SlidingOverlay isOpen={true} overlayWidth="60%" />
+     <div className={styles.room}>
+      
       <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} />
       <div className={styles.description}>
         <h1>{room.name}</h1>
@@ -129,6 +134,8 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         {JSON.stringify(room)}
       </div>
     </div>
+    </>
+   
   );
 };
 

@@ -1,0 +1,55 @@
+/* SlidingOverlay.css */
+
+/* Overlay styles */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #2d3748; /* Dark gray */
+    color: white;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 50; /* Ensures it appears above other elements */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Add a shadow for depth */
+  }
+  
+  .overlay.open {
+    transform: translateX(0); /* Slide into view */
+  }
+  
+  /* Other styles (unchanged) */
+  .overlay-content {
+    padding: 20px;
+  }
+  
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 40; /* Behind the overlay */
+  }
+  
+  .toggle-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .close-button {
+    padding: 10px 20px;
+    background-color: #e53e3e; /* Red */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  

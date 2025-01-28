@@ -13,6 +13,7 @@ const Page = () => {
 
   return (
     <div className={styles.page}>
+      
       {roomId ? (
         <RoomDetails id={roomId} />
       ) : (

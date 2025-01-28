@@ -121,8 +121,14 @@ namespace Gamebook.Server.Controllers
                             ip.Item.Description // Add other properties of Item if needed
                         } : null // Handle cases where ip.Item is null
                     }),
+                    TriggerActions = r.TriggerActions.Select(ip => new
+                    {
+                        ip.ActionId,
+                        ip.MiniGameData,
+                        ip.Description
+                    }),
 
-                    TriggerActions = r.TriggerActions.Select(ta => new { ta.ActionId })
+                   
                 })
                 .FirstOrDefaultAsync();
 
@@ -224,8 +230,8 @@ namespace Gamebook.Server.Controllers
      */
         [HttpPatch("{id}/updateRoomContent")]
         public async Task<IActionResult> UpdateRoomContent(
-     int id,
-     [FromBody] RoomContentDto updateDto)
+       int id,
+       [FromBody] RoomContentUpdateDto updateDto)
         {
             // Validate input
             if (updateDto == null)
@@ -247,10 +253,10 @@ namespace Gamebook.Server.Controllers
             try
             {
                 // Update NPCs
-                if (updateDto.NPCIds != null && updateDto.NPCIds.Any())
+                if (updateDto.NPCs != null && updateDto.NPCs.Any())
                 {
                     var npcsToAdd = await _context.NPCs
-                        .Where(npc => updateDto.NPCIds.Contains(npc.NPCId))
+                        .Where(npc => updateDto.NPCs.Contains(npc.NPCId))
                         .ToListAsync();
 
                     foreach (var npc in npcsToAdd)
@@ -263,10 +269,10 @@ namespace Gamebook.Server.Controllers
                 }
 
                 // Update TriggerActions
-                if (updateDto.triggerActionIds != null && updateDto.triggerActionIds.Any())
+                if (updateDto.TriggerActions != null && updateDto.TriggerActions.Any())
                 {
                     var actionsToAdd = await _context.Actions
-                        .Where(action => updateDto.triggerActionIds.Contains(action.ActionId))
+                        .Where(action => updateDto.TriggerActions.Contains(action.ActionId))
                         .ToListAsync();
 
                     foreach (var action in actionsToAdd)
@@ -288,6 +294,7 @@ namespace Gamebook.Server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
 
 
         [HttpGet("{roomId}/Connection")]
@@ -394,14 +401,13 @@ namespace Gamebook.Server.Controllers
             public string Name { get; set; }
         }
 
-     
-        public class RoomContentUpdateDto
-        {
-            public List<int>? NPCs { get; set; } // IDs of NPCs to add
-            public List<int>? Items { get; set; } // IDs of Items to add
-            public List<ItemPositionDto>? ItemPositions { get; set; } // Item positions to add
-        }
-        public class ItemPositionDto
+
+    public class RoomContentUpdateDto
+    {
+        public List<int>? NPCs { get; set; } // IDs of NPCs to add
+        public List<int>? TriggerActions { get; set; } // IDs of Actions to add
+    }
+    public class ItemPositionDto
         {
             public int ItemId { get; set; } // ID of the item
             public int X { get; set; } // X-coordinate of the item's position
