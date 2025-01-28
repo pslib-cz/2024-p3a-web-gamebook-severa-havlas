@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import RoomContentViewer from "./GetRoomContent";
 import styles from "./GetRoom.module.css";
-import {RoomConnections} from "../Connections/BetterConnections";
+import { RoomConnections } from "../Connections/BetterConnections";
 import SlidingOverlay from "../Minigames/Overlay";
+
 type RoomDetailsInputProps = {
   id: string;
   onBackgroundImageChange?: (imageUrl: string) => void;
@@ -11,7 +12,6 @@ type RoomDetailsInputProps = {
 
 type RoomContentViewerProps = {
   roomContent: {
-    
     npCs: { npcId: number; name: string }[];
     items: {
       itemPositionId: number;
@@ -30,11 +30,10 @@ type RoomContentViewerProps = {
 
 export type Room = {
   roomId: number;
-  imgUrl: string; 
+  imgUrl: string;
   name: string; // Name of the room
   text: string; // Description of the room
-
-  // Relationships
+  triggerActions: { actionId: number; description: string; miniGameData: string; actionTypeId: number }[]; // Actions triggered when entering the room
   items: {
     itemPositionId: number;
     roomId: number;
@@ -49,7 +48,6 @@ export type Room = {
   }[]; // Collection of items in the room
   npcs: { npcId: number; name: string }[]; // Collection of NPCs in the room
 
-  // Connections
   connectionsFrom: { connectionId: number; toRoomId: number; description: string }[]; // Connections originating from this room
   connectionsTo: { connectionId: number; fromRoomId: number; description: string }[]; // Connections leading to this room
 };
@@ -58,6 +56,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -81,6 +80,9 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         if (data.imgUrl && onBackgroundImageChange) {
           onBackgroundImageChange(`https://localhost:7058${data.imgUrl}`);
         }
+
+        // Check if trigger actions exist and open overlay if they do
+        setIsOverlayOpen(data.triggerActions && data.triggerActions.length > 0);
       } catch (error) {
         console.error(error);
         setError("Error fetching room.");
@@ -90,6 +92,9 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     };
 
     fetchRoom();
+
+    // Cleanup/reset overlay state when component unmounts or room changes
+    return () => setIsOverlayOpen(false);
   }, [id, onBackgroundImageChange]);
 
   if (loading) return <div>Loading...</div>;
@@ -111,31 +116,35 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
   return (
     <>
-      <SlidingOverlay isOpen={true} overlayWidth="60%" />
-     <div className={styles.room}>
-      
-      <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} />
-      <div className={styles.description}>
-        <h1>{room.name}</h1>
-        <p>{room.text}</p>
-        <h2>Requireds</h2>
-        
-        <h2>Items</h2>
-        <ul>
-          {room.items.map((item) => (
-            <li key={item.itemPositionId}>{item.item ? item.item.name : "Unknown item"}</li>
-          ))}
-        </ul>
-        <h2>Řízení</h2>
-        
-        <h2>Content</h2>
-        <RoomContentViewer roomContent={roomContent} />
-        <RoomConnections />
-        {JSON.stringify(room)}
+      <SlidingOverlay isOpen={isOverlayOpen} overlayWidth="60%"  onClose={() => setIsOverlayOpen(false)} triggerActions={room?.triggerActions || []}/>
+      <div className={styles.room}>
+        <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} />
+        <div className={styles.description}>
+          <h1>{room.name}</h1>
+          <p>{room.text}</p>
+          <h2>Requireds</h2>
+
+          <h2>Items</h2>
+          <ul>
+            {room.items.map((item) => (
+              <li key={item.itemPositionId}>{item.item ? item.item.name : "Unknown item"}</li>
+            ))}
+          </ul>
+          <h2>Řízení</h2>
+          <ul>
+            {room.triggerActions.map((action) => (
+              <li key={action.actionId}>
+                {action.description}, {action.actionTypeId}, {action.miniGameData}
+              </li>
+            ))}
+          </ul>
+          <h2>Content</h2>
+          <RoomContentViewer roomContent={roomContent} />
+          <RoomConnections />
+          {JSON.stringify(room)}
+        </div>
       </div>
-    </div>
     </>
-   
   );
 };
 

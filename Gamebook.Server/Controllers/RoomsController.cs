@@ -125,7 +125,8 @@ namespace Gamebook.Server.Controllers
                     {
                         ip.ActionId,
                         ip.MiniGameData,
-                        ip.Description
+                        ip.Description,
+                        ip.ActionTypeId
                     }),
 
                    

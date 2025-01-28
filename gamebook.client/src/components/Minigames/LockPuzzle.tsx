@@ -1,57 +1,71 @@
 import React, { useState } from "react";
 
 interface LockCombinationPuzzleProps {
-  numberOfDials: number; // Number of dials on the lock
-  maxDialValue: number;  // Maximum value each dial can have (e.g., 9 for a 0-9 lock)
+  MinigameData: string; // JSON string containing CorrectCombination
+  onPuzzleSolved?: () => void; // Callback for when the puzzle is solved
 }
 
-const LockCombinationPuzzle: React.FC<LockCombinationPuzzleProps> = ({
-  numberOfDials = 4,
-  maxDialValue = 9,
-}) => {
-  // Generate a random combination
-  const generateCombination = () =>
-    Array.from({ length: numberOfDials }, () =>
-      Math.floor(Math.random() * (maxDialValue + 1))
-    );
+const LockCombinationPuzzle: React.FC<LockCombinationPuzzleProps> = ({ MinigameData, onPuzzleSolved }) => {
+  // Parse the MinigameData JSON string to extract the correct combination
+  const parsedData = JSON.parse(MinigameData);
+  const correctCombination = parsedData.CorrectCombination;
 
-  const [combination] = useState<number[]>(generateCombination());
-  const [currentValues, setCurrentValues] = useState<number[]>(
-    Array(numberOfDials).fill(0)
-  );
+  // Number of dials is determined by the length of the correct combination
+  const numberOfDials = correctCombination.length;
+
+  // Initialize the current values for each dial (all set to 0 initially)
+  const [currentValues, setCurrentValues] = useState<number[]>(Array(numberOfDials).fill(0));
+
+  // Track whether the puzzle is unlocked
   const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
 
+  // Function to rotate a dial up or down
   const rotateDial = (index: number, direction: "up" | "down") => {
+    console.log(`Rotating dial ${index} ${direction}`);
     setCurrentValues((prevValues) => {
       const newValues = [...prevValues];
       if (direction === "up") {
-        newValues[index] = (newValues[index] + 1) % (maxDialValue + 1);
+        newValues[index] = (newValues[index] + 1) % 10; // Range 0-9
       } else if (direction === "down") {
-        newValues[index] =
-          (newValues[index] - 1 + (maxDialValue + 1)) % (maxDialValue + 1);
+        newValues[index] = (newValues[index] - 1 + 10) % 10; // Range 0-9
       }
+      console.log("Current values:", newValues);
       return newValues;
     });
   };
 
+  // Function to check if the current values match the correct combination
   const checkCombination = () => {
-    if (JSON.stringify(currentValues) === JSON.stringify(combination)) {
+    console.log("Checking combination...");
+    if (currentValues.join("") === correctCombination) {
+      console.log("Puzzle solved!");
       setIsUnlocked(true);
+      if (onPuzzleSolved) {
+        console.log("Calling onPuzzleSolved callback...");
+        onPuzzleSolved(); // Notify parent
+      }
     } else {
+      console.log("Incorrect combination:", currentValues.join(""));
       setIsUnlocked(false);
     }
   };
 
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
-      {combination}
       <h1>Lock Combination Puzzle</h1>
       {isUnlocked ? (
         <h2 style={{ color: "green" }}>Unlocked! You solved the puzzle!</h2>
       ) : (
         <h2 style={{ color: "red" }}>The lock is still locked.</h2>
       )}
-      <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginTop: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "20px",
+          marginTop: "20px",
+        }}
+      >
         {currentValues.map((value, index) => (
           <div key={index} style={{ textAlign: "center" }}>
             <button
