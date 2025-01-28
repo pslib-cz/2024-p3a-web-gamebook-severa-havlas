@@ -176,13 +176,13 @@ namespace Gamebook.Server.Controllers
         [Route("{id}/image")]
         public async Task<IActionResult> GetRoomImage(int id)
         {
-            var room = await _context.Rooms.FindAsync(id);
-            if (room == null || room.Img == null)
+            var connection = await _context.Connections.FindAsync(id);
+            if (connection == null || connection.Img == null)
             {
                 return NotFound("Image not found.");
             }
 
-            return File(room.Img, "image/jpeg"); // Adjust the MIME type as needed
+            return File(connection.Img, "image/jpeg"); // Adjust the MIME type as needed
         }
 
         [HttpGet("GetToConnection/{ToRoomId}")]

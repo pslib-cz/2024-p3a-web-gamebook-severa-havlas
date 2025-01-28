@@ -367,7 +367,43 @@ namespace Gamebook.Server.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+        public class ConnectionDto
+        {
+            public int ConnectionId { get; set; }
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
+        [HttpPatch("Connections")]
+        public async Task<IActionResult> UpdateConnections([FromBody] List<ConnectionDto> updatedConnections)
+        {
+            if (updatedConnections == null || updatedConnections.Count == 0)
+            {
+                return BadRequest("No connection data provided.");
+            }
 
+            foreach (var updatedConnection in updatedConnections)
+            {
+                // Find the connection in the database
+                var connection = await _context.Connections
+                    .FirstOrDefaultAsync(c => c.ConnectionId == updatedConnection.ConnectionId);
+
+                if (connection != null)
+                {
+                    // Update the x and y coordinates from the DTO
+                    connection.X = updatedConnection.X;
+                    connection.Y = updatedConnection.Y;
+                }
+                else
+                {
+                    // If the connection doesn't exist in the database, return a NotFound error
+                    return NotFound($"Connection with ID {updatedConnection.ConnectionId} not found.");
+                }
+            }
+
+            await _context.SaveChangesAsync();  // Save changes to the database
+
+            return Ok(new { message = "Connections updated successfully", connections = updatedConnections });
+        }
 
     }
 
