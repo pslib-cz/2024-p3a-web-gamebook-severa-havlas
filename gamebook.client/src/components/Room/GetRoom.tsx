@@ -4,7 +4,8 @@ import SlidingOverlay from "../Minigames/Overlay";
 import styles from "./GetRoom.module.css";
 import { useGameContext } from "../../GameProvider";
 
-import Typewriter from "typewriter-effect"; // Import the Typewriter component
+import Typewriter from "typewriter-effect";
+
 type Connection = {
   fromRoomId: number;
   toRoomId: number;
@@ -21,7 +22,12 @@ type RoomDetailsInputProps = {
 
 type RoomContentViewerProps = {
   roomContent: {
-    npCs: { npcId: number; name: string }[];
+    npCs: {
+      npcId: number;
+      name: string;
+      dialogs: { dialogId: number; text: string }[];
+      action: { actionId: number; description: string, actionTypeId: number };
+    }[];
     items: {
       itemPositionId: number;
       roomId: number;
@@ -36,16 +42,18 @@ type RoomContentViewerProps = {
     }[];
   };
 };
-type Dialog = {
-  dialogId: number;
-  text: string;
-}
-export type Room = {
+
+type Room = {
   roomId: number;
   imgUrl: string;
   name: string;
   text: string;
-  triggerActions: { actionId: number; description: string; miniGameData: string; actionTypeId: number }[];
+  triggerActions: {
+    actionId: number;
+    description: string;
+    miniGameData: string;
+    actionTypeId: number;
+  }[];
   items: {
     itemPositionId: number;
     roomId: number;
@@ -58,7 +66,12 @@ export type Room = {
       description: string;
     } | null;
   }[];
-  npCs: { npcId: number; name: string, actionId: number,Dialogs: Dialog[]  }[];
+  npCs: {
+    npcId: number;
+    name: string;
+    dialogs: { dialogId: number; text: string }[];
+    action: { actionId: number; description: string,actionTypeId: number  };
+  }[];
   connectionsFrom: { connectionId: number; toRoomId: number; description: string }[];
   connectionsTo: { connectionId: number; fromRoomId: number; description: string }[];
 };
@@ -69,9 +82,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const { serializeContext, setRoomId, stamina, setStamina, date, setDate } = useGameContext();
-
-
+  const { serializeContext, setRoomId, stamina, setStamina, date } = useGameContext();
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -91,12 +102,10 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
           npCs: data.npCs || [],
         });
 
-        // Set background image if URL is present
         if (data.imgUrl && onBackgroundImageChange) {
           onBackgroundImageChange(`https://localhost:7058${data.imgUrl}`);
         }
 
-        // Check if trigger actions exist and open overlay if they do
         setIsOverlayOpen(data.triggerActions && data.triggerActions.length > 0);
       } catch (error) {
         console.error(error);
@@ -108,7 +117,6 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
     fetchRoom();
 
-    // Cleanup/reset overlay state when component unmounts or room changes
     return () => setIsOverlayOpen(false);
   }, [id, onBackgroundImageChange]);
 
@@ -143,16 +151,21 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   }, [id, serializeContext]);
 
   const navigateToRoom = (toRoomId: number) => {
-    setRoomId(String(toRoomId)); // Update context
+    setStamina(stamina - 10);
+    setRoomId(String(toRoomId));
   };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!room) return <div>Room not found.</div>;
 
-  // Transform room data for RoomContentViewer
   const roomContent: RoomContentViewerProps["roomContent"] = {
-    npCs: room.npCs.map((npc) => ({ npcId: npc.npcId, name: npc.name })),
+    npCs: room.npCs.map((npc) => ({
+      npcId: npc.npcId,
+      name: npc.name,
+      dialogs: npc.dialogs,
+      action: npc.action,
+    })),
     items: room.items.map((item) => ({
       itemPositionId: item.itemPositionId,
       roomId: item.roomId,
@@ -165,37 +178,39 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
   return (
     <>
-      <SlidingOverlay isOpen={isOverlayOpen} overlayWidth="60%" onClose={() => setIsOverlayOpen(false)} triggerActions={room.triggerActions || []} />
-      <div className={styles.room} style={{ position: 'relative' }}>
-        {/* Background image */}
+      <SlidingOverlay
+        isOpen={isOverlayOpen}
+        overlayWidth="60%"
+        onClose={() => setIsOverlayOpen(false)}
+        triggerActions={room.triggerActions || []}
+      />
+      <div className={styles.room} style={{ position: "relative" }}>
         <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} />
 
-        {/* Items and Connections images */}
-        {connections?.map((connection) => (
+        {connections?.map((connection) =>
           connection.imgUrl && connection.x && connection.y ? (
             <img
               key={connection.toRoomId}
               src={`https://localhost:7058${connection.imgUrl}`}
               alt={`Connection image`}
               style={{
-                position: 'absolute',
-                left: `${connection.x / 10}%`,  // Convert to percentage
-                top: `${connection.y / 10}%`,  // Convert to percentage
-                transform: 'translate(-50%, -50%)'  // Center image on the point
+                position: "absolute",
+                left: `${connection.x / 10}%`,
+                top: `${connection.y / 10}%`,
+                transform: "translate(-50%, -50%)",
               }}
             />
           ) : null
-        ))}
-        
-        {/* Render the rest of your component */}
+        )}
+
         <div className={styles.description}>
           <h1>{room.name}</h1>
           <Typewriter
             options={{
-              strings: [room.text], // Text from the room description
+              strings: [room.text],
               autoStart: true,
               loop: false,
-              delay: 75, // Adjust the typing speed (in milliseconds)
+              delay: 75,
             }}
           />
           <h2>Items</h2>
@@ -208,9 +223,12 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
           </ul>
           <div>
             <h2>Player Stats</h2>
-            <p><strong>Stamina:</strong> {stamina}</p>
-            <p><strong>Date:</strong> {date.toDateString()}</p>
-            
+            <p>
+              <strong>Stamina:</strong> {stamina}
+            </p>
+            <p>
+              <strong>Date:</strong> {date.toDateString()}
+            </p>
           </div>
           <h2>Room Connections</h2>
           <ul>
@@ -241,8 +259,8 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
               <li>No connections found.</li>
             )}
           </ul>
-          {/* Room content */}
           <RoomContentViewer roomContent={roomContent} />
+          {JSON.stringify(room)}
         </div>
       </div>
     </>

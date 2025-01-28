@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { useGameContext } from "../../GameProvider";
-import NpcInteraction from "../NPC/HandleNPC"; // Import the NpcInteraction component
+import NpcInteraction from "../NPC/HandleNPC";
 
 type RoomContentViewerProps = {
   roomContent: {
-    npCs: { npcId: number; name: string }[];
+    npCs: {
+      npcId: number;
+      name: string;
+      dialogs: { dialogId: number; text: string }[];
+      action: { actionId: number; description: string, actionTypeId: number  };
+    }[];
     items: {
       itemPositionId: number;
       roomId: number;
@@ -27,9 +32,9 @@ type PlayerItem = {
 };
 
 const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) => {
-  const [selectedNpcId, setSelectedNpcId] = useState<number | null>(null); // Selected NPC ID
+  const [selectedNpc, setSelectedNpc] = useState<RoomContentViewerProps["roomContent"]["npCs"][0] | null>(null);
 
-  const { setPlayerItems } = useGameContext(); // Access game context
+  const { setPlayerItems } = useGameContext();
 
   const handlePickUpItem = (itemId: number, itemName: string) => {
     setPlayerItems((prevItems: PlayerItem[]) => {
@@ -63,16 +68,17 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
 
       <div style={{ marginTop: "20px" }}>
         <h3>Room Content:</h3>
+
+        {/* NPCs */}
         <div>
           <strong>NPCs:</strong>
           {roomContent.npCs?.length > 0 ? (
             <ul>
-              {roomContent.npCs.map((npC) => (
-                <li key={npC.npcId}>
-                  <NpcInteraction npcId={npC.npcId} />
-                  {npC.npcId} - {npC.name} {" "}
+              {roomContent.npCs.map((npc) => (
+                <li key={npc.npcId}>
+                  {npc.npcId} - {npc.name}{" "}
                   <button
-                    onClick={() => setSelectedNpcId(npC.npcId)}
+                    onClick={() => setSelectedNpc(npc)}
                     style={{
                       marginLeft: "10px",
                       padding: "5px 10px",
@@ -87,9 +93,9 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
           ) : (
             <p>No NPCs in this room.</p>
           )}
-          {JSON.stringify(roomContent)}
         </div>
 
+        {/* Items */}
         <div>
           <strong>Items:</strong>
           {roomContent.items?.length > 0 ? (
@@ -98,9 +104,12 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
                 <li key={item.itemPositionId}>
                   {item.item ? (
                     <>
-                      {item.item.itemId} - {item.item.name} {" "}
+                      {item.item.itemId} - {item.item.name}{" "}
                       <button
-                        onClick={() => item.item && handlePickUpItem(item.item.itemId, item.item.name)}
+                        onClick={() =>
+                          item.item &&
+                          handlePickUpItem(item.item.itemId, item.item.name)
+                        }
                         style={{
                           marginLeft: "10px",
                           padding: "5px 10px",
@@ -121,10 +130,11 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
           )}
         </div>
 
-        {selectedNpcId && (
+        {/* NPC Interaction */}
+        {selectedNpc && (
           <div style={{ marginTop: "20px" }}>
-            <h3>Interact with NPC</h3>
-            <NpcInteraction npcId={selectedNpcId} />
+            <h3>Interact with {selectedNpc.name}</h3>
+            <NpcInteraction npc={selectedNpc} />
           </div>
         )}
       </div>

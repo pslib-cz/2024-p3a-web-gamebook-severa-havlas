@@ -1,113 +1,65 @@
-import React, { useState, useEffect } from "react";
-
-interface NPC {
-  npcId: number;
-  name: string;
-  description: string;
-}
-
+import React, { useState } from "react";
+import ActionType3Component from "../ActionType/ActionType3Component";
 interface Dialog {
   dialogId: number;
   text: string;
 }
 
-interface DialogOption {
-  dialogId: number;
-  text: string;
+interface Action {
+  actionId: number;
+  description: string;
+  actionTypeId: number; // Added actionTypeId
+}
+
+interface NPC {
+  npcId: number;
+  name: string;
+  dialogs: Dialog[];
+  action: Action;
 }
 
 interface NpcInteractionProps {
-  npcId: number;
+  npc: NPC;
 }
 
-const NpcInteraction: React.FC<NpcInteractionProps> = ({ npcId }) => {
-  const [npc, setNpc] = useState<NPC | null>(null);
+// Components for different action types
+
+
+const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
-  const [options, setOptions] = useState<DialogOption[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [options, setOptions] = useState<Dialog[]>(npc.dialogs);
 
-  useEffect(() => {
-    // Fetch NPC details on mount
-    const fetchNpcDetails = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(`https://localhost:7058/api/NPCs/${npcId}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch NPC with ID ${npcId}`);
-        }
-        const data: NPC = await response.json();
-        setNpc(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchNpcDetails();
-  }, [npcId]);
-
-  const handleStartConversation = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`https://localhost:7058/api/Dialogs/${npcId}`, { method: "GET" });
-      if (!response.ok) {
-        throw new Error("Failed to start dialog.");
-      }
-      const dialogData: Dialog = await response.json();
-      setDialog(dialogData);
-      fetchDialogOptions(dialogData.dialogId);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+  const handleStartConversation = () => {
+    if (options.length > 0) {
+      setDialog(options[0]); // Start the first dialog
+      setOptions(options.slice(1)); // Remove the first dialog from options
     }
   };
 
-  const fetchDialogOptions = async (dialogId: number) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`https://localhost:7058/api/Dialogs/getOptions/${dialogId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch dialog options.");
-      }
-      const optionsData: DialogOption[] = await response.json();
-      setOptions(optionsData);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+  const handleOptionClick = (nextDialog: Dialog) => {
+    setDialog(nextDialog);
+    setOptions((prevOptions) => prevOptions.filter((opt) => opt.dialogId !== nextDialog.dialogId));
+  };
+
+  // Render action based on actionTypeId
+  const renderActionComponent = (action: Action) => {
+    switch (action.actionTypeId) {
+      case 3:
+        return <ActionType3Component action={action} />;
+      // Add more cases for other actionTypeIds here
+      default:
+        return <p>Unknown action type: {action.actionTypeId}</p>;
     }
   };
-
-  const handleOptionClick = (dialogId: number) => {
-    fetchDialogOptions(dialogId);
-    setDialog(null); // Clear current dialog when moving to next options
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
     <div>
-      {npc && (
-        <div>
-          <h2>{npc.name}</h2>
-          <p>{npc.description}</p>
-          {!dialog && options.length === 0 && (
-            <button onClick={handleStartConversation}>Start Conversation</button>
-          )}
-        </div>
-      )}
+      <h2>{npc.name}</h2>
+      {npc.action && renderActionComponent(npc.action)}
+
+      {dialog === null && options.length === 0 ? (
+        <button onClick={handleStartConversation}>Start Conversation</button>
+      ) : null}
 
       {dialog && (
         <div>
@@ -122,7 +74,11 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npcId }) => {
           {options.map((option) => (
             <button
               key={option.dialogId}
-              onClick={() => handleOptionClick(option.dialogId)}
+              onClick={() => handleOptionClick(option)}
+              style={{
+                marginRight: "10px",
+                padding: "5px 10px",
+              }}
             >
               {option.text}
             </button>
