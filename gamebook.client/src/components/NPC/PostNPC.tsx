@@ -4,6 +4,7 @@ const CreateNPCForm: React.FC = () => {
     const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [target, setTarget] = useState<number | string>('');
+    const [actionId, setActionId] = useState<number | string>('');
     const [img, setImg] = useState<File | null>(null);
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,6 +27,9 @@ const CreateNPCForm: React.FC = () => {
         }
         if (target) {
             formData.append('Target', target.toString());
+        }
+        if (actionId) {
+            formData.append('ActionId', actionId.toString());
         }
 
         setIsLoading(true);
@@ -85,6 +89,16 @@ const CreateNPCForm: React.FC = () => {
                         id="target"
                         value={target}
                         onChange={(e) => setTarget(e.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="actionId">Action ID (Optional):</label>
+                    <input
+                        type="number"
+                        id="actionId"
+                        value={actionId}
+                        onChange={(e) => setActionId(e.target.value)}
                     />
                 </div>
 

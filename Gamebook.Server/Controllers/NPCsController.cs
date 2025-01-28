@@ -81,7 +81,7 @@ namespace Gamebook.Server.Controllers
                 return BadRequest("NPC data is null.");
             }
 
-            // Check if an image is provided and convert it to byte array if present
+            // Check if an image is provided and convert it to a byte array if present
             byte[]? imgBytes = null;
             if (npcDto.Img != null && npcDto.Img.Length > 0)
             {
@@ -97,8 +97,9 @@ namespace Gamebook.Server.Controllers
             {
                 Name = npcDto.Name,
                 Description = npcDto.Description,
-                Img = imgBytes, // Set the image as byte array
-                Target = npcDto.Target
+                Img = imgBytes, // Set the image as a byte array
+                Target = npcDto.Target,
+                ActionId = npcDto.ActionId // Include the new ActionId property
             };
 
             // Add the new NPC to the database
@@ -106,7 +107,7 @@ namespace Gamebook.Server.Controllers
             await _context.SaveChangesAsync();
 
             // Return the created NPC object
-            return Ok();
+            return Ok(newNPC);
         }
 
         public class NPCDTO
@@ -115,6 +116,7 @@ namespace Gamebook.Server.Controllers
             public string Description { get; set; }
             public IFormFile Img { get; set; }
             public int? Target { get; set; }
+            public int? ActionId { get; set; }
         }
 
         // DELETE: api/NPCs/5

@@ -36,7 +36,10 @@ type RoomContentViewerProps = {
     }[];
   };
 };
-
+type Dialog = {
+  dialogId: number;
+  text: string;
+}
 export type Room = {
   roomId: number;
   imgUrl: string;
@@ -55,7 +58,7 @@ export type Room = {
       description: string;
     } | null;
   }[];
-  npcs: { npcId: number; name: string }[];
+  npCs: { npcId: number; name: string, actionId: number,Dialogs: Dialog[]  }[];
   connectionsFrom: { connectionId: number; toRoomId: number; description: string }[];
   connectionsTo: { connectionId: number; fromRoomId: number; description: string }[];
 };
@@ -85,7 +88,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
           connectionsTo: data.connectionsTo || [],
           connectionsFrom: data.connectionsFrom || [],
           items: data.items || [],
-          npcs: data.npcs || [],
+          npCs: data.npCs || [],
         });
 
         // Set background image if URL is present
@@ -149,7 +152,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
   // Transform room data for RoomContentViewer
   const roomContent: RoomContentViewerProps["roomContent"] = {
-    npCs: room.npcs.map((npc) => ({ npcId: npc.npcId, name: npc.name })),
+    npCs: room.npCs.map((npc) => ({ npcId: npc.npcId, name: npc.name })),
     items: room.items.map((item) => ({
       itemPositionId: item.itemPositionId,
       roomId: item.roomId,

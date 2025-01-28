@@ -104,7 +104,7 @@ namespace Gamebook.Server.Controllers
                     // Related data
                  
 
-                    NPCs = r.NPCs.Select(n => new { n.NPCId, n.Name }),
+                    NPCs = r.NPCs.Select(n => new { n.NPCId, n.Name, n.ActionId, n.Dialogs }),
 
                     Items = r.Items.Select(ip => new
                     {

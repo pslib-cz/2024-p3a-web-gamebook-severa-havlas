@@ -5,7 +5,7 @@ import CreateGameBookAction from "./PostAction";
 const Action = () => {
     return (
         <>
-           <GameBookActionComponent id={1} />
+           <GameBookActionComponent id={3} />
             <CreateGameBookAction />
         </>
     );

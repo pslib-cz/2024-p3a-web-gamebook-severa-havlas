@@ -87,6 +87,7 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
           ) : (
             <p>No NPCs in this room.</p>
           )}
+          {JSON.stringify(roomContent)}
         </div>
 
         <div>
