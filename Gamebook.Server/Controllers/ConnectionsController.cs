@@ -167,7 +167,7 @@ namespace Gamebook.Server.Controllers
                                 connection.ToRoomId,
                                 connection.FromRoomId,
                                 ImgUrl = $"/api/connections/{connection.ConnectionId}/image" // Provide URL to fetch the image
-                            }).Where(connection => FromRoomId == connection.ToRoomId)
+                            }).Where(connection => FromRoomId == connection.FromRoomId)
                             .ToListAsync();
 
             return Ok(connections);

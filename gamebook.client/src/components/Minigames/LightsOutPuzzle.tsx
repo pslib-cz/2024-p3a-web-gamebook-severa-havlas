@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-const LightsOutPuzzle: React.FC = () => {
+interface LightsOutPuzzleProps {
+  onPuzzleSolved?: () => void; // Callback function for when the puzzle is solved
+}
+
+const LightsOutPuzzle: React.FC<LightsOutPuzzleProps> = ({ onPuzzleSolved }) => {
   const gridSize = 3; // 3x3 grid
   const [grid, setGrid] = useState<boolean[][]>(
     Array.from({ length: gridSize }, () =>
@@ -31,6 +35,11 @@ const LightsOutPuzzle: React.FC = () => {
   };
 
   const isPuzzleSolved = grid.every((row) => row.every((light) => !light));
+
+  if (isPuzzleSolved) {
+    // Call the onPuzzleSolved callback when the puzzle is solved
+    onPuzzleSolved?.();
+  }
 
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>

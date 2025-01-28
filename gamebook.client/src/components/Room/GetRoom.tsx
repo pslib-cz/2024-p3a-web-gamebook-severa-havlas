@@ -4,6 +4,7 @@ import SlidingOverlay from "../Minigames/Overlay";
 import styles from "./GetRoom.module.css";
 import { useGameContext } from "../../GameProvider";
 
+import Typewriter from "typewriter-effect"; // Import the Typewriter component
 type Connection = {
   fromRoomId: number;
   toRoomId: number;
@@ -65,8 +66,9 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+  const { serializeContext, setRoomId, stamina, setStamina, date, setDate } = useGameContext();
 
-  const { serializeContext, setRoomId } = useGameContext();
+
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -185,7 +187,14 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         {/* Render the rest of your component */}
         <div className={styles.description}>
           <h1>{room.name}</h1>
-          <p>{room.text}</p>
+          <Typewriter
+            options={{
+              strings: [room.text], // Text from the room description
+              autoStart: true,
+              loop: false,
+              delay: 75, // Adjust the typing speed (in milliseconds)
+            }}
+          />
           <h2>Items</h2>
           <ul>
             {room.items.map((item) => (
@@ -194,6 +203,12 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
               </li>
             ))}
           </ul>
+          <div>
+            <h2>Player Stats</h2>
+            <p><strong>Stamina:</strong> {stamina}</p>
+            <p><strong>Date:</strong> {date.toDateString()}</p>
+            
+          </div>
           <h2>Room Connections</h2>
           <ul>
             {connections && connections.length > 0 ? (

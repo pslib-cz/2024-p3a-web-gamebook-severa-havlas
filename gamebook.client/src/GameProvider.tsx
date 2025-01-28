@@ -9,31 +9,48 @@ interface PlayerItem {
 
 type GameContextType = {
   roomId: string | null;
-  previousRoomId: string | null; // Added previousRoomId
+  previousRoomId: string | null; // Tracks the previous room
   setRoomId: (id: string | null) => void;
   player: {
     items: PlayerItem[];
   };
   setPlayerItems: (update: (prevItems: PlayerItem[]) => PlayerItem[]) => void;
+  stamina: number; // Added stamina
+  date: Date; // Added date
+  setStamina: (value: number) => void; // Function to update stamina
+  setDate: (value: Date) => void; // Function to update date
   serializeContext: () => string;
 };
 
 export const GameContext = createContext<GameContextType>({
   roomId: "1",
-  previousRoomId: null, // Default to null
+  previousRoomId: null,
   setRoomId: () => {},
   player: { items: [] },
   setPlayerItems: () => {},
+  stamina: 100, // Default stamina
+  date: new Date(1849, 1, 3), // Default date (Feb 3, 1849)
+  setStamina: () => {},
+  setDate: () => {},
   serializeContext: () =>
-    JSON.stringify({ roomId: "1", previousRoomId: null, player: { items: [] } }), // Include previousRoomId
+    JSON.stringify({
+      roomId: "1",
+      previousRoomId: null,
+      player: { items: [] },
+      stamina: 100,
+      date: new Date(1849, 1, 3).toISOString(),
+    }),
 });
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [roomId, setRoomIdState] = useState<string | null>(null);
-  const [previousRoomId, setPreviousRoomId] = useState<string | null>(null); // State for tracking the previous room
+  const [previousRoomId, setPreviousRoomId] = useState<string | null>(null);
   const [player, setPlayer] = useState<{ items: PlayerItem[] }>({ items: [] });
+  const [stamina, setStamina] = useState(100); // State for stamina
+  const [date, setDate] = useState(new Date(1849, 1, 3)); // State for date
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -44,17 +61,17 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 
     if (newRoomId !== roomId) {
       console.log(`Changing room: previous=${roomId}, current=${newRoomId}`);
-      setPreviousRoomId(roomId); // Update previousRoomId before changing roomId
+      setPreviousRoomId(roomId);
       setRoomIdState(newRoomId);
     }
-  }, [location.pathname]); // Runs when the URL changes
+  }, [location.pathname]);
 
   const updateRoomId = (id: string | null) => {
     if (id !== roomId) {
-      setPreviousRoomId(roomId); // Update previousRoomId before changing roomId
+      setPreviousRoomId(roomId);
       setRoomIdState(id);
       if (id) {
-        navigate(`/Page/${id}`, { replace: true }); // Update the URL
+        navigate(`/Page/${id}`, { replace: true });
       }
     }
   };
@@ -68,8 +85,10 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
   const serializeContext = () => {
     return JSON.stringify({
       roomId,
-      previousRoomId, // Include previousRoomId in the serialized context
+      previousRoomId,
       player,
+      stamina,
+      date: date.toISOString(), // Serialize the date as an ISO string
     });
   };
 
@@ -81,6 +100,10 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         setRoomId: updateRoomId,
         player,
         setPlayerItems,
+        stamina,
+        date,
+        setStamina,
+        setDate,
         serializeContext,
       }}
     >

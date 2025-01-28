@@ -2,6 +2,7 @@ import React from "react";
 import "./SlidingOverlay.css";
 import LockCombinationPuzzle from "./LockPuzzle"; // Import the lock puzzle component
 import { useGameContext } from "../../GameProvider"; // Import GameContext to access room navigation
+import LightsOutPuzzle from "./LightsOutPuzzle"; // Import the LightsOutPuzzle component
 
 interface TriggerAction {
   actionId: number;
@@ -29,6 +30,10 @@ const renderActionComponent = (
       return (
         <LockCombinationPuzzle MinigameData={miniGameData} onPuzzleSolved={onClose} />
       );
+      case 3:
+        console.log("Rendering LightsOutPuzzle...");
+        return <LightsOutPuzzle onPuzzleSolved={onClose} />; // Pass onClose to LightsOutPuzzle
+      
     default:
       console.log("Unsupported action type:", actionTypeId);
       return <p>Unsupported action type: {actionTypeId}</p>;
