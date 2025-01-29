@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { ApiBaseUrl } from '../../EnvFile';
 const PostConnection: React.FC = () => {
   const [fromRoomId, setFromRoomId] = useState<number | ''>('');
   const [toRoomId, setToRoomId] = useState<number | ''>('');
@@ -34,7 +34,7 @@ const PostConnection: React.FC = () => {
       setLoading(true);
       setMessage('');
   
-      const response = await fetch('https://localhost:7058/api/Connections', {
+      const response = await fetch(`${ApiBaseUrl}/api/Connections`, {
         method: 'POST',
         body: formData, // Use FormData as the request body
       });

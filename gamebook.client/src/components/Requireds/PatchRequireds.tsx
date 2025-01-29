@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 const RoomRequirementsForm: React.FC = () => {
   const [roomId, setRoomId] = useState<string>(""); // Room ID as input
   const [requiredItems, setRequiredItems] = useState<string>(""); // Comma-separated IDs
@@ -34,7 +34,7 @@ const RoomRequirementsForm: React.FC = () => {
 
     try {
       const response = await fetch(
-        `https://localhost:7058/api/Connections/${roomId}/UpdateRequirements`,
+        `${ApiBaseUrl}/api/Connections/${roomId}/UpdateRequirements`,
         {
           method: "PATCH",
           headers: {

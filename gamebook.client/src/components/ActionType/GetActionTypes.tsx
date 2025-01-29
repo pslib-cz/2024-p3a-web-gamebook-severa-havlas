@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ActionType } from '../../types/types';
+import { ActionType } from '../../types/types2';
+import { ApiBaseUrl } from '../../EnvFile';
 export const ActionTypeList = () => {
   const [actionTypes, setActionTypes] = useState<ActionType[]>([]);
 
@@ -7,7 +8,7 @@ export const ActionTypeList = () => {
   useEffect(() => {
     const fetchActionTypes = async () => {
       try {
-        const response = await fetch('https://localhost:7058/api/ActionTypes');
+        const response = await fetch(`${ApiBaseUrl}/api/ActionTypes`);
         if (!response.ok) {
           throw new Error('Failed to fetch action types');
         }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Connection } from "../../types/types";
-
+import { Connection } from "../../types/types2";
+import { ApiBaseUrl } from "../../EnvFile";
 const ConnectionsList: React.FC = () => {
   const [connections, setConnections] = useState<Connection[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -10,7 +10,7 @@ const ConnectionsList: React.FC = () => {
   useEffect(() => {
     const fetchConnections = async () => {
       try {
-        const response = await fetch("https://localhost:7058/api/connections"); // Replace with the actual endpoint
+        const response = await fetch(`${ApiBaseUrl}/api/connections`); // Replace with the actual endpoint
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

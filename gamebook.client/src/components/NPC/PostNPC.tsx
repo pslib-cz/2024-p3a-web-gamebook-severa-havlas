@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { ApiBaseUrl } from '../../EnvFile';
 const CreateNPCForm: React.FC = () => {
     const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -34,7 +34,7 @@ const CreateNPCForm: React.FC = () => {
 
         setIsLoading(true);
         try {
-            const response = await fetch('https://localhost:7058/api/NPCs', {
+            const response = await fetch(`${ApiBaseUrl}/api/NPCs`, {
                 method: 'POST',
                 body: formData, // send the FormData with the file included
             });

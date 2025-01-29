@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { ApiBaseUrl } from '../../EnvFile';
 interface DialogDTO {
     ParentDialogId?: number;
     NPCId?: number;
@@ -26,7 +26,7 @@ const PostDialogForm: React.FC = () => {
         setIsLoading(true);
         try {
             // Use fetch API to send the POST request
-            const response = await fetch('https://localhost:7058/api/Dialogs', {
+            const response = await fetch(`${ApiBaseUrl}/api/Dialogs`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { ApiBaseUrl } from '../../EnvFile';
 const ActionTypeForm = () => {
   const [actionType, setActionType] = useState({
     ActionTypeId: '', // ActionTypeId can be an integer or a string for controlled input
@@ -24,7 +24,7 @@ const ActionTypeForm = () => {
     };
 
     try {
-      const response = await fetch('https://localhost:7058/api/ActionTypes', {
+      const response = await fetch(`${ApiBaseUrl}/api/ActionTypes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

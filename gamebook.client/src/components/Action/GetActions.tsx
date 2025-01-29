@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 interface Option {
   label: string;
   text: string;
@@ -26,7 +26,7 @@ const GetAllActions: React.FC = () => {
     const fetchActions = async () => {
       try {
         setLoading(true);
-        const response = await fetch("https://localhost:7058/api/GameBookActions"); // Replace with your API endpoint
+        const response = await fetch(`${ApiBaseUrl}/api/GameBookActions`); // Replace with your API endpoint
 
         if (!response.ok) {
           const errorMessage = await response.text();

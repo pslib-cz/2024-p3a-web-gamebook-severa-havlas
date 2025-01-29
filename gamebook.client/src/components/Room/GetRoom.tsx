@@ -3,7 +3,7 @@ import RoomContentViewer from "./GetRoomContent";
 import SlidingOverlay from "../Minigames/Overlay";
 import styles from "./GetRoom.module.css";
 import { useGameContext } from "../../GameProvider";
-
+import {ApiBaseUrl} from "../../EnvFile"
 import Typewriter from "typewriter-effect";
 
 type Connection = {
@@ -90,7 +90,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
       setError(null);
 
       try {
-        const response = await fetch(`https://localhost:7058/api/Rooms/${id}`);
+        const response = await fetch(`${ApiBaseUrl}/api/Rooms/${id}`);
         if (!response.ok) throw new Error("Failed to fetch room");
 
         const data: Room = await response.json();
@@ -103,7 +103,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         });
 
         if (data.imgUrl && onBackgroundImageChange) {
-          onBackgroundImageChange(`https://localhost:7058${data.imgUrl}`);
+          onBackgroundImageChange(`${ApiBaseUrl}${data.imgUrl}`);
         }
 
         setIsOverlayOpen(data.triggerActions && data.triggerActions.length > 0);
@@ -131,7 +131,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         const gameState = serializeContext();
 
         const response = await fetch(
-          `https://localhost:7058/api/Rooms/${id}/Connection?gameState=${encodeURIComponent(gameState)}`
+          `${ApiBaseUrl}/api/Rooms/${id}/Connection?gameState=${encodeURIComponent(gameState)}`
         );
 
         if (!response.ok) {
@@ -185,13 +185,13 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         triggerActions={room.triggerActions || []}
       />
       <div className={styles.room} style={{ position: "relative" }}>
-        <img className={styles.image} src={`https://localhost:7058${room.imgUrl}`} alt={room.name} />
+        <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
 
         {connections?.map((connection) =>
           connection.imgUrl && connection.x && connection.y ? (
             <img
               key={connection.toRoomId}
-              src={`https://localhost:7058${connection.imgUrl}`}
+              src={`${ApiBaseUrl}${connection.imgUrl}`}
               alt={`Connection image`}
               style={{
                 position: "absolute",

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 interface CreateItemDTO {
   RoomId: number;
   ItemId: number;
@@ -28,7 +28,7 @@ const CreateItemPosition: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://localhost:7058/api/ItemPositions", {
+      const response = await fetch(`${ApiBaseUrl}/api/ItemPositions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

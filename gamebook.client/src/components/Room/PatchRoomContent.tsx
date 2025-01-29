@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 const UpdateRoomContentForm: React.FC = () => {
   const [roomId, setRoomId] = useState<string>(""); // Room ID as string for input
   const [npcs, setNpcs] = useState<string>(""); // Input for NPC IDs (comma-separated)
@@ -17,7 +17,7 @@ const UpdateRoomContentForm: React.FC = () => {
     };
 
     try {
-      const response = await fetch(`https://localhost:7058/api/Rooms/${roomId}/updateRoomContent`, {
+      const response = await fetch(`${ApiBaseUrl}/api/Rooms/${roomId}/updateRoomContent`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

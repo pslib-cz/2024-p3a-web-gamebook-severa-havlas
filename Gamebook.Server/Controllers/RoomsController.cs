@@ -215,33 +215,9 @@ namespace Gamebook.Server.Controllers
             }
         }
 
+    
         // GET: api/Rooms/5
-        // GET: api/Rooms/5
-        /*
-        [HttpGet("Required/{id}")]
-        public async Task<ActionResult<object>> GetRoomReq(int id)
-        {
-            var room = await _context.Rooms
-                .Include(r => r.RequiredItems)
-                .Include(r => r.RequiredNPCs)
-                .Include(r => r.RequiredActions)
-                .FirstOrDefaultAsync(r => r.RoomId == id);
-
-            if (room == null)
-            {
-                return NotFound();
-            }
-
-            // Return only the IDs of the required properties
-            return new
-            {
-                RequiredItems = room.RequiredItems.Select(item => item.ItemId), // Assuming ItemId exists in Item class
-                RequiredNPCs = room.RequiredNPCs.Select(npc => npc.NPCId),     // Assuming NPCId exists in NPC class
-                RequiredActions = room.RequiredActions.Select(action => action.ActionId) // Assuming ActionId exists in GameBookAction class
-            };
-        }
-
-     */
+       
         [HttpPatch("{id}/updateRoomContent")]
         public async Task<IActionResult> UpdateRoomContent(
        int id,

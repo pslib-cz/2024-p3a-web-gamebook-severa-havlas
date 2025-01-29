@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 interface GameBookActionCreateDto {
   actionTypeId: number;
   description: string;
@@ -30,7 +30,7 @@ const CreateGameBookAction: React.FC = () => {
     setSuccessMessage(null);
 
     try {
-      const response = await fetch("https://localhost:7058/api/GameBookActions", {
+      const response = await fetch(`${ApiBaseUrl}/api/GameBookActions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 // Define the types for GameBookAction and related properties
 interface ActionType {
   id: number;
@@ -30,7 +30,7 @@ const GameBookActionComponent: React.FC<{ id: number }> = ({ id }) => {
     const fetchGameBookAction = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`https://localhost:7058/api/GameBookActions/${id}`);
+        const response = await fetch(`${ApiBaseUrl}/api/GameBookActions/${id}`);
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);

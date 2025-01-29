@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 const CreateRoom: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [text, setText] = useState<string>("");
@@ -27,7 +27,7 @@ const CreateRoom: React.FC = () => {
 
     try {
       // Send request to the backend
-      const response = await fetch("https://localhost:7058/api/Rooms", {
+      const response = await fetch(`${ApiBaseUrl}/api/Rooms`, {
         method: "POST",
         body: formData, // Send the form data as the body
       });

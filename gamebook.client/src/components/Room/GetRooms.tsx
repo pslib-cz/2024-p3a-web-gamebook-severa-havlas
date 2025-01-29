@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 type Room = {
   roomId: number;
   name: string;
@@ -14,7 +14,7 @@ const RoomList: React.FC = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await fetch("https://localhost:7058/api/Rooms");
+        const response = await fetch(`${ApiBaseUrl}/api/Rooms`);
         if (!response.ok) throw new Error("Failed to fetch rooms");
 
         const data: Room[] = await response.json();
@@ -41,7 +41,7 @@ const RoomList: React.FC = () => {
             <h2>{room.name}</h2>
             <p>{room.roomId}</p>
             <p>{room.text}</p>
-            <img src={"https://localhost:7058"+room.imgUrl} alt={room.name} width={200} />
+            <img src={`${ApiBaseUrl}`+room.imgUrl} alt={room.name} width={200} />
           </li>
         ))}
       </ul>

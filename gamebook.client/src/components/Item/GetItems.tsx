@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 type Item = {
   itemId: number;
   name: string;
@@ -16,7 +16,7 @@ const ItemsList: React.FC = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch("https://localhost:7058/api/Items");
+        const response = await fetch(`${ApiBaseUrl}/api/Items`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-
+import { ApiBaseUrl } from "../../EnvFile";
 interface Connection {
   connectionId: number;
   x: number;
@@ -29,7 +29,7 @@ const RoomConnectionForm: React.FC = () => {
 
     try {
       // Fetch room image
-      const roomImageResponse = await fetch(`https://localhost:7058/api/rooms/${roomId}/image`);
+      const roomImageResponse = await fetch(`${ApiBaseUrl}/api/rooms/${roomId}/image`);
       if (!roomImageResponse.ok) {
         throw new Error("Failed to fetch room image");
       }
@@ -38,7 +38,7 @@ const RoomConnectionForm: React.FC = () => {
       setRoomImage(imageUrl);
 
       // Fetch connections
-      const connectionsResponse = await fetch(`https://localhost:7058/api/connections/${roomId}/GetFromConnection`);
+      const connectionsResponse = await fetch(`${ApiBaseUrl}/api/connections/${roomId}/GetFromConnection`);
       if (!connectionsResponse.ok) {
         throw new Error("Failed to fetch connections");
       }
@@ -89,7 +89,7 @@ const RoomConnectionForm: React.FC = () => {
     }));
   
     try {
-      const response = await fetch("https://localhost:7058/api/Rooms/Connections", {
+      const response = await fetch(`${ApiBaseUrl}/api/Rooms/Connections`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -143,7 +143,7 @@ const RoomConnectionForm: React.FC = () => {
         {connections.map((connection) => (
           <img
             key={connection.connectionId}
-            src={"https://localhost:7058" + connection.imgUrl}
+            src={{ApiBaseUrl} + connection.imgUrl}
             alt={`Connection ${connection.connectionId}`}
             draggable
             onDragStart={(event) => handleDragStart(event, connection)}

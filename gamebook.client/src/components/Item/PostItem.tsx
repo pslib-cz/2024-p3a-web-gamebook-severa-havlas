@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { ApiBaseUrl } from "../../EnvFile";
 const ItemForm: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -44,7 +44,7 @@ const ItemForm: React.FC = () => {
     };
 
     try {
-      const response = await fetch("https://localhost:7058/api/items", {
+      const response = await fetch(`${ApiBaseUrl}/api/items`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
