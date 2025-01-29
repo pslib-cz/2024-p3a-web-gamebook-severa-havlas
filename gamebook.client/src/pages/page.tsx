@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import RoomDetails from "../components/Room/GetRoom";
 import { useGameContext } from "../GameProvider";

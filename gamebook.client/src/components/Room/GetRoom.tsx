@@ -184,7 +184,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         onClose={() => setIsOverlayOpen(false)}
         triggerActions={room.triggerActions || []}
       />
-      <div className={styles.room} style={{ position: "relative" }}>
+      <div className={styles.room}>
         <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
 
         {connections?.map((connection) =>

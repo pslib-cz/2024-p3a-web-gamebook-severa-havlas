@@ -1,5 +1,5 @@
 import React from "react";
-import "./SlidingOverlay.css";
+import styles from "./Overlay.module.css";
 import LockCombinationPuzzle from "./LockPuzzle"; // Import the lock puzzle component
 import { useGameContext } from "../../GameProvider"; // Import GameContext to access room navigation
 import LightsOutPuzzle from "./LightsOutPuzzle"; // Import the LightsOutPuzzle component
@@ -62,10 +62,10 @@ const SlidingOverlay: React.FC<SlidingOverlayProps> = ({
   return (
     <>
       <div
-        className={`overlay ${isOpen ? "open" : ""}`}
+        className={`${styles.overlay} ${isOpen ? styles.open : ""}`}
         style={{ width: overlayWidth }}
       >
-        <div className="overlay-content">
+        <div className={styles.overlayContent}>
           <h2>Sliding Overlay</h2>
 
           {triggerActions.length > 0 ? (
@@ -83,14 +83,14 @@ const SlidingOverlay: React.FC<SlidingOverlayProps> = ({
 
           {/* "Go Back" Button */}
           {previousRoomId && (
-            <button onClick={handleGoBack} className="go-back-button">
+            <button onClick={handleGoBack} className={styles.goBackButton}>
               Go Back
             </button>
           )}
         </div>
       </div>
 
-      {isOpen && onClose && <div onClick={onClose} className="backdrop" />}
+      {isOpen && onClose && <div onClick={onClose} className={styles.backdrop} />}
     </>
   );
 };

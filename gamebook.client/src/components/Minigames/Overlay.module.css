@@ -1,6 +1,3 @@
-/* SlidingOverlay.css */
-
-/* Overlay styles */
 .overlay {
     position: fixed;
     top: 0;
@@ -19,7 +16,7 @@
   }
   
   /* Other styles (unchanged) */
-  .overlay-content {
+  .overlayContent {
     padding: 20px;
   }
   

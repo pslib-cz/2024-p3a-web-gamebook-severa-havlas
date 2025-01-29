@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-import SlidingOverlay from "../components/Minigames/Overlay";
 
 const Map = () => {
   return (

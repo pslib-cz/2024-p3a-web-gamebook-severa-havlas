@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import styles from  "./Home.module.css";
-import SlidingOverlay from "../components/Minigames/Overlay";
 
 const Home = () => {
   return (
