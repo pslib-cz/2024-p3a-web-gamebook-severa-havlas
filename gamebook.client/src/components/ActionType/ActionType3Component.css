@@ -1,0 +1,7 @@
+.screen-overlay {
+    transition: background-color 0.5s ease-in-out;
+}
+
+.fade-out {
+    background-color: black;
+}

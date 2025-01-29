@@ -21,25 +21,55 @@ namespace Gamebook.Server.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        [Route("{id}/image")]
+        public async Task<IActionResult> GetNpcImage(int id)
+        {
+            var Npc = await _context.NPCs.FindAsync(id);
+            if (Npc == null || Npc.Img == null)
+            {
+                return NotFound("Image not found.");
+            }
+
+            return File(Npc.Img, "image/jpeg"); // Adjust the MIME type as needed
+        }
+
         // GET: api/NPCs
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NPC>>> GetNPCs()
         {
-            return await _context.NPCs.ToListAsync();
+            var npc = await _context.NPCs
+              .Select(npc => new
+              {
+                  npc.NPCId,
+                  npc.Name,
+                  npc.Target,
+                  npc.Action,
+                  npc.Dialogs,
+                  ImgUrl = $"/api/rooms/{npc.NPCId}/image" // Provide URL to fetch the image
+              })
+              .ToListAsync();
+
+            return Ok(npc);
         }
 
         // GET: api/NPCs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<NPC>> GetNPC(int id)
         {
-            var nPC = await _context.NPCs.FindAsync(id);
+            var npc = await _context.NPCs
+               .Select(npc => new
+               {
+                   npc.NPCId,
+                   npc.Name,
+                   npc.Target,
+                   npc.Action,
+                   npc.Dialogs,
+                   ImgUrl = $"/api/rooms/{npc.NPCId}/image" // Provide URL to fetch the image
+               })
+                .FirstOrDefaultAsync(npc => npc.NPCId == id);
 
-            if (nPC == null)
-            {
-                return NotFound();
-            }
-
-            return nPC;
+            return Ok(npc);
         }
 
         [HttpPut("{id}")]

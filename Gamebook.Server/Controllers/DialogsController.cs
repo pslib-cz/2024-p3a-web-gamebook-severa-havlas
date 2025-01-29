@@ -134,12 +134,24 @@ namespace Gamebook.Server.Controllers
                 }
             }
 
+            // Validate if Action exists (if provided)
+            if (dialogDto.ActionId.HasValue)
+            {
+                var actionExists = await _context.Actions.AnyAsync(a => a.ActionId == dialogDto.ActionId.Value);
+                if (!actionExists)
+                {
+                    return NotFound($"Action with ID {dialogDto.ActionId} not found.");
+                }
+            }
+
             // Create new Dialog entity
             var newDialog = new Dialog
             {
                 NPCId = dialogDto.NPCId,
                 ParentDialogId = dialogDto.ParentDialogId,
-                Text = dialogDto.Text
+                Text = dialogDto.Text,
+                Label = dialogDto.Label,
+                ActionId = dialogDto.ActionId
             };
 
             try
@@ -151,7 +163,6 @@ namespace Gamebook.Server.Controllers
             catch (Exception ex)
             {
                 // Log the error and return a generic error message
-                // (Log to file or monitoring system in production)
                 return StatusCode(500, "An error occurred while saving the dialog. Please try again later.");
             }
 
@@ -161,16 +172,23 @@ namespace Gamebook.Server.Controllers
                 newDialog.DialogId,
                 newDialog.NPCId,
                 newDialog.ParentDialogId,
-                newDialog.Text
+                newDialog.Text,
+                newDialog.Label,
+                newDialog.ActionId
             };
 
             return Ok(result);
         }
+
         public class CreateDialogDTO
         {
             public int? ParentDialogId { get; set; }
             public int? NPCId { get; set; }
             public string Text { get; set; }
+            public string Label { get; set; }
+
+            public int? ActionId { get; set; }
+
         }
         // DELETE: api/Dialogs/5
         [HttpDelete("{id}")]

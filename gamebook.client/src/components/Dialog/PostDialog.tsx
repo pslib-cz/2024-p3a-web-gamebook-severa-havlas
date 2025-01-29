@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { ApiBaseUrl } from '../../EnvFile';
+
 interface DialogDTO {
     ParentDialogId?: number;
     NPCId?: number;
     Text: string;
+    Label: string;
+    ActionId?: number;
 }
 
 const PostDialogForm: React.FC = () => {
     const [parentDialogId, setParentDialogId] = useState<number | undefined>(undefined);
     const [npcId, setNpcId] = useState<number | undefined>(undefined);
     const [text, setText] = useState<string>('');
+    const [label, setLabel] = useState<string>('');
+    const [actionId, setActionId] = useState<number | undefined>(undefined);
     const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -21,6 +26,8 @@ const PostDialogForm: React.FC = () => {
             ParentDialogId: parentDialogId,
             NPCId: npcId,
             Text: text,
+            Label: label,
+            ActionId: actionId
         };
 
         setIsLoading(true);
@@ -64,6 +71,17 @@ const PostDialogForm: React.FC = () => {
                         required
                     />
                 </div>
+
+                <div>
+                    <label htmlFor="label">Label:</label>
+                    <input
+                        type="text"
+                        id="label"
+                        value={label}
+                        onChange={(e) => setLabel(e.target.value)}
+                        required
+                    />
+                </div>
                 
                 <div>
                     <label htmlFor="npcId">NPC ID (Optional):</label>
@@ -82,6 +100,16 @@ const PostDialogForm: React.FC = () => {
                         id="parentDialogId"
                         value={parentDialogId ?? ''}
                         onChange={(e) => setParentDialogId(e.target.value ? parseInt(e.target.value) : undefined)}
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="actionId">Action ID (Optional):</label>
+                    <input
+                        type="number"
+                        id="actionId"
+                        value={actionId ?? ''}
+                        onChange={(e) => setActionId(e.target.value ? parseInt(e.target.value) : undefined)}
                     />
                 </div>
 
