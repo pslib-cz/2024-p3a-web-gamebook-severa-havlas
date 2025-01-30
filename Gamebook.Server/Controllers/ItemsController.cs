@@ -31,7 +31,7 @@ namespace Gamebook.Server.Controllers
 
         // GET: api/Items/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> GetItem(int id)
+        public async Task<ActionResult<ItemDto>> GetItem(int id)
         {
             var item = await _context.Items.FindAsync(id);
 
@@ -40,7 +40,27 @@ namespace Gamebook.Server.Controllers
                 return NotFound();
             }
 
-            return item;
+            // Map the 'item' to ItemDto, only returning required fields
+            var itemDto = new ItemDto
+            {
+                ItemId = item.ItemId,
+                Name = item.Name,
+                Description = item.Description,
+                ImgUrl = $"/api/rooms/{item.ItemId}/image",
+                Target = item.Target,
+                Price = item.Price
+            };
+
+            return itemDto;
+        }
+        public class ItemDto
+        {
+            public int ItemId { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public string ImgUrl { get; set; }
+            public int? Target { get; set; }
+            public int? Price { get; set; }
         }
         public class ItemCreateDto
         {

@@ -190,6 +190,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         {connections?.map((connection) =>
           connection.imgUrl && connection.x && connection.y ? (
             <img
+            
               key={connection.toRoomId}
               src={`${ApiBaseUrl}${connection.imgUrl}`}
               alt={`Connection image`}
