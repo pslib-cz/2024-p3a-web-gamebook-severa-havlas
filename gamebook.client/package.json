@@ -15,6 +15,7 @@
     "axios": "^1.7.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-howler": "^5.2.0",
     "react-router-dom": "^7.0.2",
     "typewriter-effect": "^2.21.0"
   },
@@ -24,6 +25,7 @@
     "@types/react": "^18.3.12",
     "@types/react-d3-graph": "^2.6.7",
     "@types/react-dom": "^18.3.1",
+    "@types/react-howler": "^5.2.3",
     "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^9.13.0",
     "eslint-plugin-react-hooks": "^5.0.0",
