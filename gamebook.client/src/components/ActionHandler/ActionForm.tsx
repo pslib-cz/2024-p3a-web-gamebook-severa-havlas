@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import LightsOutPuzzle from '../Minigames/LightsOutPuzzle';
 import LockCombinationPuzzle from '../Minigames/LockPuzzle';
-import styles from "./Overlay.module.css";
+import styles from "./ActionForm.module.css";
 // Assuming you have a context defined somewhere in your project
 import { GameContext, useGameContext } from '../../GameProvider';
 

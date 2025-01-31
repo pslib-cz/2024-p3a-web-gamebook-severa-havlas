@@ -5,6 +5,7 @@ import styles from "./GetRoom.module.css";
 import { useGameContext } from "../../GameProvider";
 import { ApiBaseUrl } from "../../EnvFile";
 import Typewriter from "typewriter-effect";
+import ActionForm from "../ActionHandler/ActionForm";
 
 type Connection = {
   fromRoomId: number;
@@ -178,14 +179,25 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     })),
   };
 
-
+const closeAction = () => {
+  console.log("Close action");
+}
   return (
     <>
+      {preparedAction && 
+      <ActionForm 
+        action={preparedAction.action} 
+        source={preparedAction.source} 
+        isopen={!preparedAction} 
+        CloseAction={closeAction} 
+      />}
+
       <SlidingOverlay
         isOpen={room.triggerActions && room.triggerActions.length > 0}
         overlayWidth="60%"
         triggerActions={room.triggerActions || []}
       />
+
       <div className={styles.room}>
         <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
 
