@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ActionType3Component from "../ActionType/ActionType3Component";
 import { ApiBaseUrl } from "../../EnvFile";
+import handleAction from "../ActionHandler/HandleActioon";
 interface Dialog {
   dialogId: number;
   text: string;
@@ -9,6 +10,7 @@ interface Dialog {
 interface Action {
   actionId: number;
   description: string;
+  miniGameData: string;
   actionTypeId: number;
 }
 
@@ -51,17 +53,24 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   };
 
   const renderActionComponent = (action: Action) => {
+    
     switch (action.actionTypeId) {
       case 3:
+          handleAction(action, "asd");
         return <ActionType3Component action={action} />;
       default:
         return <p>Unknown action type: {action.actionTypeId}</p>;
     }
   };
 
+ 
+
+
   return (
     <div>
+       
       <h2>{npc.name}</h2>
+        
       {npc.action && renderActionComponent(npc.action)}
 
       {dialog && (

@@ -7,19 +7,34 @@ interface PlayerItem {
   quantity: number;
 }
 
+interface Action {
+  actionId: number;
+  description: string;
+  miniGameData: string;
+  actionTypeId: number;
+}
+
+interface PreparedAction {
+  action: Action;
+  source: string;
+}
+
 type GameContextType = {
   roomId: string | null;
-  previousRoomId: string | null; // Tracks the previous room
+  previousRoomId: string | null;
   setRoomId: (id: string | null) => void;
   player: {
     items: PlayerItem[];
   };
   setPlayerItems: (update: (prevItems: PlayerItem[]) => PlayerItem[]) => void;
-  stamina: number; // Added stamina
-  date: Date; // Added date
-  setStamina: (value: number) => void; // Function to update stamina
-  setDate: (value: Date) => void; // Function to update date
+  stamina: number;
+  date: Date;
+  setStamina: (value: number) => void;
+  setDate: (value: Date) => void;
   serializeContext: () => string;
+  setIsOverlayOpen: (isOpen: boolean) => void;
+  preparedAction: PreparedAction | null;
+  setPreparedAction: (action: PreparedAction | null) => void;
 };
 
 export const GameContext = createContext<GameContextType>({
@@ -28,8 +43,8 @@ export const GameContext = createContext<GameContextType>({
   setRoomId: () => {},
   player: { items: [] },
   setPlayerItems: () => {},
-  stamina: 100, // Default stamina
-  date: new Date(1849, 1, 3), // Default date (Feb 3, 1849)
+  stamina: 100,
+  date: new Date(1849, 1, 3),
   setStamina: () => {},
   setDate: () => {},
   serializeContext: () =>
@@ -40,21 +55,22 @@ export const GameContext = createContext<GameContextType>({
       stamina: 100,
       date: new Date(1849, 1, 3).toISOString(),
     }),
+  setIsOverlayOpen: () => {},
+  preparedAction: null,
+  setPreparedAction: () => {},
 });
 
-export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [roomId, setRoomIdState] = useState<string | null>(null);
   const [previousRoomId, setPreviousRoomId] = useState<string | null>(null);
   const [player, setPlayer] = useState<{ items: PlayerItem[] }>({ items: [] });
-  const [stamina, setStamina] = useState(100); // State for stamina
-  const [date, setDate] = useState(new Date(1849, 1, 3)); // State for date
+  const [stamina, setStamina] = useState(100);
+  const [date, setDate] = useState(new Date(1849, 1, 3));
+  const [preparedAction, setPreparedAction] = useState<PreparedAction | null>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Effect to update roomId and previousRoomId when the location changes
   useEffect(() => {
     const pathParts = location.pathname.split("/");
     const newRoomId = pathParts[pathParts.length - 1];
@@ -76,9 +92,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const setPlayerItems = (
-    update: (prevItems: PlayerItem[]) => PlayerItem[]
-  ) => {
+  const setPlayerItems = (update: (prevItems: PlayerItem[]) => PlayerItem[]) => {
     setPlayer((prev) => ({ ...prev, items: update(prev.items) }));
   };
 
@@ -88,7 +102,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       previousRoomId,
       player,
       stamina,
-      date: date.toISOString(), // Serialize the date as an ISO string
+      date: date.toISOString(),
+      preparedAction,
     });
   };
 
@@ -105,6 +120,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         setStamina,
         setDate,
         serializeContext,
+        setIsOverlayOpen: () => {},
+        preparedAction,
+        setPreparedAction,
       }}
     >
       {children}
@@ -114,7 +132,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useGameContext = () => {
   const context = useContext(GameContext);
-
   if (!context) {
     throw new Error("useGameContext must be used within a GameProvider");
   }

@@ -3,7 +3,7 @@ import RoomContentViewer from "./GetRoomContent";
 import SlidingOverlay from "../Minigames/Overlay";
 import styles from "./GetRoom.module.css";
 import { useGameContext } from "../../GameProvider";
-import {ApiBaseUrl} from "../../EnvFile"
+import { ApiBaseUrl } from "../../EnvFile";
 import Typewriter from "typewriter-effect";
 
 type Connection = {
@@ -26,7 +26,7 @@ type RoomContentViewerProps = {
       npcId: number;
       name: string;
       dialogs: { dialogId: number; text: string }[];
-      action: { actionId: number; description: string, actionTypeId: number };
+      action: { actionId: number; description: string; actionTypeId: number, miniGameData: string };
     }[];
     items: {
       itemPositionId: number;
@@ -70,7 +70,7 @@ type Room = {
     npcId: number;
     name: string;
     dialogs: { dialogId: number; text: string }[];
-    action: { actionId: number; description: string,actionTypeId: number  };
+    action: { actionId: number; description: string; actionTypeId: number; miniGameData: string };
   }[];
   connectionsFrom: { connectionId: number; toRoomId: number; description: string }[];
   connectionsTo: { connectionId: number; fromRoomId: number; description: string }[];
@@ -81,8 +81,8 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const { serializeContext, setRoomId, stamina, setStamina, date } = useGameContext();
+  
+  const { serializeContext,preparedAction , setRoomId, stamina, setStamina, date, setIsOverlayOpen } = useGameContext();
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -106,6 +106,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
           onBackgroundImageChange(`${ApiBaseUrl}${data.imgUrl}`);
         }
 
+        // Open overlay if triggerActions exist
         setIsOverlayOpen(data.triggerActions && data.triggerActions.length > 0);
       } catch (error) {
         console.error(error);
@@ -116,9 +117,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     };
 
     fetchRoom();
-
-    return () => setIsOverlayOpen(false);
-  }, [id, onBackgroundImageChange]);
+  }, [id, onBackgroundImageChange, setIsOverlayOpen]);
 
   useEffect(() => {
     if (!id) return;
@@ -164,7 +163,10 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
       npcId: npc.npcId,
       name: npc.name,
       dialogs: npc.dialogs,
-      action: npc.action,
+      action: {
+        ...npc.action,
+        miniGameData: npc.action.miniGameData || "",
+      },
     })),
     items: room.items.map((item) => ({
       itemPositionId: item.itemPositionId,
@@ -176,12 +178,12 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     })),
   };
 
+
   return (
     <>
       <SlidingOverlay
-        isOpen={isOverlayOpen}
+        isOpen={room.triggerActions && room.triggerActions.length > 0}
         overlayWidth="60%"
-        onClose={() => setIsOverlayOpen(false)}
         triggerActions={room.triggerActions || []}
       />
       <div className={styles.room}>
@@ -190,10 +192,9 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         {connections?.map((connection) =>
           connection.imgUrl && connection.x && connection.y ? (
             <img
-            
               key={connection.toRoomId}
               src={`${ApiBaseUrl}${connection.imgUrl}`}
-              alt={`Connection image`}
+              alt="Connection image"
               style={{
                 position: "absolute",
                 left: `${connection.x / 10}%`,
@@ -206,63 +207,37 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
         <div className={styles.description}>
           <h1>{room.name}</h1>
-          <Typewriter
-            options={{
-              strings: [room.text],
-              autoStart: true,
-              loop: false,
-              delay: 75,
-            }}
-          />
+          <Typewriter options={{ strings: [room.text], autoStart: true, loop: false, delay: 75 }} />
           <h2>Items</h2>
           <ul>
             {room.items.map((item) => (
-              <li key={item.itemPositionId}>
-                {item.item ? item.item.name : "Unknown item"}
-              </li>
+              <li key={item.itemPositionId}>{item.item ? item.item.name : "Unknown item"}</li>
             ))}
           </ul>
           <div>
             <h2>Player Stats</h2>
-            <p>
-              <strong>Stamina:</strong> {stamina}
-            </p>
-            <p>
-              <strong>Date:</strong> {date.toDateString()}
-            </p>
+            <p><strong>Stamina:</strong> {stamina}</p>
+            <p><strong>Date:</strong> {date.toDateString()}</p>
           </div>
           <h2>Room Connections</h2>
           <ul>
-            {connections && connections.length > 0 ? (
-              connections.map((connection) => (
-                <li key={connection.toRoomId}>
-                  <div>
-                    <strong>To Room ID:</strong> {connection.toRoomId}
-                  </div>
-                  <div>
-                    <strong>Position:</strong> ({connection.x}, {connection.y})
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => navigateToRoom(connection.toRoomId)}
-                      disabled={!connection.state}
-                      title={!connection.state ? "You need certain items to unlock this room." : ""}
-                    >
-                      Go to Room {connection.toRoomId}
-                    </button>
-                  </div>
-                  <div>
-                    <strong>State:</strong> {connection.state ? "Accessible" : "Blocked"}
-                  </div>
-                </li>
-              ))
-            ) : (
-              <li>No connections found.</li>
-            )}
+            {connections?.map((connection) => (
+              <li key={connection.toRoomId}>
+                <strong>To Room ID:</strong> {connection.toRoomId}
+                <button
+                  onClick={() => navigateToRoom(connection.toRoomId)}
+                  disabled={!connection.state}
+                  title={!connection.state ? "You need certain items to unlock this room." : ""}
+                >
+                  Go to Room {connection.toRoomId}
+                </button>
+              </li>
+            ))}
           </ul>
           <RoomContentViewer roomContent={roomContent} />
-          {JSON.stringify(room)}
+          {JSON.stringify(preparedAction)}
         </div>
+        
       </div>
     </>
   );

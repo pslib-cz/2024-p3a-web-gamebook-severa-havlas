@@ -8,7 +8,7 @@ type RoomContentViewerProps = {
       npcId: number;
       name: string;
       dialogs: { dialogId: number; text: string }[];
-      action: { actionId: number; description: string, actionTypeId: number  };
+      action: { actionId: number; description: string, actionTypeId: number, miniGameData: string };
     }[];
     items: {
       itemPositionId: number;
