@@ -32,7 +32,7 @@ type GameContextType = {
   setStamina: (value: number) => void;
   setDate: (value: Date) => void;
   serializeContext: () => string;
-  setIsOverlayOpen: (isOpen: boolean) => void;
+  
   preparedAction: PreparedAction | null;
   setPreparedAction: (action: PreparedAction | null) => void;
 };
@@ -55,7 +55,7 @@ export const GameContext = createContext<GameContextType>({
       stamina: 100,
       date: new Date(1849, 1, 3).toISOString(),
     }),
-  setIsOverlayOpen: () => {},
+  
   preparedAction: null,
   setPreparedAction: () => {},
 });
@@ -120,7 +120,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setStamina,
         setDate,
         serializeContext,
-        setIsOverlayOpen: () => {},
+        
         preparedAction,
         setPreparedAction,
       }}

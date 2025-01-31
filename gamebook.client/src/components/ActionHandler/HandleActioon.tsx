@@ -16,10 +16,10 @@ interface ActionHandlerProps {
 const handleAction: React.FC<ActionHandlerProps> = ({ action, source }) => {
   const { setPreparedAction } = useGameContext();
 
-  useEffect(() => {
+ 
     console.log(`Preparing action: ${action.description}`);
     setPreparedAction({ action, source });
-  }, [action, source, setPreparedAction]);
+ 
 
   return <></>; // or return actual JSX
 };

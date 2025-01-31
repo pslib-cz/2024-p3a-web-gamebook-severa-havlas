@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useGameContext } from "../../GameProvider";
 import NpcInteraction from "../NPC/HandleNPC";
 import actionHandler from "../ActionHandler/HandleActioon";
+
 type RoomContentViewerProps = {
   roomContent: {
     npCs: {
@@ -38,18 +39,19 @@ type PlayerItem = {
 };
 
 const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) => {
+  const { setPlayerItems, setPreparedAction, serializeContext } = useGameContext();
   const [selectedNpc, setSelectedNpc] = useState<RoomContentViewerProps["roomContent"]["npCs"][0] | null>(null);
-  
 
-  if (roomContent.triggerActions?.length > 0) {
-    roomContent.triggerActions.forEach((action) => {
-      actionHandler({ 
-        action: action, 
-        source: "asjd" 
-      });
-    });
-  }
-  const { setPlayerItems } = useGameContext();
+  
+    if (roomContent.triggerActions?.length > 0) {
+      
+        actionHandler({
+          action: roomContent.triggerActions[0],
+          source: "asjd", // or some dynamic source if needed
+        });
+      
+    }
+
 
   const handlePickUpItem = (itemId: number, itemName: string) => {
     setPlayerItems((prevItems: PlayerItem[]) => {

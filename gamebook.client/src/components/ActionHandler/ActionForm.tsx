@@ -23,7 +23,7 @@ const ActionForm: React.FC<ActionComponentProps> = ({ action, source,  CloseActi
     let ForceSolve: boolean = false;
     let actionContent;
     let isNotOverlay: boolean  = false;
-     const { previousRoomId, setRoomId, setIsOverlayOpen } = useGameContext();
+     const { previousRoomId, setRoomId } = useGameContext();
     const [isopen, setIsOpen] = React.useState(true);
     const CloseActionForm = () => {
         setIsOpen(false);
@@ -57,8 +57,9 @@ const ActionForm: React.FC<ActionComponentProps> = ({ action, source,  CloseActi
     const handleGoBack = () => {
         if (previousRoomId) {
           console.log(`Navigating back to previous room: ${previousRoomId}`);
-          setRoomId(previousRoomId);
           CloseActionForm();
+          setRoomId(previousRoomId);
+          
         }
       };
     const { preparedAction } = useContext(GameContext);
@@ -83,13 +84,13 @@ const ActionForm: React.FC<ActionComponentProps> = ({ action, source,  CloseActi
             <h1>Action Form</h1>
             
                 
-            {previousRoomId && ForceSolve && (
+            {previousRoomId  && (
                 <button onClick={handleGoBack}>
                 Go Back
                 </button>
             )}
 
-            {!ForceSolve && (
+            {  (
                 <button onClick={CloseActionForm}>
                 close
                 </button>

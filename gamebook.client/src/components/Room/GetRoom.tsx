@@ -92,7 +92,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   
-  const { serializeContext, preparedAction , setRoomId, stamina, setStamina, date, setIsOverlayOpen } = useGameContext();
+  const { serializeContext, preparedAction , setRoomId, stamina, setStamina, date } = useGameContext();
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -126,8 +126,8 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     };
 
     fetchRoom();
-  }, [id, onBackgroundImageChange, setIsOverlayOpen]);
-
+  }, [id, onBackgroundImageChange]);
+let a;
   useEffect(() => {
     if (!id) return;
 
@@ -136,8 +136,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
       setError(null);
 
       try {
-        
-        const gameState = serializeContext();
+        const gameState = serializeContext(); // Use the memoized function here
 
         const response = await fetch(
           `${ApiBaseUrl}/api/Rooms/${id}/Connection?gameState=${encodeURIComponent(gameState)}`
@@ -157,7 +156,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     };
 
     fetchConnections();
-  }, [id, serializeContext]);
+  }, [a]); 
 
 
 
