@@ -56,7 +56,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
     
     switch (action.actionTypeId) {
       case 3:
-          handleAction(action, "asd");
+          handleAction({ action, source: "npc" });
         return <ActionType3Component action={action} />;
       default:
         return <p>Unknown action type: {action.actionTypeId}</p>;

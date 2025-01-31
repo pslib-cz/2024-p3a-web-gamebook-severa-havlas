@@ -6,7 +6,7 @@ import { useGameContext } from "../../GameProvider";
 import { ApiBaseUrl } from "../../EnvFile";
 import Typewriter from "typewriter-effect";
 import ActionForm from "../ActionHandler/ActionForm";
-
+import handleAction from "../ActionHandler/HandleActioon";
 type Connection = {
   fromRoomId: number;
   toRoomId: number;
@@ -14,7 +14,10 @@ type Connection = {
   y: number | null;
   imgUrl: string | null;
   state: boolean;
-};
+  };
+
+ 
+
 
 type RoomDetailsInputProps = {
   id: string;
@@ -40,6 +43,12 @@ type RoomContentViewerProps = {
         name: string;
         description: string;
       } | null;
+    }[];
+    triggerActions: {
+      actionId: number;
+      description: string;
+      miniGameData: string;
+      actionTypeId: number;
     }[];
   };
 };
@@ -83,7 +92,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   
-  const { serializeContext,preparedAction , setRoomId, stamina, setStamina, date, setIsOverlayOpen } = useGameContext();
+  const { serializeContext, preparedAction , setRoomId, stamina, setStamina, date, setIsOverlayOpen } = useGameContext();
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -107,8 +116,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
           onBackgroundImageChange(`${ApiBaseUrl}${data.imgUrl}`);
         }
 
-        // Open overlay if triggerActions exist
-        setIsOverlayOpen(data.triggerActions && data.triggerActions.length > 0);
+        
       } catch (error) {
         console.error(error);
         setError("Error fetching room.");
@@ -128,6 +136,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
       setError(null);
 
       try {
+        
         const gameState = serializeContext();
 
         const response = await fetch(
@@ -150,6 +159,10 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     fetchConnections();
   }, [id, serializeContext]);
 
+
+
+
+
   const navigateToRoom = (toRoomId: number) => {
     setStamina(stamina - 10);
     setRoomId(String(toRoomId));
@@ -166,7 +179,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
       dialogs: npc.dialogs,
       action: {
         ...npc.action,
-        miniGameData: npc.action.miniGameData || "",
+        miniGameData: npc.action.miniGameData || "", // Ensuring miniGameData is always a string
       },
     })),
     items: room.items.map((item) => ({
@@ -175,9 +188,17 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
       x: item.x,
       y: item.y,
       itemId: item.itemId,
-      item: item.item ? { ...item.item } : null,
+      item: item.item ? { ...item.item } : null, // Handling possible null item
+    })),
+    // Ensure you're passing the triggerActions array here as expected by RoomContentViewerProps
+    triggerActions: room.triggerActions.map((action) => ({
+      actionId: action.actionId,
+      description: action.description,
+      miniGameData: action.miniGameData, // Just pass the miniGameData as is
+      actionTypeId: action.actionTypeId,
     })),
   };
+  
 
 const closeAction = () => {
   console.log("Close action");
@@ -188,15 +209,9 @@ const closeAction = () => {
       <ActionForm 
         action={preparedAction.action} 
         source={preparedAction.source} 
-        isopen={!preparedAction} 
+        
         CloseAction={closeAction} 
       />}
-
-      <SlidingOverlay
-        isOpen={room.triggerActions && room.triggerActions.length > 0}
-        overlayWidth="60%"
-        triggerActions={room.triggerActions || []}
-      />
 
       <div className={styles.room}>
         <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />

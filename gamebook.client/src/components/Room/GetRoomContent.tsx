@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useGameContext } from "../../GameProvider";
 import NpcInteraction from "../NPC/HandleNPC";
-
+import actionHandler from "../ActionHandler/HandleActioon";
 type RoomContentViewerProps = {
   roomContent: {
     npCs: {
@@ -22,6 +22,12 @@ type RoomContentViewerProps = {
         description: string;
       } | null;
     }[];
+    triggerActions: {
+      actionId: number;
+      description: string;
+      miniGameData: string;
+      actionTypeId: number;
+    }[];
   };
 };
 
@@ -33,7 +39,16 @@ type PlayerItem = {
 
 const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) => {
   const [selectedNpc, setSelectedNpc] = useState<RoomContentViewerProps["roomContent"]["npCs"][0] | null>(null);
+  
 
+  if (roomContent.triggerActions?.length > 0) {
+    roomContent.triggerActions.forEach((action) => {
+      actionHandler({ 
+        action: action, 
+        source: "asjd" 
+      });
+    });
+  }
   const { setPlayerItems } = useGameContext();
 
   const handlePickUpItem = (itemId: number, itemName: string) => {

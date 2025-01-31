@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     height: 100%;
-    
+    background-color: rgb(50, 13, 117);
     color: white;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;

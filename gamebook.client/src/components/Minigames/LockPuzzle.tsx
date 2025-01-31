@@ -7,8 +7,19 @@ interface LockCombinationPuzzleProps {
 
 const LockCombinationPuzzle: React.FC<LockCombinationPuzzleProps> = ({ MinigameData, onPuzzleSolved }) => {
   // Parse the MinigameData JSON string to extract the correct combination
-  const parsedData = JSON.parse(MinigameData);
-  const correctCombination = parsedData.CorrectCombination;
+  let parsedData;
+  let correctCombination = "";
+  try {
+    parsedData = JSON.parse(MinigameData);
+    if (parsedData.CorrectCombination) {
+      correctCombination = parsedData.CorrectCombination;
+    } else {
+      throw new Error("CorrectCombination not found in MinigameData");
+    }
+  } catch (error) {
+    console.error("Failed to parse MinigameData or CorrectCombination missing:", error);
+    return <div>Error loading puzzle. Please check the MinigameData.</div>;
+  }
 
   // Number of dials is determined by the length of the correct combination
   const numberOfDials = correctCombination.length;
