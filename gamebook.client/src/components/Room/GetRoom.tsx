@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import RoomContentViewer from "./GetRoomContent";
-import SlidingOverlay from "../Minigames/Overlay";
 import styles from "./GetRoom.module.css";
 import { useGameContext } from "../../GameProvider";
 import { ApiBaseUrl } from "../../EnvFile";
 import Typewriter from "typewriter-effect";
 import ActionForm from "../ActionHandler/ActionForm";
-import handleAction from "../ActionHandler/HandleActioon";
 type Connection = {
   fromRoomId: number;
   toRoomId: number;
@@ -212,21 +210,21 @@ const closeAction = () => {
         CloseAction={closeAction} 
       />}
 
-      <div className={styles.room}>
+      <div className={`${styles.room} ${room.name === "Mapa" ? styles.map : ""}`}>
         <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
 
-        {connections?.map((connection) =>
+        {room.name === "Mapa" && connections?.map((connection) =>
           connection.imgUrl && connection.x && connection.y ? (
             <img
               key={connection.toRoomId}
               src={`${ApiBaseUrl}${connection.imgUrl}`}
               alt="Connection image"
+              className={styles.connection}
               style={{
-                position: "absolute",
                 left: `${connection.x / 10}%`,
                 top: `${connection.y / 10}%`,
-                transform: "translate(-50%, -50%)",
               }}
+              onClick={() => navigateToRoom(connection.toRoomId)}
             />
           ) : null
         )}
