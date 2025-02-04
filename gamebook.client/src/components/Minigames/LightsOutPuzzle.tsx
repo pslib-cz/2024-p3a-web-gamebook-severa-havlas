@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./LightsOutPuzzle.module.css";
 
 interface LightsOutPuzzleProps {
   onPuzzleSolved?: () => void; // Callback function for when the puzzle is solved
@@ -42,29 +43,16 @@ const LightsOutPuzzle: React.FC<LightsOutPuzzleProps> = ({ onPuzzleSolved }) => 
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
+    <div className={styles.container}>
       <h1>Lights Out Puzzle</h1>
       {isPuzzleSolved && <h2>Congratulations! You solved the puzzle!</h2>}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${gridSize}, 50px)`,
-          gap: "5px",
-          justifyContent: "center",
-        }}
-      >
+      <div className={styles.grid} style={{ "--grid-size": gridSize } as React.CSSProperties}>
         {grid.map((row, rowIndex) =>
           row.map((isOn, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              onClick={() => toggleLight(rowIndex, colIndex)}
-              style={{
-                width: "50px",
-                height: "50px",
-                backgroundColor: isOn ? "yellow" : "gray",
-                border: "1px solid black",
-                cursor: "pointer",
-              }}
+            <div 
+            className={`${styles.cell} ${isOn ? styles.cellOn : ""}`} 
+            key={`${rowIndex}-${colIndex}`} 
+            onClick={() => toggleLight(rowIndex, colIndex)}
             />
           ))
         )}

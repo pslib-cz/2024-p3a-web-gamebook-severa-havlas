@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./LockPuzzle.module.css";
 
 interface LockCombinationPuzzleProps {
   MinigameData: string; // JSON string containing CorrectCombination
@@ -62,70 +63,29 @@ const LockCombinationPuzzle: React.FC<LockCombinationPuzzleProps> = ({ MinigameD
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
+    <div className={styles.container}>
       <h1>Lock Combination Puzzle</h1>
       {isUnlocked ? (
-        <h2 style={{ color: "green" }}>Unlocked! You solved the puzzle!</h2>
+        <h2 className={styles.unlocked}>Unlocked! You solved the puzzle!</h2>
       ) : (
-        <h2 style={{ color: "red" }}>The lock is still locked.</h2>
+        <h2 className={styles.locked}>The lock is still locked.</h2>
       )}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
+      <div className={styles.dials}>
         {currentValues.map((value, index) => (
-          <div key={index} style={{ textAlign: "center" }}>
-            <button
-              onClick={() => rotateDial(index, "up")}
-              style={{
-                display: "block",
-                marginBottom: "10px",
-                padding: "5px 10px",
-                cursor: "pointer",
-              }}
-            >
+          <div key={index} className={styles.index}>
+            <button className={styles.button} onClick={() => rotateDial(index, "up")}>
               ▲
             </button>
-            <div
-              style={{
-                width: "50px",
-                height: "50px",
-                lineHeight: "50px",
-                border: "1px solid black",
-                fontSize: "20px",
-                fontWeight: "bold",
-                backgroundColor: "#f0f0f0",
-              }}
-            >
+            <div className={styles.value}>
               {value}
             </div>
-            <button
-              onClick={() => rotateDial(index, "down")}
-              style={{
-                display: "block",
-                marginTop: "10px",
-                padding: "5px 10px",
-                cursor: "pointer",
-              }}
-            >
+            <button className={styles.button} onClick={() => rotateDial(index, "down")}>
               ▼
             </button>
           </div>
         ))}
       </div>
-      <button
-        onClick={checkCombination}
-        style={{
-          marginTop: "20px",
-          padding: "10px 20px",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
+      <button className={styles.checkButton} onClick={checkCombination}>
         Check Combination
       </button>
     </div>
