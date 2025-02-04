@@ -10,7 +10,7 @@
 }
 
 .connection {
-    position: sticky;
+    position: fixed;
     translate: -50% -50%;
 }
 
