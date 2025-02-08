@@ -28,7 +28,7 @@ type RoomContentViewerProps = {
       npcId: number;
       name: string;
       dialogs: { dialogId: number; text: string }[];
-      action: { actionId: number; description: string; actionTypeId: number, miniGameData: string };
+      action: { actionId: number; description: string; actionTypeId: number; miniGameData: string } | null;
     }[];
     items: {
       itemPositionId: number;
@@ -78,13 +78,14 @@ type Room = {
     npcId: number;
     name: string;
     dialogs: { dialogId: number; text: string }[];
-    action: { actionId: number; description: string; actionTypeId: number; miniGameData: string };
+    action: { actionId: number; description: string; actionTypeId: number; miniGameData: string } | null;
   }[];
   connectionsFrom: { connectionId: number; toRoomId: number; description: string }[];
   connectionsTo: { connectionId: number; fromRoomId: number; description: string }[];
 };
 
 const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageChange }) => {
+   {console.log("Room")}
   const [room, setRoom] = useState<Room | null>(null);
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -124,7 +125,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     };
 
     fetchRoom();
-  }, [id, onBackgroundImageChange]);
+  }, [id]);
 let a;
   useEffect(() => {
     if (!id) return;
@@ -174,10 +175,10 @@ let a;
       npcId: npc.npcId,
       name: npc.name,
       dialogs: npc.dialogs,
-      action: {
+      action: npc.action ? {
         ...npc.action,
         miniGameData: npc.action.miniGameData || "", // Ensuring miniGameData is always a string
-      },
+      } : null, // Allowing action to be nullable
     })),
     items: room.items.map((item) => ({
       itemPositionId: item.itemPositionId,
@@ -258,6 +259,7 @@ const closeAction = () => {
               </li>
             ))}
           </ul>
+         
           <RoomContentViewer roomContent={roomContent} />
           {JSON.stringify(preparedAction)}
         </div>

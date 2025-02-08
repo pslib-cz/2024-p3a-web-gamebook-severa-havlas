@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useGameContext } from "../../GameProvider";
 import NpcInteraction from "../NPC/HandleNPC";
-import actionHandler from "../ActionHandler/HandleActioon";
 
 type RoomContentViewerProps = {
   roomContent: {
@@ -9,7 +8,12 @@ type RoomContentViewerProps = {
       npcId: number;
       name: string;
       dialogs: { dialogId: number; text: string }[];
-      action: { actionId: number; description: string, actionTypeId: number, miniGameData: string };
+      action: {
+        actionId: number;
+        description: string;
+        actionTypeId: number;
+        miniGameData: string;
+      } | null;
     }[];
     items: {
       itemPositionId: number;
@@ -39,24 +43,41 @@ type PlayerItem = {
 };
 
 const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) => {
-  const { setPlayerItems, setPreparedAction, serializeContext } = useGameContext();
-  const [selectedNpc, setSelectedNpc] = useState<RoomContentViewerProps["roomContent"]["npCs"][0] | null>(null);
+  const { setPlayerItems, setPreparedAction, setIsActionOpen } = useGameContext();
+  const [selectedNpc, setSelectedNpc] = useState<
+    RoomContentViewerProps["roomContent"]["npCs"][0] | null
+  >(null);
+  const [hasTriggeredAction, setHasTriggeredAction] = useState(false);
 
-  
-    if (roomContent.triggerActions?.length > 0) {
-      
-        actionHandler({
-          action: roomContent.triggerActions[0],
-          source: "asjd", // or some dynamic source if needed
-        });
-      
+  // Create a memoized function that triggers an action.
+  const triggerAction = useCallback(
+    (
+      action: RoomContentViewerProps["roomContent"]["triggerActions"][0],
+      source: string
+    ) => {
+      console.log("Triggering action", action);
+      setIsActionOpen(true);  // Open overlay when action is prepared
+      setPreparedAction({ action, source });
+    },
+    [setPreparedAction]
+  );
+
+  // When triggerActions is available and we haven't yet triggered one, fire it.
+  useEffect(() => {
+    if (
+      !hasTriggeredAction &&
+      roomContent.triggerActions &&
+      roomContent.triggerActions.length > 0
+    ) {
+      // For example, trigger the first action in the list.
+      triggerAction(roomContent.triggerActions[0], "roomContent");
+      setHasTriggeredAction(true);
     }
-
+  }, [roomContent.triggerActions, hasTriggeredAction, triggerAction]);
 
   const handlePickUpItem = (itemId: number, itemName: string) => {
     setPlayerItems((prevItems: PlayerItem[]) => {
       const itemIndex = prevItems.findIndex((item) => item.itemId === itemId);
-
       if (itemIndex >= 0) {
         const updatedItems = [...prevItems];
         updatedItems[itemIndex] = {
@@ -75,21 +96,18 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
         ];
       }
     });
-
     console.log(`Picked up: ${itemName}`);
   };
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h2>Room Content Viewer</h2>
-
       <div style={{ marginTop: "20px" }}>
         <h3>Room Content:</h3>
-
         {/* NPCs */}
         <div>
           <strong>NPCs:</strong>
-          {roomContent.npCs?.length > 0 ? (
+          {roomContent.npCs && roomContent.npCs.length > 0 ? (
             <ul>
               {roomContent.npCs.map((npc) => (
                 <li key={npc.npcId}>
@@ -111,11 +129,10 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
             <p>No NPCs in this room.</p>
           )}
         </div>
-
         {/* Items */}
         <div>
           <strong>Items:</strong>
-          {roomContent.items?.length > 0 ? (
+          {roomContent.items && roomContent.items.length > 0 ? (
             <ul>
               {roomContent.items.map((item) => (
                 <li key={item.itemPositionId}>
@@ -146,7 +163,6 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
             <p>No Items in this room.</p>
           )}
         </div>
-
         {/* NPC Interaction */}
         {selectedNpc && (
           <div style={{ marginTop: "20px" }}>

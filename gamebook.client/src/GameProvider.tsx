@@ -32,9 +32,12 @@ type GameContextType = {
   setStamina: (value: number) => void;
   setDate: (value: Date) => void;
   serializeContext: () => string;
-  
   preparedAction: PreparedAction | null;
   setPreparedAction: (action: PreparedAction | null) => void;
+
+  // New state for managing overlay visibility
+  isActionOpen: boolean;
+  setIsActionOpen: (open: boolean) => void;
 };
 
 export const GameContext = createContext<GameContextType>({
@@ -55,9 +58,11 @@ export const GameContext = createContext<GameContextType>({
       stamina: 100,
       date: new Date(1849, 1, 3).toISOString(),
     }),
-  
   preparedAction: null,
   setPreparedAction: () => {},
+
+  isActionOpen: false,
+  setIsActionOpen: () => {},
 });
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -67,6 +72,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [stamina, setStamina] = useState(100);
   const [date, setDate] = useState(new Date(1849, 1, 3));
   const [preparedAction, setPreparedAction] = useState<PreparedAction | null>(null);
+  
+  // New state for overlay visibility
+  const [isActionOpen, setIsActionOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -95,7 +103,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const setPlayerItems = (update: (prevItems: PlayerItem[]) => PlayerItem[]) => {
     setPlayer((prev) => ({ ...prev, items: update(prev.items) }));
   };
-
   const serializeContext = () => {
     return JSON.stringify({
       roomId,
@@ -120,9 +127,12 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setStamina,
         setDate,
         serializeContext,
-        
         preparedAction,
         setPreparedAction,
+
+        // New values
+        isActionOpen,
+        setIsActionOpen,
       }}
     >
       {children}

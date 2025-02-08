@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ActionType3Component from "../ActionType/ActionType3Component";
 import { ApiBaseUrl } from "../../EnvFile";
 import handleAction from "../ActionHandler/HandleActioon";
+import { useGameContext } from "../../GameProvider";
 interface Dialog {
   dialogId: number;
   text: string;
@@ -18,7 +19,7 @@ interface NPC {
   npcId: number;
   name: string;
   dialogs: Dialog[] | null;
-  action: Action;
+  action: Action | null;
 }
 
 interface NpcInteractionProps {
@@ -26,6 +27,7 @@ interface NpcInteractionProps {
 }
 
 const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
+  const { setPreparedAction } = useGameContext();
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [options, setOptions] = useState<Dialog[]>(npc.dialogs || []);
   const [loading, setLoading] = useState<boolean>(false);
@@ -53,15 +55,25 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   };
 
   const renderActionComponent = (action: Action) => {
-    
     switch (action.actionTypeId) {
       case 3:
-          handleAction({ action, source: "npc" });
-        return <ActionType3Component action={action} />;
+        return (
+          <div>
+            <button
+              onClick={() => {
+                console.log(`Preparing action: ${action.description}`);
+                setPreparedAction({ action, source: "npc" });
+              }}
+            >
+              Trigger Action
+            </button>
+          </div>
+        );
       default:
         return <p>Unknown action type: {action.actionTypeId}</p>;
     }
   };
+  
 
  
 

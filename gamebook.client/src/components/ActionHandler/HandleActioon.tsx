@@ -1,27 +1,27 @@
 import { useGameContext } from "../../GameProvider";
-import { useEffect } from "react";
 
 interface Action {
     actionId: number;
     description: string;
     miniGameData: string;
     actionTypeId: number;
-  }
-
-interface ActionHandlerProps {
-  action: Action;
-  source: string;
 }
 
-const handleAction: React.FC<ActionHandlerProps> = ({ action, source }) => {
-  const { setPreparedAction } = useGameContext();
+interface ActionHandlerProps {
+    action: Action;
+    source: string;
+}
 
- 
-    console.log(`Preparing action: ${action.description}`);
-    setPreparedAction({ action, source });
- 
+const useHandleAction = () => {
+    const { setPreparedAction, setIsActionOpen } = useGameContext();
 
-  return <></>; // or return actual JSX
+    const triggerAction = (action: Action, source: string) => {
+        
+        setPreparedAction({ action, source });
+        setIsActionOpen(true);  // Open overlay when action is prepared
+    };
+
+    return triggerAction;
 };
 
-export default handleAction;
+export default useHandleAction;

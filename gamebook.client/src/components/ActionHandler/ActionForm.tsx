@@ -19,17 +19,32 @@ type ActionComponentProps = {
     actionTypeId: number;
   }
 
-const ActionForm: React.FC<ActionComponentProps> = ({ action, source,  CloseAction }) => {
+  const ActionForm: React.FC<ActionComponentProps> = ({ action, source, CloseAction }) => {
     let ForceSolve: boolean = false;
     let actionContent;
-    let isNotOverlay: boolean  = false;
-     const { previousRoomId, setRoomId } = useGameContext();
-    const [isopen, setIsOpen] = React.useState(true);
+    let isNotOverlay: boolean = false;
+
+    const { previousRoomId, setRoomId, isActionOpen, setIsActionOpen } = useGameContext();
+
     const CloseActionForm = () => {
-        setIsOpen(false);
+        setIsActionOpen(false);
         CloseAction();
     };
-   
+
+    console.log(isActionOpen);
+
+    const handleGoBack = () => {
+        if (previousRoomId) {
+            console.log(`Navigating back to previous room: ${previousRoomId}`);
+            setIsActionOpen(false); // Close overlay first
+            
+            // Use effect to wait until overlay is closed
+            setTimeout(() => {
+                setRoomId(previousRoomId);
+                CloseAction(); // Ensure this runs after room change
+            }, 300); // Slight delay for UI update
+        }
+    };
 
     switch (action.actionTypeId) {
         case 1:
@@ -49,59 +64,37 @@ const ActionForm: React.FC<ActionComponentProps> = ({ action, source,  CloseActi
             break;
     }
 
-    let background: string = "";
-    if(isNotOverlay){
-        background = "rgba(0, 0, 0, 0.01)";
-    }
-    
-    const handleGoBack = () => {
-        if (previousRoomId) {
-          console.log(`Navigating back to previous room: ${previousRoomId}`);
-          CloseActionForm();
-          setRoomId(previousRoomId);
-          
-        }
-      };
-    const { preparedAction } = useContext(GameContext);
-      let overlayWidth = "60%";
+    let background: string = isNotOverlay ? "rgba(0, 0, 0, 0.01)" : "";
+
     return (
-       <> 
-            
-            <div className={`${styles.overlay} ${isopen ? styles.open : ""}`} style={{ width: overlayWidth, backgroundColor: background } } >
+        <> 
+            <div className={`${styles.overlay} ${isActionOpen ? styles.open : ""}`} style={{ width: "60%", backgroundColor: background }}>
                 <div className={styles.overlayContent}>
                     <h2>Sliding Overlay</h2>
-
-                        <p>asd</p>
-                        {actionContent}
-                        {JSON.stringify(action)}
+                    <p>asd</p>
+                    {actionContent}
+                    {JSON.stringify(action)}
 
                     {previousRoomId && (
                         <button onClick={handleGoBack} className={styles.goBackButton}>
-                        Go Back
+                            Go Back
                         </button>
                     )}
 
-            <h1>Action Form</h1>
-            
-                
-            {previousRoomId  && (
-                <button onClick={handleGoBack}>
-                Go Back
-                </button>
-            )}
+                    <h1>Action Form</h1>
+                    
+                    {previousRoomId && (
+                        <button onClick={handleGoBack}>
+                            Go Back
+                        </button>
+                    )}
 
-            {  (
-                <button onClick={CloseActionForm}>
-                close
-                </button>
-            )}
+                    <button onClick={CloseActionForm}>
+                        Close
+                    </button>
                 </div>
             </div>
-               
-            
-
         </>
     );
 };
-
 export default ActionForm;
