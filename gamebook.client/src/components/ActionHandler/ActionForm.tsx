@@ -4,6 +4,7 @@ import LockCombinationPuzzle from '../Minigames/LockPuzzle';
 import styles from "./ActionForm.module.css";
 // Assuming you have a context defined somewhere in your project
 import { GameContext, useGameContext } from '../../GameProvider';
+import DarkRoomDetails from '../Room/DarkRoomDetails';
 
 type ActionComponentProps = { 
     action: Action;
@@ -57,7 +58,7 @@ type ActionComponentProps = {
             break;
         case 3:
             isNotOverlay = true;
-            actionContent = <div>Unknown Action Type</div>;
+            actionContent = <DarkRoomDetails onExit={CloseActionForm}/>;
             break;
         default:
             actionContent = <div>Unknown Action Type</div>;

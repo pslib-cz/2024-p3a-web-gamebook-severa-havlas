@@ -27,7 +27,7 @@ interface NpcInteractionProps {
 }
 
 const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
-  const { setPreparedAction } = useGameContext();
+  const { setPreparedAction, setIsActionOpen } = useGameContext();
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [options, setOptions] = useState<Dialog[]>(npc.dialogs || []);
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,6 +54,8 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
     await fetchDialogOptions(nextDialog.dialogId);
   };
 
+  
+
   const renderActionComponent = (action: Action) => {
     switch (action.actionTypeId) {
       case 3:
@@ -62,6 +64,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
             <button
               onClick={() => {
                 console.log(`Preparing action: ${action.description}`);
+                setIsActionOpen(true);  // Open overlay when action is prepared
                 setPreparedAction({ action, source: "npc" });
               }}
             >

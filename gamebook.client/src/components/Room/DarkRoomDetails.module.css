@@ -1,0 +1,56 @@
+.container {
+    position: fixed;
+    inset: 0;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 100;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .description {
+    text-align: center;
+    margin-top: 8px;
+  }
+  
+  .exitButton {
+    margin-top: 16px;
+    padding: 8px 16px;
+    background-color: #444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .exitButton:hover {
+    background-color: #666;
+  }
+  
+  .text {
+    color: white;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  

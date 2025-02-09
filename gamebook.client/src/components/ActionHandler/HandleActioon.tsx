@@ -13,7 +13,7 @@ interface ActionHandlerProps {
 }
 
 const useHandleAction = () => {
-    const { setPreparedAction, setIsActionOpen } = useGameContext();
+   /* const { setPreparedAction, setIsActionOpen } = useGameContext();
 
     const triggerAction = (action: Action, source: string) => {
         
@@ -21,7 +21,7 @@ const useHandleAction = () => {
         setIsActionOpen(true);  // Open overlay when action is prepared
     };
 
-    return triggerAction;
+    return triggerAction;*/
 };
 
 export default useHandleAction;
