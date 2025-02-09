@@ -76,9 +76,13 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
         <div className={styles.actionsContainer}>
           <h2 className={styles.actionsTitle}>Actions</h2>
           <ul className={styles.actionsList}>
-            {room.triggerActions.map((action) => (
-              <li key={action.actionId} className={styles.actionItem}>{action.description}</li>
-            ))}
+          {room.imgUrl && (
+            <div  > 
+              <div className={styles.imageContainer}>
+                <img src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} className={styles.image} />
+              </div>
+            </div> 
+)}
           </ul>
         </div>
       )}
