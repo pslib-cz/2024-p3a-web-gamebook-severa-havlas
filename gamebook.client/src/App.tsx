@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./pages/Home";
 import Admin from "./pages/admin";
 import Page from "./pages/page";
-import Map from "./pages/Map";
 import MolekuleMapViewer from './components/Map/MapViewer';
 import GameProvider from "./GameProvider";
 
@@ -15,7 +14,6 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/Admin" element={<Admin />} />
           <Route path="/Page/:id" element={<Page />} />
-          <Route path="/Map" element={<Map />} />
           <Route path="/Page/:nodeId" element={<MolekuleMapViewer />} />
         </Routes>
       </GameProvider>

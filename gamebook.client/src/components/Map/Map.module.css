@@ -6,6 +6,7 @@
     border: 1px solid black;
     border-radius: 20px 0 0 20px;
     background-color: burlywood;
+    z-index: 1;
 }
 
 .image {
