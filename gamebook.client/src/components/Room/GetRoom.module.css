@@ -10,21 +10,17 @@
 }
 
 .connection {
-    position: fixed;
-    translate: -50% -50%;
+    display: none;
 }
 
-.connection:hover {
-    filter: brightness(2) contrast(2);
-}
 .description {
+    position: relative;
     display: flex;
     flex-direction: column;
     background-color: burlywood;
     border: 5px 0px 0px 0px solid black;
     width: 100%;
     overflow-y: auto;
-
 }
 
 li {
@@ -38,7 +34,17 @@ li {
 
     .image {
         position: sticky;
-        width: 100%;
+        width: auto;
         height: 100vh;
+    }
+
+    .connection {
+        display: block;
+        position: fixed;
+        translate: -50% -50%;
+    }
+    
+    .connection:hover {
+        filter: brightness(2) contrast(2);
     }
 }

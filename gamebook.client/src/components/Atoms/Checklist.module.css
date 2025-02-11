@@ -19,7 +19,6 @@
   }
   
   .checklistContent.expanded {
-      display: block;
       padding: 20px 0;
       position: absolute;
       top: 0;
@@ -27,6 +26,10 @@
       width: 100vw;
       height: 100vh;
       overflow-y: auto;
+  }
+
+  .checklistContent.expanded::-webkit-scrollbar {
+    display: none;
   }
   
   .checklistContent h2 {
@@ -70,6 +73,9 @@ select {
 
 @media (min-width: 768px) {
   .checklistContent.expanded {
-    width: calc(100vw - 100vh);
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
   }
 }

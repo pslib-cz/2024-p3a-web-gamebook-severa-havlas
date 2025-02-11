@@ -5,6 +5,9 @@ import { useGameContext } from "../../GameProvider";
 import { ApiBaseUrl } from "../../EnvFile";
 import Typewriter from "typewriter-effect";
 import ActionForm from "../ActionHandler/ActionForm";
+import TextEditor from "../Atoms/TextEditor";
+import Checklist from "../Atoms/Checklist";
+import Map from "../Map/Map";
 type Connection = {
   fromRoomId: number;
   toRoomId: number;
@@ -126,7 +129,6 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
     fetchRoom();
   }, [id]);
-let a;
   useEffect(() => {
     if (!id) return;
 
@@ -155,7 +157,7 @@ let a;
     };
 
     fetchConnections();
-  }, [a]); 
+  }, [id]); 
 
 
 
@@ -214,7 +216,7 @@ const closeAction = () => {
       <div className={`${styles.room} ${room.name === "Mapa" ? styles.map : ""}`}>
         <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
 
-        {room.name === "Mapa" && connections?.map((connection) =>
+        {connections?.map((connection) =>
           connection.imgUrl && connection.x && connection.y ? (
             <img
               key={connection.toRoomId}
@@ -259,6 +261,10 @@ const closeAction = () => {
               </li>
             ))}
           </ul>
+          
+          <Map />
+          <TextEditor />
+          <Checklist />
          
           <RoomContentViewer roomContent={roomContent} />
           {JSON.stringify(preparedAction)}
