@@ -48,3 +48,51 @@ li {
         filter: brightness(2) contrast(2);
     }
 }
+.roomContainer {
+    position: relative;
+  }
+  
+  .image {
+    width: 100vw;
+    aspect-ratio: 1 / 1;
+    position: relative; /* Ensures children are positioned relative to this */
+  }
+  
+  .connection {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .connection:hover {
+    filter: brightness(2) contrast(2);
+  }
+  
+  @media (min-width: 768px) {
+    .room {
+      flex-direction: row;
+    }
+  
+    .image {
+      width: auto;
+      height: 100vh;
+    }
+  
+    .connection {
+      display: block;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .connection {
+      width: 30px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .connection {
+      width: 20px;
+    }
+  }
+  

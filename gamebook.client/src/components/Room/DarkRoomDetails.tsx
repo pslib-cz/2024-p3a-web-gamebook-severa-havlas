@@ -69,25 +69,29 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{room.name || "Unknown Room"}</h1>
-      {room.imgUrl && <img src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} className={styles.image} />}
+
+      {room.imgUrl && (
+        <div className={styles.imageContainer}>
+          <img src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} className={styles.image} />
+        </div>
+      )}
+
       <p className={styles.description}>{room.text || "No description available."}</p>
-      
+
       {room.triggerActions.length > 0 && (
         <div className={styles.actionsContainer}>
           <h2 className={styles.actionsTitle}>Actions</h2>
           <ul className={styles.actionsList}>
-          {room.imgUrl && (
-            <div  > 
-              <div className={styles.imageContainer}>
-                <img src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} className={styles.image} />
-              </div>
-            </div> 
-)}
+            {room.triggerActions.map((action) => (
+              <li key={action.actionId}>{action.description}</li>
+            ))}
           </ul>
         </div>
       )}
 
-      <button onClick={onExit} className={styles.exitButton}>Exit</button>
+      <button onClick={onExit} className={styles.exitButton}>
+        Exit
+      </button>
     </div>
   );
 }

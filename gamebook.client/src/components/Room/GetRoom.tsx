@@ -8,6 +8,7 @@ import ActionForm from "../ActionHandler/ActionForm";
 import TextEditor from "../Atoms/TextEditor";
 import Checklist from "../Atoms/Checklist";
 import Map from "../Map/Map";
+import { console } from "inspector";
 type Connection = {
   fromRoomId: number;
   toRoomId: number;
@@ -214,23 +215,31 @@ const closeAction = () => {
       />}
 
       <div className={`${styles.room} ${room.name === "Mapa" ? styles.map : ""}`}>
-        <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
+      <div className={styles.roomContainer}>
+    <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
 
-        {connections?.map((connection) =>
-          connection.imgUrl && connection.x && connection.y ? (
-            <img
-              key={connection.toRoomId}
-              src={`${ApiBaseUrl}${connection.imgUrl}`}
-              alt="Connection image"
-              className={styles.connection}
-              style={{
-                left: `${connection.x / 10}%`,
-                top: `${connection.y / 10}%`,
-              }}
-              onClick={() => navigateToRoom(connection.toRoomId)}
-            />
-          ) : null
-        )}
+    {connections?.map(
+      (connection) =>
+        connection.imgUrl &&
+        connection.x !== null &&
+        connection.y !== null && (
+          <img
+            key={connection.toRoomId}
+            src={`${ApiBaseUrl}${connection.imgUrl}`}
+            alt="Connection"
+            className={styles.connection}
+            style={{
+              left: `${connection.x /10}%`,
+              
+              top: `${connection.y /10} %`,
+              width: `${Math.max(20, window.innerWidth * 0.1)}px`, // Scales based on screen size
+              height: "auto",
+            }}
+            onClick={() => navigateToRoom(connection.toRoomId)}
+          />
+        )
+    )}
+  </div>
 
         <div className={styles.description}>
           <h1>{room.name}</h1>

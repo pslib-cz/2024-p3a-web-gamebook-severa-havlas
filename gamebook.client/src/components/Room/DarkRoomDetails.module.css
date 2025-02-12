@@ -14,65 +14,64 @@
   z-index: 100;
   animation: fadeIn 1s ease-in-out;
 }
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
-  .title {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  .imageContainer {
-    width: 60%; /* Adjust width as needed */
-    max-width: 600px; /* Prevent it from becoming too large */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-radius: 8px; /* Optional: Rounded corners */
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.imageContainer {
+  width: 100%;
+  max-width: 1200px; /* Ensures the image doesn’t go beyond 1200px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
 .image {
-    width: 100%; 
-    height: auto; 
-    object-fit: cover; /* Ensures the image covers the container properly */
-    border-radius: 8px; /* Matches container */
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
 }
-  .image {
-    width: 100%;
-    height: auto;
+
+.description {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.exitButton {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: #444;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.exitButton:hover {
+  background-color: #666;
+}
+
+.text {
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .description {
-    text-align: center;
-    margin-top: 8px;
+  to {
+    opacity: 1;
   }
-  
-  .exitButton {
-    margin-top: 16px;
-    padding: 8px 16px;
-    background-color: #444;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .exitButton:hover {
-    background-color: #666;
-  }
-  
-  .text {
-    color: white;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
+}
