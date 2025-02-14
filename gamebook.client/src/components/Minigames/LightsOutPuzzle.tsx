@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styles from "./LightsOutPuzzle.module.css";
+import lightOn from "../../assets/lucerna_1.webp";
+import lightOff from "../../assets/lucerna.webp";
 
 interface LightsOutPuzzleProps {
   onPuzzleSolved?: () => void; // Callback function for when the puzzle is solved
@@ -49,8 +51,9 @@ const LightsOutPuzzle: React.FC<LightsOutPuzzleProps> = ({ onPuzzleSolved }) => 
       <div className={styles.grid} style={{ "--grid-size": gridSize } as React.CSSProperties}>
         {grid.map((row, rowIndex) =>
           row.map((isOn, colIndex) => (
-            <div 
+            <img 
             className={`${styles.cell} ${isOn ? styles.cellOn : ""}`} 
+            src={isOn ? lightOn : lightOff} alt="Light"
             key={`${rowIndex}-${colIndex}`} 
             onClick={() => toggleLight(rowIndex, colIndex)}
             />

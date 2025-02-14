@@ -55,7 +55,7 @@ li {
   .image {
     width: 100vw;
     aspect-ratio: 1 / 1;
-    position: relative; /* Ensures children are positioned relative to this */
+    /*position: relative; /* Ensures children are positioned relative to this */
   }
   
   .connection {

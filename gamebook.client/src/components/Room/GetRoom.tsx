@@ -8,7 +8,7 @@ import ActionForm from "../ActionHandler/ActionForm";
 import TextEditor from "../Atoms/TextEditor";
 import Checklist from "../Atoms/Checklist";
 import Map from "../Map/Map";
-import { console } from "inspector";
+
 type Connection = {
   fromRoomId: number;
   toRoomId: number;
@@ -16,10 +16,7 @@ type Connection = {
   y: number | null;
   imgUrl: string | null;
   state: boolean;
-  };
-
- 
-
+};
 
 type RoomDetailsInputProps = {
   id: string;
