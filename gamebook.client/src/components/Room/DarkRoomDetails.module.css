@@ -75,3 +75,16 @@ html, body {
     opacity: 1;
   }
 }
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fadeOut {
+  animation: fadeOut 1s ease-in-out forwards;
+}

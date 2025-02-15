@@ -140,7 +140,8 @@ namespace Gamebook.Server.Controllers
                         ip.ActionId,
                         ip.MiniGameData,
                         ip.Description,
-                        ip.ActionTypeId
+                        ip.ActionTypeId,
+                        ip.Dialogs
                     }),
 
                    
