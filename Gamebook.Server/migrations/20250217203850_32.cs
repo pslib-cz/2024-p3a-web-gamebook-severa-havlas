@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _31 : Migration
+    public partial class _32 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -224,6 +224,7 @@ namespace Gamebook.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     RoomId = table.Column<int>(type: "INTEGER", nullable: false),
                     ItemId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Size = table.Column<int>(type: "INTEGER", nullable: true),
                     X = table.Column<int>(type: "INTEGER", nullable: false),
                     Y = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -418,7 +419,7 @@ namespace Gamebook.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Role", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "12345", 0, "5bdf5eb0-be71-4a97-b2b5-32c11e3b1208", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", null, null, false, 1, "4e8a9961-695e-486d-9098-55eae9b92e7f", false, "admin@example.com" });
+                values: new object[] { "12345", 0, "ac90b5f1-63c0-4fa6-9028-2965e62448f5", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", null, null, false, 1, "082a13f5-947e-4013-8710-ab55c7dda88e", false, "admin@example.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

@@ -20,6 +20,7 @@ namespace Gamebook.Server.models
         public int ToRoomId { get; set; } // ToRoom reference
         public virtual Room ToRoom { get; set; }
 
+        public int? Size { get; set; } // Size of the connection 
         public int? X { get; set; } // X position
         public int? Y { get; set; } // Y position
 

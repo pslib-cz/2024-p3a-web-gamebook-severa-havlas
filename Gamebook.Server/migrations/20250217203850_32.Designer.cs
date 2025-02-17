@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20250216130235_31")]
-    partial class _31
+    [Migration("20250217203850_32")]
+    partial class _32
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -201,6 +201,9 @@ namespace Gamebook.Server.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("Size")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("X")
                         .HasColumnType("INTEGER");
 
@@ -379,7 +382,7 @@ namespace Gamebook.Server.Migrations
                         {
                             Id = "12345",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5bdf5eb0-be71-4a97-b2b5-32c11e3b1208",
+                            ConcurrencyStamp = "ac90b5f1-63c0-4fa6-9028-2965e62448f5",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -387,7 +390,7 @@ namespace Gamebook.Server.Migrations
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
                             PhoneNumberConfirmed = false,
                             Role = 1,
-                            SecurityStamp = "4e8a9961-695e-486d-9098-55eae9b92e7f",
+                            SecurityStamp = "082a13f5-947e-4013-8710-ab55c7dda88e",
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
                         });

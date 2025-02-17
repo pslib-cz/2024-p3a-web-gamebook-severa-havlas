@@ -17,6 +17,7 @@ namespace Gamebook.Server.models
         public int ItemId { get; set; }
         public virtual Item Item { get; set; } // Reverse navigation property
 
+        public int? Size { get; set; }
         public int X { get; set; } // X position
         public int Y { get; set; } // Y position
     }
