@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gamebook.Server.Migrations
 {
     [DbContext(typeof(GamebookDbContext))]
-    [Migration("20250217203850_32")]
-    partial class _32
+    [Migration("20250218185012_39")]
+    partial class _39
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,9 @@ namespace Gamebook.Server.Migrations
 
                     b.Property<byte[]>("Img")
                         .HasColumnType("BLOB");
+
+                    b.Property<int?>("Size")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ToRoomId")
                         .HasColumnType("INTEGER");
@@ -359,6 +362,9 @@ namespace Gamebook.Server.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("UserData")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -382,7 +388,7 @@ namespace Gamebook.Server.Migrations
                         {
                             Id = "12345",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ac90b5f1-63c0-4fa6-9028-2965e62448f5",
+                            ConcurrencyStamp = "eab28cd3-c732-43f7-ab7f-d1d94b02935a",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -390,7 +396,7 @@ namespace Gamebook.Server.Migrations
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
                             PhoneNumberConfirmed = false,
                             Role = 1,
-                            SecurityStamp = "082a13f5-947e-4013-8710-ab55c7dda88e",
+                            SecurityStamp = "72527783-a149-4767-9b63-2e7ee469b14a",
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
                         });

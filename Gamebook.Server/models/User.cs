@@ -10,7 +10,7 @@ namespace Gamebook.Server.models
 
     public class User : IdentityUser
     {
-       
+       public string? UserData { get; set; }
         public UserRole Role { get; set; } = UserRole.User;// "Admin" or "User"
     }
 }

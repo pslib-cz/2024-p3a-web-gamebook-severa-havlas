@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _32 : Migration
+    public partial class _39 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,6 +45,7 @@ namespace Gamebook.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    UserData = table.Column<string>(type: "TEXT", nullable: true),
                     Role = table.Column<int>(type: "INTEGER", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -195,6 +196,7 @@ namespace Gamebook.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FromRoomId = table.Column<int>(type: "INTEGER", nullable: false),
                     ToRoomId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Size = table.Column<int>(type: "INTEGER", nullable: true),
                     X = table.Column<int>(type: "INTEGER", nullable: true),
                     Y = table.Column<int>(type: "INTEGER", nullable: true),
                     Img = table.Column<byte[]>(type: "BLOB", nullable: true)
@@ -418,8 +420,8 @@ namespace Gamebook.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Role", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "12345", 0, "ac90b5f1-63c0-4fa6-9028-2965e62448f5", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", null, null, false, 1, "082a13f5-947e-4013-8710-ab55c7dda88e", false, "admin@example.com" });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Role", "SecurityStamp", "TwoFactorEnabled", "UserData", "UserName" },
+                values: new object[] { "12345", 0, "eab28cd3-c732-43f7-ab7f-d1d94b02935a", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", null, null, false, 1, "72527783-a149-4767-9b63-2e7ee469b14a", false, null, "admin@example.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
