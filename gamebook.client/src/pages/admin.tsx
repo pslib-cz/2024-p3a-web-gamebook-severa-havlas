@@ -33,7 +33,7 @@ const Admin = () => {
     }
 
     return (
-        <div>
+        <div className={styles.admin}>
             <nav className={styles.nav}>
                 <button className={activeComponent === 'Room' ? styles.active : ''} onClick={() => setActiveComponent('Room')}>Room</button>
                 <button className={activeComponent === 'Connection' ? styles.active : ''} onClick={() => setActiveComponent('Connection')}>Connection</button>

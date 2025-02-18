@@ -1497,3 +1497,4 @@ C:\Users\havla\source\Gamebook2\Gamebook.Server\obj\Debug\net8.0\Gamebook.Server
 C:\Users\havla\source\Gamebook2\Gamebook.Server\obj\Debug\net8.0\Gamebook.Server.genruntimeconfig.cache
 C:\Users\havla\source\Gamebook2\Gamebook.Server\obj\Debug\net8.0\ref\Gamebook.Server.dll
 C:\Users\havla\source\Gamebook2\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Tonda\Source\Repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

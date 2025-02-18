@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "8qgb8xCVLde4gArWMChqQBjhKXoD77Bt/rAERjy5RSg=",
+  "Hash": "Znn8rHYdPG2czl0x5PktHLoBhg8GuOBSEuB7o9/nYY4=",
   "Source": "Gamebook.Server",
   "BasePath": "_content/Gamebook.Server",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\havla\\source\\Gamebook2\\gamebook.client\\gamebook.client.esproj",
+      "Identity": "C:\\Users\\Tonda\\Source\\Repos\\2024-p3a-web-gamebook-severa-havlas\\gamebook.client\\gamebook.client.esproj",
       "Version": 2,
       "Source": "gamebook.client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
@@ -19,5 +19,6 @@
     }
   ],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

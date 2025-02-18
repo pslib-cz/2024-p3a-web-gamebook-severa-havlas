@@ -1,3 +1,7 @@
+.admin {
+    padding: 3rem;
+}
+
 .exit {
     color: white;
     text-decoration: none;
@@ -14,7 +18,7 @@
 
 .nav {
     display: flex;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
