@@ -1,10 +1,19 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from "./pages/Home";
 import Admin from "./pages/admin";
 import Page from "./pages/page";
+import Login from "./pages/Login";
 import MolekuleMapViewer from './components/Map/MapViewer';
-import GameProvider from "./GameProvider";
+
+import GameProvider, { useGameContext } from "./GameProvider";
+
+import { ReactNode } from 'react';
+
+const AdminRoute = ({ children }: { children: ReactNode }) => {
+  const { user } = useGameContext();
+  return user && user.role === "Admin" ? children : <Navigate to="/login" />;
+};
 
 const App = () => {
   return (
@@ -12,7 +21,8 @@ const App = () => {
       <GameProvider>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Admin" element={<Admin />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
           <Route path="/Page/:id" element={<Page />} />
           <Route path="/Page/:nodeId" element={<MolekuleMapViewer />} />
         </Routes>

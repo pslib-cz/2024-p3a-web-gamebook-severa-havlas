@@ -385,15 +385,16 @@ namespace Gamebook.Server.Migrations
                         {
                             Id = "12345",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eab28cd3-c732-43f7-ab7f-d1d94b02935a",
+                            ConcurrencyStamp = "a82374d7-4d0e-41a0-9cd7-bf0b25d949cf",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGGHe3stk18ZL+tE+Pe7E6TSFesEdg8BU2FoX31eMO5y2fsd8RUp6XTYhtIDMKVWFw==",
                             PhoneNumberConfirmed = false,
                             Role = 1,
-                            SecurityStamp = "72527783-a149-4767-9b63-2e7ee469b14a",
+                            SecurityStamp = "36b4e1af-0a39-4e85-9fad-b34088791b06",
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
                         });

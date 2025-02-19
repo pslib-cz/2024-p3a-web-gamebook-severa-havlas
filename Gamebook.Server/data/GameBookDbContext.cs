@@ -101,8 +101,9 @@ namespace Gamebook.Server.Data
                 NormalizedEmail = "ADMIN@EXAMPLE.COM",
                 EmailConfirmed = true
             };
+            var hasher = new PasswordHasher<User>();
+            adminUser.PasswordHash = hasher.HashPassword(adminUser, "Admin@123"); // Set admin password
 
-           
 
             modelBuilder.Entity<User>().HasData(adminUser);
 

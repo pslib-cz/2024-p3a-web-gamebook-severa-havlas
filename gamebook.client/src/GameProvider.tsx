@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import {ApiBaseUrl} from "./EnvFile";
 interface PlayerItem {
   itemId: number;
   itemName: string;
@@ -23,9 +23,7 @@ type GameContextType = {
   roomId: string | null;
   previousRoomId: string | null;
   setRoomId: (id: string | null) => void;
-  player: {
-    items: PlayerItem[];
-  };
+  player: { items: PlayerItem[] };
   setPlayerItems: (update: (prevItems: PlayerItem[]) => PlayerItem[]) => void;
   stamina: number;
   date: Date;
@@ -35,9 +33,14 @@ type GameContextType = {
   preparedAction: PreparedAction | null;
   setPreparedAction: (action: PreparedAction | null) => void;
 
-  // New state for managing overlay visibility
+  // Overlay visibility
   isActionOpen: boolean;
   setIsActionOpen: (open: boolean) => void;
+
+  // Authentication
+  user: { email: string; role: string } | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
 };
 
 export const GameContext = createContext<GameContextType>({
@@ -63,6 +66,11 @@ export const GameContext = createContext<GameContextType>({
 
   isActionOpen: false,
   setIsActionOpen: () => {},
+
+  // Authentication
+  user: null,
+  login: async () => {},
+  logout: () => {},
 });
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -72,19 +80,26 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [stamina, setStamina] = useState(100);
   const [date, setDate] = useState(new Date(1849, 1, 3));
   const [preparedAction, setPreparedAction] = useState<PreparedAction | null>(null);
-  
-  // New state for overlay visibility
+
   const [isActionOpen, setIsActionOpen] = useState(false);
 
+  // Authentication state
+  const [user, setUser] = useState<{ email: string; role: string } | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Load user from localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
+    // Auto-update roomId based on URL
     const pathParts = location.pathname.split("/");
     const newRoomId = pathParts[pathParts.length - 1];
 
     if (newRoomId !== roomId) {
-      console.log(`Changing room: previous=${roomId}, current=${newRoomId}`);
       setPreviousRoomId(roomId);
       setRoomIdState(newRoomId);
     }
@@ -103,6 +118,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const setPlayerItems = (update: (prevItems: PlayerItem[]) => PlayerItem[]) => {
     setPlayer((prev) => ({ ...prev, items: update(prev.items) }));
   };
+
   const serializeContext = () => {
     return JSON.stringify({
       roomId,
@@ -112,6 +128,48 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       date: date.toISOString(),
       preparedAction,
     });
+  };
+
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await fetch(`${ApiBaseUrl}/api/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Invalid credentials");
+      }
+
+      const data = await response.json();
+      const loggedInUser = {
+        email,
+        role: data.role, // Assuming API returns user role
+      };
+
+      setUser(loggedInUser);
+      localStorage.setItem("user", JSON.stringify(loggedInUser));
+
+      if (loggedInUser.role === "Admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("An unknown error occurred");
+      }
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    navigate("/");
   };
 
   return (
@@ -129,10 +187,13 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         serializeContext,
         preparedAction,
         setPreparedAction,
-
-        // New values
         isActionOpen,
         setIsActionOpen,
+
+        // Auth values
+        user,
+        login,
+        logout,
       }}
     >
       {children}

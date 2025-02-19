@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gamebook.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class _39 : Migration
+    public partial class _96 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -421,7 +421,7 @@ namespace Gamebook.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Role", "SecurityStamp", "TwoFactorEnabled", "UserData", "UserName" },
-                values: new object[] { "12345", 0, "eab28cd3-c732-43f7-ab7f-d1d94b02935a", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", null, null, false, 1, "72527783-a149-4767-9b63-2e7ee469b14a", false, null, "admin@example.com" });
+                values: new object[] { "12345", 0, "a82374d7-4d0e-41a0-9cd7-bf0b25d949cf", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEGGHe3stk18ZL+tE+Pe7E6TSFesEdg8BU2FoX31eMO5y2fsd8RUp6XTYhtIDMKVWFw==", null, false, 1, "36b4e1af-0a39-4e85-9fad-b34088791b06", false, null, "admin@example.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
