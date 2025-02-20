@@ -9,6 +9,7 @@ import MolekuleMapViewer from './components/Map/MapViewer';
 import GameProvider, { useGameContext } from "./GameProvider";
 
 import { ReactNode } from 'react';
+import Register from './pages/register';
 
 const AdminRoute = ({ children }: { children: ReactNode }) => {
   const { user } = useGameContext();
@@ -24,6 +25,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
           <Route path="/Page/:id" element={<Page />} />
           <Route path="/Page/:nodeId" element={<MolekuleMapViewer />} />

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Gamebook.Server.Controllers
 {
@@ -95,6 +96,47 @@ namespace Gamebook.Server.Controllers
             await _userManager.UpdateAsync(user);
 
             return Ok(new { Message = "User role updated successfully" });
+        }
+        [HttpPost("SaveData")]
+        public async Task<IActionResult> SaveData([FromBody] object userData)
+        {
+            if (userData == null)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized("User not found.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            user.UserData = userData.ToString();
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return StatusCode(500, "Error saving user data.");
+            }
+
+            return Ok("User data saved successfully.");
+        }
+        [HttpGet("GetData/{userId}")]
+        public async Task<IActionResult> GetData(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            return Ok(user.UserData);
         }
 
         public class RegisterUserDto

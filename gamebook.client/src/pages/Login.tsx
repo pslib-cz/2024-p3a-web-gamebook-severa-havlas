@@ -1,20 +1,24 @@
 import { useState } from "react";
-import { useGameContext } from "../GameProvider"; // Corrected import
+import { useGameContext } from "../GameProvider";
+// import user from "../GameProvider"; // Remove this line
 import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { login } = useGameContext(); // Use the correct context hook
+    const { login, user } = useGameContext();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             await login(email, password);
-            console.log("asd")
-             navigate("/admin")
+            if (user && user.role === "admin") {
+                navigate("/admin");
+            } else {
+                navigate("/dashboard");
+            }
         } catch (error) {
             console.error("Login failed:", error);
             alert("Invalid email or password");
@@ -22,8 +26,8 @@ const Login = () => {
     };
 
     return (
-        <div >
-            <h2>Admin Login</h2>
+        <div>
+            <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <input 
                     type="email" 

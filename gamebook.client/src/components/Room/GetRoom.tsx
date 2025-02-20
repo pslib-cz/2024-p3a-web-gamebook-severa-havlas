@@ -240,7 +240,7 @@ const closeAction = () => {
 
         <div className={styles.description}>
           <h1>{room.name}</h1>
-          <Typewriter options={{ strings: [room.text], autoStart: true, loop: false, delay: 75 }} />
+          <Typewriter options={{ strings: [room.text], autoStart: true, loop: true, delay: 50, cursor:"#" }} />
           <h2>Items</h2>
           <ul>
             {room.items.map((item) => (
