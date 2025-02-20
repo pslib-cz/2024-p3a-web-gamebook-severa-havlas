@@ -132,7 +132,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch(`${ApiBaseUrl}/api/users/login`, {
+      const response = await fetch(`${ApiBaseUrl}/api/User/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

@@ -57,11 +57,14 @@ namespace Gamebook.Server.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return Unauthorized("Invalid login attempt");
 
-            var result = await _signInManager.PasswordSignInAsync(user.UserName ?? string.Empty, model.Password, false, false); // Added null check
+            var result = await _signInManager.PasswordSignInAsync(user.UserName ?? string.Empty, model.Password, false, false);
 
             if (!result.Succeeded) return Unauthorized("Invalid login attempt");
 
-            return Ok(new { Message = "Login successful" });
+            // Include user role in the response
+            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();  // Assuming user only has one role
+
+            return Ok(new { Message = "Login successful", Role = role });
         }
 
         // GET: api/users

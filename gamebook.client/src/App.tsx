@@ -12,7 +12,9 @@ import { ReactNode } from 'react';
 
 const AdminRoute = ({ children }: { children: ReactNode }) => {
   const { user } = useGameContext();
+  console.log("User in AdminRoute:", user); // Check user in AdminRoute
   return user && user.role === "Admin" ? children : <Navigate to="/login" />;
+ 
 };
 
 const App = () => {

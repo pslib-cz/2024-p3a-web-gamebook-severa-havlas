@@ -1201,10 +1201,6 @@ C:\Users\Kuba\source\repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\o
 C:\Users\jakub.havlas.022\source\repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\havla\source\repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\Tonda\Source\Repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
-C:\Users\jakub.havlas.022\Source\Repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\bin\Debug\net8.0\Gamebook.Server.staticwebassets.endpoints.json
-C:\Users\jakub.havlas.022\Source\Repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\jakub.havlas.022\Source\Repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\obj\Debug\net8.0\staticwebassets\msbuild.Gamebook.Server.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-C:\Users\jakub.havlas.022\Source\Repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\havla\source\Gamebook2\Gamebook.Server\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\havla\source\Gamebook2\Gamebook.Server\bin\Debug\net8.0\appsettings.json
 C:\Users\havla\source\Gamebook2\Gamebook.Server\bin\Debug\net8.0\spa.proxy.json
@@ -1498,3 +1494,4 @@ C:\Users\havla\source\Gamebook2\Gamebook.Server\obj\Debug\net8.0\Gamebook.Server
 C:\Users\havla\source\Gamebook2\Gamebook.Server\obj\Debug\net8.0\ref\Gamebook.Server.dll
 C:\Users\havla\source\Gamebook2\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\Tonda\Source\Repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\jakub.havlas.022\Source\Repos\2024-p3a-web-gamebook-severa-havlas\Gamebook.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
