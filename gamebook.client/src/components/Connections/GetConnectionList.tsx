@@ -39,7 +39,7 @@ const ConnectionsList: React.FC = () => {
     <div>
       <h2>Connections</h2>
       {connections.length > 0 ? (
-        <table border={1}>
+        <table border={1} color="black">
           <thead>
             <tr>
               <th>Connection ID</th>

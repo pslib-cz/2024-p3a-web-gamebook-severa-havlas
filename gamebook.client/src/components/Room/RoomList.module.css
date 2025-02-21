@@ -1,0 +1,14 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8em;
+}
+
+.table tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table img {
+    height: 3em;
+    width: 3em;
+}

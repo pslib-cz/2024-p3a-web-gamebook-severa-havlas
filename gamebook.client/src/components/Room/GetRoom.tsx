@@ -3,7 +3,6 @@ import RoomContentViewer from "./GetRoomContent";
 import styles from "./GetRoom.module.css";
 import { useGameContext } from "../../GameProvider";
 import { ApiBaseUrl } from "../../EnvFile";
-import Typewriter from "typewriter-effect";
 import ActionForm from "../ActionHandler/ActionForm";
 import TextEditor from "../Atoms/TextEditor";
 import Checklist from "../Atoms/Checklist";
@@ -207,40 +206,36 @@ const closeAction = () => {
       <ActionForm 
         action={preparedAction.action} 
         source={preparedAction.source} 
-        
         CloseAction={closeAction} 
       />}
 
       <div className={`${styles.room} ${room.name === "Mapa" ? styles.map : ""}`}>
-      <div className={styles.roomContainer}>
-    <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
-
-    {connections?.map(
-      (connection) =>
-        connection.imgUrl &&
-        connection.x !== null &&
-        connection.y !== null && (
-          <img
-            key={connection.toRoomId}
-            src={`${ApiBaseUrl}${connection.imgUrl}`}
-            alt="Connection"
-            className={styles.connection}
-            style={{
-              left: `${connection.x /10}%`,
-              
-              top: `${connection.y /10} %`,
-              width: `${Math.max(20, window.innerWidth * 0.1)}px`, // Scales based on screen size
-              height: "auto",
-            }}
-            onClick={() => navigateToRoom(connection.toRoomId)}
-          />
-        )
-    )}
-  </div>
-
+        <div>
+          <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
+          {connections?.map(
+            (connection) =>
+            connection.imgUrl &&
+            connection.x !== null &&
+            connection.y !== null && (
+              <img
+                key={connection.toRoomId}
+                src={`${ApiBaseUrl}${connection.imgUrl}`}
+                alt="Connection"
+                className={styles.connection}
+                style={{
+                  left: `${connection.x /10}%`,
+                  top: `${connection.y /10} %`,
+                  width: `${Math.max(20, window.innerWidth * 0.1)}px`, // Scales based on screen size
+                  height: "auto",
+                }}
+                onClick={() => navigateToRoom(connection.toRoomId)}
+              />
+            )
+          )}
+        </div>
         <div className={styles.description}>
           <h1>{room.name}</h1>
-          <Typewriter options={{ strings: [room.text], autoStart: true, loop: true, delay: 50, cursor:"#" }} />
+          <p>{room.text}</p>
           <h2>Items</h2>
           <ul>
             {room.items.map((item) => (
@@ -254,9 +249,9 @@ const closeAction = () => {
           </div>
           <h2>Room Connections</h2>
           <ul>
-            {connections?.map((connection) => (
+            {connections?.map((connection) => 
+            (
               <li key={connection.toRoomId}>
-                <strong>To Room ID:</strong> {connection.toRoomId}
                 <button
                   onClick={() => navigateToRoom(connection.toRoomId)}
                   disabled={!connection.state}
@@ -275,7 +270,6 @@ const closeAction = () => {
           <RoomContentViewer roomContent={roomContent} />
           {JSON.stringify(preparedAction)}
         </div>
-        
       </div>
     </>
   );

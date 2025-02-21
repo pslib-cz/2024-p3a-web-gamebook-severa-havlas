@@ -1,5 +1,5 @@
 import RoomRequirementsForm from "../Requireds/PatchRequireds";
-import RoomList from "./GetRooms";
+import RoomList from "./RoomList";
 import UpdateRoomContentForm from "./PatchRoomContent";
 import CreateRoom from "./PostRoomForm";
 import PostItemPosition from "../ItemPosition/PostItemPosition";
