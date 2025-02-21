@@ -55,7 +55,6 @@ const RoomList: React.FC = () => {
                 <img
                   src={`${ApiBaseUrl}${room.imgUrl}`}
                   alt={room.name}
-                  width={200}
                 />
               </td>
               <td>{room.text}</td>

@@ -86,6 +86,7 @@ type Room = {
 
 const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageChange }) => {
    {console.log("Room")}
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [room, setRoom] = useState<Room | null>(null);
   const [connections, setConnections] = useState<Connection[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -156,6 +157,22 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
     fetchConnections();
   }, [id]); 
 
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await fetch(`${ApiBaseUrl}/api/Rooms`);
+        if (!response.ok) throw new Error("Failed to fetch rooms");
+  
+        const data: Room[] = await response.json();
+        setRooms(data);
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+      }
+    };
+  
+    fetchRooms();
+  }, []);
+  
 
 
 
@@ -248,20 +265,24 @@ const closeAction = () => {
             <p><strong>Date:</strong> {date.toDateString()}</p>
           </div>
           <h2>Room Connections</h2>
-          <ul>
-            {connections?.map((connection) => 
-            (
+          <ul className={styles.connections}>
+          {connections?.map((connection) => {
+            const targetRoom = rooms.find((r) => r.roomId === connection.toRoomId);
+
+            return (
               <li key={connection.toRoomId}>
                 <button
                   onClick={() => navigateToRoom(connection.toRoomId)}
                   disabled={!connection.state}
                   title={!connection.state ? "You need certain items to unlock this room." : ""}
                 >
-                  Go to Room {connection.toRoomId}
+                  Prozkoumat {targetRoom ? targetRoom.name : `Room ${connection.toRoomId}`}
                 </button>
               </li>
-            ))}
+            );
+            })}
           </ul>
+
           
           <Map />
           <TextEditor />
