@@ -47,7 +47,7 @@ h3 {
 }
 
 .button {
-    color: rgb(101, 67, 33);
+    color: var(--brown);
     background-color: rgb(210, 180, 140);
     text-decoration: none;
     font-size: 1rem;
