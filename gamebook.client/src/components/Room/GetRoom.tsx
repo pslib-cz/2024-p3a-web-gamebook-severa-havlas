@@ -227,7 +227,7 @@ const closeAction = () => {
       />}
 
       <div className={`${styles.room} ${room.name === "Mapa" ? styles.map : ""}`}>
-        <div>
+        <div className={styles.imageContainer}>
           <img className={styles.image} src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} />
           {connections?.map(
             (connection) =>
@@ -272,6 +272,7 @@ const closeAction = () => {
             return (
               <li key={connection.toRoomId}>
                 <button
+                  className={styles.connectionButton}
                   onClick={() => navigateToRoom(connection.toRoomId)}
                   disabled={!connection.state}
                   title={!connection.state ? "You need certain items to unlock this room." : ""}
@@ -282,14 +283,13 @@ const closeAction = () => {
             );
             })}
           </ul>
-
-          
-          <Map />
-          <TextEditor />
-          <Checklist />
-         
           <RoomContentViewer roomContent={roomContent} />
           {JSON.stringify(preparedAction)}
+        </div>
+        <TextEditor />       
+        <Checklist />
+        <div className={room.name === "Mapa" ? styles.mapButton : ""}>
+          <Map />
         </div>
       </div>
     </>
