@@ -44,6 +44,7 @@ interface GameContextType {
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     saveUserData: () => Promise<void>;
+    getUserData: (userId: string) => Promise<void>;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -157,9 +158,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             preparedAction,
             isActionOpen,
         };
-
+        console.log("Saving user data:", userData);
         try {
-            const response = await fetch(`${ApiBaseUrl}/api/User/SaveData`, {
+            const response = await fetch(`${ApiBaseUrl}/api/User/${user.email}/SaveData`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -174,6 +175,31 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.log("User data saved successfully.");
         } catch (error) {
             console.error("Error saving user data:", error);
+        }
+    };
+
+    const getUserData = async (userEmail: string) => {
+        try {
+            const response = await fetch(`${ApiBaseUrl}/api/User/GetData/${userEmail}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch user data");
+            }
+    
+            const data = await response.json(); // This is already a parsed object
+            console.log("Fetched user data:", data);
+    
+            setRoomIdState(data.roomId);
+            console.log("data.roomId", data.previousRoomId);
+            setPreviousRoomId(data.previousRoomId);
+            setPlayer(data.player);
+            setStamina(data.stamina);
+            setDate(new Date(data.date));
+            setPreparedAction(data.preparedAction);
+            setIsActionOpen(data.isActionOpen);
+
+            navigate(`/Page/${data.previousRoomId}`, { replace: true });
+        } catch (error) {
+            console.error("Error fetching user data:", error);
         }
     };
 
@@ -197,11 +223,13 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             login,
             logout,
             saveUserData,
+            getUserData,
         }}>
             {children}
         </GameContext.Provider>
     );
 };
+
 
 export const useGameContext = (): GameContextType => {
     const context = useContext(GameContext);

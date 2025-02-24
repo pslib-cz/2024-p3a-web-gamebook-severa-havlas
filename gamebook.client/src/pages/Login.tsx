@@ -7,17 +7,20 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { login, user } = useGameContext();
+    const { login, user, getUserData , previousRoomId} = useGameContext();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         try {
             await login(email, password);
             if (user && user.role === "admin") {
                 navigate("/admin");
             } else {
-                navigate("/dashboard");
+
+                await getUserData(user?.email || "");
+                
             }
         } catch (error) {
             console.error("Login failed:", error);

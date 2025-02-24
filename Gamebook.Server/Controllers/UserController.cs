@@ -70,7 +70,7 @@ namespace Gamebook.Server.Controllers
 
         // GET: api/users
         [HttpGet]
-        [Authorize(Roles = "Admin")] // Only Admins can access this
+        
         public IActionResult GetUsers()
         {
             var users = _userManager.Users.Select(u => new { u.Id, u.UserName, u.Email, u.Role }).ToList();
@@ -97,21 +97,15 @@ namespace Gamebook.Server.Controllers
 
             return Ok(new { Message = "User role updated successfully" });
         }
-        [HttpPost("SaveData")]
-        public async Task<IActionResult> SaveData([FromBody] object userData)
+        [HttpPost("{userEmail}/SaveData")]
+        public async Task<IActionResult> SaveData(string userEmail, [FromBody] object userData)
         {
             if (userData == null)
             {
                 return BadRequest("Invalid data.");
             }
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                return Unauthorized("User not found.");
-            }
-
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
                 return NotFound("User not found.");
@@ -127,10 +121,11 @@ namespace Gamebook.Server.Controllers
 
             return Ok("User data saved successfully.");
         }
-        [HttpGet("GetData/{userId}")]
-        public async Task<IActionResult> GetData(string userId)
+
+        [HttpGet("GetData/{userEmail}")]
+        public async Task<IActionResult> GetData(string userEmail)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
                 return NotFound("User not found.");

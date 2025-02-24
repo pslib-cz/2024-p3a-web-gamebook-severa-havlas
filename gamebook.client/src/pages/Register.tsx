@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiBaseUrl } from "../EnvFile";
-
+import { useGameContext } from "../GameProvider";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
+const { saveUserData } = useGameContext();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
-
+    saveUserData();
     try {
       const response = await fetch(`${ApiBaseUrl}/api/User/register`, {
         method: "POST",
