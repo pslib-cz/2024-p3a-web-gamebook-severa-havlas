@@ -45,6 +45,9 @@ interface GameContextType {
     logout: () => void;
     saveUserData: () => Promise<void>;
     getUserData: (userId: string) => Promise<void>;
+    NoteBookValue: string;
+    setNoteBookValue: (value: string) => void;
+
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -58,6 +61,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [preparedAction, setPreparedAction] = useState<PreparedAction | null>(null);
     const [isActionOpen, setIsActionOpen] = useState(false);
     const [user, setUser] = useState<User | null>(null);
+    const [NoteBookValue, setNoteBookValue] = useState("");
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -157,6 +161,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             date,
             preparedAction,
             isActionOpen,
+            NoteBookValue,
         };
         console.log("Saving user data:", userData);
         try {
@@ -196,7 +201,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setDate(new Date(data.date));
             setPreparedAction(data.preparedAction);
             setIsActionOpen(data.isActionOpen);
-
+            setNoteBookValue(data.NoteBookValue);
             navigate(`/Page/${data.previousRoomId}`, { replace: true });
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -224,6 +229,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             logout,
             saveUserData,
             getUserData,
+            NoteBookValue,
+            setNoteBookValue,
         }}>
             {children}
         </GameContext.Provider>

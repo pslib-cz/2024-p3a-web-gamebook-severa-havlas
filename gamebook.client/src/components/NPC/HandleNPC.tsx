@@ -58,7 +58,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
 
   const renderActionComponent = (action: Action) => {
     switch (action.actionTypeId) {
-      case 3:
+      case 4:
         return (
           <div>
             <button

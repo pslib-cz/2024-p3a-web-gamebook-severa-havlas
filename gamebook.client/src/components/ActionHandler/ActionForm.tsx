@@ -3,9 +3,9 @@ import LightsOutPuzzle from '../Minigames/LightsOutPuzzle';
 import LockCombinationPuzzle from '../Minigames/LockPuzzle';
 import styles from "./ActionForm.module.css";
 // Assuming you have a context defined somewhere in your project
-import { GameContext, useGameContext } from '../../GameProvider';
+import {  useGameContext } from '../../GameProvider';
 import DarkRoomDetails from '../Room/DarkRoomDetails';
-
+import Shop from '../Action/ShopAction';
 type ActionComponentProps = { 
     action: Action;
     source: string;
@@ -49,16 +49,26 @@ type ActionComponentProps = {
 
     switch (action.actionTypeId) {
         case 1:
-            ForceSolve = true;
-            actionContent = <LockCombinationPuzzle MinigameData={action.miniGameData} onPuzzleSolved={CloseActionForm} />;
+            //dialog action
             break;
         case 2:
             ForceSolve = true;
-            actionContent = <LightsOutPuzzle onPuzzleSolved={CloseActionForm} />;
+            actionContent = <LockCombinationPuzzle MinigameData={action.miniGameData} onPuzzleSolved={CloseActionForm} />;
             break;
         case 3:
+            ForceSolve = true;
+            actionContent = <LightsOutPuzzle onPuzzleSolved={CloseActionForm} />;
+            break;
+        case 4:
             isNotOverlay = true;
             actionContent = <DarkRoomDetails onExit={CloseActionForm}/>;
+            break;
+
+        case 5:
+            //Insopect Action
+            break;
+        case 6:
+            actionContent = <Shop/>;
             break;
         default:
             actionContent = <div>Unknown Action Type</div>;

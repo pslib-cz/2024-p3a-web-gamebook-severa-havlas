@@ -7,6 +7,7 @@ import ActionForm from "../ActionHandler/ActionForm";
 import TextEditor from "../Atoms/TextEditor";
 import Checklist from "../Atoms/Checklist";
 import Map from "../Map/Map";
+import { set } from "react-hook-form";
 
 type Connection = {
   fromRoomId: number;
@@ -178,8 +179,16 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
 
 
   const navigateToRoom = (toRoomId: number) => {
-    setStamina(stamina - 10);
+    if (stamina < 10) {
+   
+      setRoomId("1");
+
+    }else{
+
+     
     setRoomId(String(toRoomId));
+    }
+    setStamina(stamina - 10);
   };
 
   if (loading) return <div>Loading...</div>;

@@ -22,11 +22,25 @@ namespace Gamebook.Server.Controllers
             _context = context;
         }
 
-        // GET: api/Items
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        public async Task<ActionResult<IEnumerable<ItemDto>>> GetItems()
         {
-            return await _context.Items.ToListAsync();
+            var items = await _context.Items.ToListAsync();
+
+            var itemDtos = items.Select(item => new ItemDto
+            {
+                ItemId = item.ItemId,
+                Name = item.Name,
+                Description = item.Description,
+                ImgUrl = $"/api/rooms/{item.ItemId}/image",
+                Target = item.Target,
+                Price = item.Price
+            }).ToList();
+
+            return Ok(itemDtos);
+
+
+        
         }
 
         // GET: api/Items/5
@@ -53,6 +67,7 @@ namespace Gamebook.Server.Controllers
 
             return itemDto;
         }
+
         public class ItemDto
         {
             public int ItemId { get; set; }
@@ -64,17 +79,62 @@ namespace Gamebook.Server.Controllers
         }
         public class ItemCreateDto
         {
-            
             public string Name { get; set; }
-
-            
             public string Description { get; set; }
-
-            
             public int GameBookActionId { get; set; } // Mandatory foreign key
-
             public int? Target { get; set; } // Nullable field
+            public int? Price { get; set; } // Nullable price field
         }
+        [HttpPost("bulk")]
+        public async Task<IActionResult> CreateItemsBulk([FromBody] List<ItemCreateDto> itemDtos)
+        {
+            if (itemDtos == null || itemDtos.Count == 0)
+            {
+                return BadRequest("The request body cannot be empty.");
+            }
+
+            var invalidItems = new List<object>();
+            var itemsToAdd = new List<Item>();
+
+            foreach (var itemDto in itemDtos)
+            {
+                if (!ModelState.IsValid)
+                {
+                    invalidItems.Add(new { itemDto, Error = "Invalid model state" });
+                    continue;
+                }
+
+                var gameBookAction = await _context.Actions.FindAsync(itemDto.GameBookActionId);
+                if (gameBookAction == null)
+                {
+                    invalidItems.Add(new { itemDto, Error = $"GameBookAction with ID {itemDto.GameBookActionId} not found." });
+                    continue;
+                }
+
+                itemsToAdd.Add(new Item
+                {
+                    Name = itemDto.Name,
+                    Description = itemDto.Description,
+                    GameBookActionId = itemDto.GameBookActionId,
+                    Target = itemDto.Target,
+                    Price = itemDto.Price
+                });
+            }
+
+            if (itemsToAdd.Count > 0)
+            {
+                await _context.Items.AddRangeAsync(itemsToAdd);
+                await _context.SaveChangesAsync();
+            }
+
+            if (invalidItems.Count > 0)
+            {
+                return BadRequest(new { Message = "Some items were not created", InvalidItems = invalidItems });
+            }
+
+            return Ok(new { Message = $"{itemsToAdd.Count} items created successfully" });
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItem(int id, Item item)

@@ -43,7 +43,7 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
   const [exitVisible, setExitVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch(`${ApiBaseUrl}/api/Rooms/4`)
+    fetch(`${ApiBaseUrl}/api/Rooms/29`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch room data");
