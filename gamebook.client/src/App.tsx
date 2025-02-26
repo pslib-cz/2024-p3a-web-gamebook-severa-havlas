@@ -9,7 +9,7 @@ import MolekuleMapViewer from './components/Map/MapViewer';
 import GameProvider, { useGameContext } from "./GameProvider";
 
 import { ReactNode } from 'react';
-import Register from './pages/Register';
+import Register from './pages/register';
 
 const AdminRoute = ({ children }: { children: ReactNode }) => {
   const { user } = useGameContext();

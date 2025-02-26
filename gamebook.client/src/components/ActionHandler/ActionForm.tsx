@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import LightsOutPuzzle from '../Minigames/LightsOutPuzzle';
 import LockCombinationPuzzle from '../Minigames/LockPuzzle';
 import styles from "./ActionForm.module.css";
@@ -6,6 +6,8 @@ import styles from "./ActionForm.module.css";
 import {  useGameContext } from '../../GameProvider';
 import DarkRoomDetails from '../Room/DarkRoomDetails';
 import Shop from '../Action/ShopAction';
+import { use } from 'framer-motion/client';
+import TexasHoldEm from '../Action/Poker';
 type ActionComponentProps = { 
     action: Action;
     source: string;
@@ -32,8 +34,9 @@ type ActionComponentProps = {
         CloseAction();
     };
 
-    console.log(isActionOpen);
+ 
 
+    
     const handleGoBack = () => {
         if (previousRoomId) {
             console.log(`Navigating back to previous room: ${previousRoomId}`);
@@ -53,15 +56,18 @@ type ActionComponentProps = {
             break;
         case 2:
             ForceSolve = true;
-            actionContent = <LockCombinationPuzzle MinigameData={action.miniGameData} onPuzzleSolved={CloseActionForm} />;
+            if (isActionOpen) {
+            actionContent = <LockCombinationPuzzle MinigameData={action.miniGameData} onPuzzleSolved={CloseActionForm} />;}
             break;
         case 3:
             ForceSolve = true;
-            actionContent = <LightsOutPuzzle onPuzzleSolved={CloseActionForm} />;
+            if (isActionOpen) {
+            actionContent = <LightsOutPuzzle onPuzzleSolved={CloseActionForm} />;}
             break;
         case 4:
             isNotOverlay = true;
-            actionContent = <DarkRoomDetails onExit={CloseActionForm}/>;
+            if (isActionOpen) {
+                actionContent = <DarkRoomDetails onExit={CloseActionForm}/>;}
             break;
 
         case 5:
@@ -70,6 +76,17 @@ type ActionComponentProps = {
         case 6:
             actionContent = <Shop/>;
             break;
+            case 7:
+                if(isActionOpen){
+                    actionContent = <TexasHoldEm/>;
+                }
+            break;
+         
+            case 8:
+                //heal
+            break;
+            
+              
         default:
             actionContent = <div>Unknown Action Type</div>;
             break;

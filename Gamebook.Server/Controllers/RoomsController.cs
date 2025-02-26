@@ -159,7 +159,59 @@ namespace Gamebook.Server.Controllers
 
 
 
+        [HttpGet("shortest-path")]
+        public async Task<IActionResult> GetShortestPath(int currentRoomId, int targetRoomId)
+        {
+            var rooms = await _context.Rooms.Include(r => r.ConnectionsFrom).Include(r => r.ConnectionsTo).ToListAsync();
+            var connections = await _context.Connections.ToListAsync();
 
+            var graph = new Dictionary<int, List<int>>();
+
+            foreach (var room in rooms)
+            {
+                graph[room.RoomId] = new List<int>();
+                foreach (var conn in room.ConnectionsFrom)
+                {
+                    graph[room.RoomId].Add(conn.ToRoomId);
+                }
+                foreach (var conn in room.ConnectionsTo)
+                {
+                    graph[room.RoomId].Add(conn.FromRoomId);
+                }
+            }
+
+            var path = FindShortestPath(graph, currentRoomId, targetRoomId);
+            return path != null ? Ok(path) : NotFound("No path found");
+        }
+
+        private List<int> FindShortestPath(Dictionary<int, List<int>> graph, int start, int target)
+        {
+            var queue = new Queue<List<int>>();
+            queue.Enqueue(new List<int> { start });
+            var visited = new HashSet<int> { start };
+
+            while (queue.Count > 0)
+            {
+                var path = queue.Dequeue();
+                var lastNode = path.Last();
+
+                if (lastNode == target)
+                {
+                    return path;
+                }
+
+                foreach (var neighbor in graph[lastNode])
+                {
+                    if (!visited.Contains(neighbor))
+                    {
+                        var newPath = new List<int>(path) { neighbor };
+                        queue.Enqueue(newPath);
+                        visited.Add(neighbor);
+                    }
+                }
+            }
+            return null;
+        }
 
 
         [HttpPost]

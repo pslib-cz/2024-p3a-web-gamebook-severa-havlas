@@ -57,8 +57,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   
 
   const renderActionComponent = (action: Action) => {
-    switch (action.actionTypeId) {
-      case 4:
+   
         return (
           <div>
             <button
@@ -72,9 +71,8 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
             </button>
           </div>
         );
-      default:
-        return <p>Unknown action type: {action.actionTypeId}</p>;
-    }
+   
+    
   };
   
 

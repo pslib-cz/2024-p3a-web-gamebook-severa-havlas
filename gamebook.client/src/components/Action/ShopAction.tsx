@@ -44,6 +44,7 @@ const Shop: React.FC = () => {
             <div key={item.itemId} style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "8px", textAlign: "center" }}>
               <img src={`${ApiBaseUrl}${item.imgUrl}`} alt={item.name} style={{ width: "100px", height: "100px", objectFit: "cover" }} />
               <h3>{item.name}</h3>
+              
               <p>{item.description}</p>
               <p><strong>Price: {item.price} Gold</strong></p>
               <button style={{ padding: "5px 10px", cursor: "pointer", background: "green", color: "white", border: "none", borderRadius: "5px" }}>
