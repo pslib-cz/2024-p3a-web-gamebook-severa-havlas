@@ -7,6 +7,7 @@
   color: rgba(0, 0, 0, 0.87);
   background-color: #242424;
   --brown: rgb(101, 67, 33);
+  --transparent-brown: rgba(101, 67, 33, 0.75);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

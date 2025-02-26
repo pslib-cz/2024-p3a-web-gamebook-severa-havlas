@@ -1,0 +1,16 @@
+.imageNPC {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+}
+
+@media (min-width: 768px) {
+   .imageNPC {
+    position: fixed;
+    top: auto;
+    left: 0;
+    bottom: 0;
+    width: 300px;
+    } 
+}

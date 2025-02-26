@@ -1,31 +1,28 @@
 body, html {
     margin: 0;
     padding: 0;
-    
 }
 
 .body {
-    background-image: url('../assets//Home_mobile.jpg');
+    display: flex;
+    flex-direction: column;
+    background-image: url('../assets//Home_mobile_darker.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    height: 100vh;
     background-position: center;
-    width: 100%;
     justify-content: center;
 }
 
-h1 {
+.h1 {
     color: white;
-    -webkit-text-stroke: .025em black;
-    font-size: 9vw;
+    font-size: 3.5em;
     margin: 0;
     padding: 1rem;
 }
 
-h3 {
+.h3 {
     color: white;
-    -webkit-text-stroke: .035em black;
-    font-size: 4vw;
+    font-size: 1.5em;
     margin: 0;
     padding: 1rem;
 }
@@ -55,7 +52,7 @@ h3 {
     padding: .5rem;
     border: 2px solid rgb(101, 67, 33);
     border-radius: 10px;
-    margin: 1rem;
+    margin: .5rem;
 }
 
 .button:hover {
@@ -63,17 +60,19 @@ h3 {
     color: rgb(210, 180, 140);
 }
 
+.navigation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 
 @media (min-width: 768px) {
     .body {
-        background-image: url('../assets/Home_desktop.jpg');
+        background-image: url('../assets/Home_desktop_darker.jpg');
     }
 
-    h1 {
-        font-size: 4vw;
-    }
-
-    h3 {
-        font-size: 1.5vw;
+    .h1 {
+        font-size: 5em;
     }
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useGameContext } from "../../GameProvider";
 import NpcInteraction from "../NPC/HandleNPC";
 import { ApiBaseUrl } from "../../EnvFile";
+import styles from "./GetRoomContent.module.css"
 
 type RoomContentViewerProps = {
   roomContent: {
@@ -106,7 +107,7 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
               {roomContent.npCs.map((npc) => (
                 <li key={npc.npcId}>
                   {npc.npcId} - {npc.name}
-                  <img src={`${ApiBaseUrl}/api/NPCs/${npc.npcId}/image`} alt={npc.name} />
+                  <img className={styles.imageNPC} src={`${ApiBaseUrl}/api/NPCs/${npc.npcId}/image`} alt={npc.name} />
                   <div style={{ marginTop: "10px" }}>
                     <NpcInteraction npc={npc} />
                   </div>
