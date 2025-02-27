@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import styles from './ActionType4Shop.module.css';
 
 interface Item {
     id: number;
@@ -36,7 +37,7 @@ const ActionType4Shop: React.FC = () => {
     }
 
     return (
-        <div>
+        <div className={styles.container}>
             <h1>Shop Items</h1>
             <ul>
                 {items.map(item => (

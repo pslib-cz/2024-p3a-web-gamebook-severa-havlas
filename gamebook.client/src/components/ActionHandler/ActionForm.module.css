@@ -3,22 +3,20 @@
     top: 0;
     left: 0;
     height: 100%;
+    aspect-ratio: 1 / 1;
     background-color: rgb(50, 13, 117);
     color: white;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
     z-index: 50; /* Ensures it appears above other elements */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Add a shadow for depth */
+    overflow-y: auto;
   }
   
   .overlay.open {
     transform: translateX(0); /* Slide into view */
   }
   
-  /* Other styles (unchanged) */
-  .overlayContent {
-    padding: 20px;
-  }
   
   .backdrop {
     position: fixed;
@@ -40,7 +38,10 @@
     font-size: 16px;
   }
   
-  .close-button {
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    left: 10px;
     padding: 10px 20px;
     background-color: #e53e3e; /* Red */
     color: white;

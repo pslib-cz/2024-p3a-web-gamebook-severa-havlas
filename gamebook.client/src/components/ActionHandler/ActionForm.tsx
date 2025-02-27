@@ -96,7 +96,7 @@ type ActionComponentProps = {
 
     return (
         <> 
-            <div className={`${styles.overlay} ${isActionOpen ? styles.open : ""}`} style={{ width: "60%", backgroundColor: background }}>
+            <div className={`${styles.overlay} ${isActionOpen ? styles.open : ""}`}>
                 <div className={styles.overlayContent}>
                     <h2>Sliding Overlay</h2>
                     <p>asd</p>
@@ -117,7 +117,7 @@ type ActionComponentProps = {
                         </button>
                     )}
 
-                    <button onClick={CloseActionForm}>
+                    <button className={styles.closeButton} onClick={CloseActionForm}>
                         Close
                     </button>
                 </div>

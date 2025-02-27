@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ApiBaseUrl } from "../../EnvFile";
 import { useGameContext } from "../../GameProvider";
 import { Item } from "../../types/types2";
+import styles from "./ShopAction.module.css";
 
 
 const Shop: React.FC = () => {
@@ -48,7 +49,7 @@ const HandleBuy = (e: Item) => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className={styles.container}>
       <h2>Shop</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
         {items.length > 0 ? (
