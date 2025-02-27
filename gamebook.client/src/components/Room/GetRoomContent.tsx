@@ -3,8 +3,8 @@ import { useGameContext } from "../../GameProvider";
 import NpcInteraction from "../NPC/HandleNPC";
 import { ApiBaseUrl } from "../../EnvFile";
 import styles from "./GetRoomContent.module.css"
-
-type RoomContentViewerProps = {
+import { Item, Room } from "../../types/types2";
+export type RoomContentViewerProps = {
   roomContent: {
     npCs: {
       npcId: number;
@@ -38,11 +38,7 @@ type RoomContentViewerProps = {
   };
 };
 
-type PlayerItem = {
-  itemId: number;
-  itemName: string;
-  quantity: number;
-};
+
 
 const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) => {
   const { setPlayerItems, setPreparedAction, setIsActionOpen } = useGameContext();
@@ -72,13 +68,13 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
   }, [roomContent.triggerActions, hasTriggeredAction, triggerAction]);
 
   const handlePickUpItem = (itemId: number, itemName: string) => {
-    setPlayerItems((prevItems: PlayerItem[]) => {
+    setPlayerItems((prevItems: Item[]) => {
       const itemIndex = prevItems.findIndex((item) => item.itemId === itemId);
       if (itemIndex >= 0) {
         const updatedItems = [...prevItems];
         updatedItems[itemIndex] = {
           ...updatedItems[itemIndex],
-          quantity: updatedItems[itemIndex].quantity + 1,
+          quantity: (updatedItems[itemIndex].quantity ?? 0) + 1,
         };
         return updatedItems;
       } else {
@@ -86,7 +82,8 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
           ...prevItems,
           {
             itemId,
-            itemName,
+            name: itemName,
+            description: "", // Add a default description or fetch it if available
             quantity: 1,
           },
         ];

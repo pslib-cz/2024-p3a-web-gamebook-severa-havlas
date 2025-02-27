@@ -6,21 +6,16 @@ import styles from "./ActionForm.module.css";
 import {  useGameContext } from '../../GameProvider';
 import DarkRoomDetails from '../Room/DarkRoomDetails';
 import Shop from '../Action/ShopAction';
-import { use } from 'framer-motion/client';
+import { GameBookAction } from '../../types/types2';
 import TexasHoldEm from '../Action/Poker';
 type ActionComponentProps = { 
-    action: Action;
+    action: GameBookAction;
     source: string;
   
     CloseAction(): void;
   }
   
-  interface Action {
-    actionId: number;
-    description: string;
-    miniGameData: string;
-    actionTypeId: number;
-  }
+ 
 
   const ActionForm: React.FC<ActionComponentProps> = ({ action, source, CloseAction }) => {
     let ForceSolve: boolean = false;

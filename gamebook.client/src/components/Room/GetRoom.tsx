@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import RoomContentViewer from "./GetRoomContent";
+import RoomContentViewer, {RoomContentViewerProps} from "./GetRoomContent";
 import styles from "./GetRoom.module.css";
 import { useGameContext } from "../../GameProvider";
 import { ApiBaseUrl } from "../../EnvFile";
@@ -9,82 +9,17 @@ import Checklist from "../Atoms/Checklist";
 import Map from "../Map/Map";
 import { set } from "react-hook-form";
 import PlayerStats from "../Atoms/PlayerStats";
+import { Connection, Room } from "../../types/types2";
 
-type Connection = {
-  fromRoomId: number;
-  toRoomId: number;
-  x: number | null;
-  y: number | null;
-  imgUrl: string | null;
-  state: boolean;
-};
 
 type RoomDetailsInputProps = {
   id: string;
   onBackgroundImageChange?: (imageUrl: string) => void;
 };
 
-type RoomContentViewerProps = {
-  roomContent: {
-    npCs: {
-      npcId: number;
-      name: string;
-      dialogs: { dialogId: number; text: string }[];
-      action: { actionId: number; description: string; actionTypeId: number; miniGameData: string } | null;
-    }[];
-    items: {
-      itemPositionId: number;
-      roomId: number;
-      x: number;
-      y: number;
-      itemId: number;
-      item: {
-        itemId: number;
-        name: string;
-        description: string;
-      } | null;
-    }[];
-    triggerActions: {
-      actionId: number;
-      description: string;
-      miniGameData: string;
-      actionTypeId: number;
-    }[];
-  };
-};
 
-type Room = {
-  roomId: number;
-  imgUrl: string;
-  name: string;
-  text: string;
-  triggerActions: {
-    actionId: number;
-    description: string;
-    miniGameData: string;
-    actionTypeId: number;
-  }[];
-  items: {
-    itemPositionId: number;
-    roomId: number;
-    x: number;
-    y: number;
-    itemId: number;
-    item: {
-      itemId: number;
-      name: string;
-      description: string;
-    } | null;
-  }[];
-  npCs: {
-    npcId: number;
-    name: string;
-    dialogs: { dialogId: number; text: string }[];
-    action: { actionId: number; description: string; actionTypeId: number; miniGameData: string } | null;
-  }[];
-  connectionsFrom: { connectionId: number; toRoomId: number; description: string }[];
-  connectionsTo: { connectionId: number; fromRoomId: number; description: string }[];
-};
+
+
 
 const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageChange }) => {
    {console.log("Room")}
@@ -111,7 +46,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
           connectionsTo: data.connectionsTo || [],
           connectionsFrom: data.connectionsFrom || [],
           items: data.items || [],
-          npCs: data.npCs || [],
+          npcs: data.npcs || [],
         });
 
         if (data.imgUrl && onBackgroundImageChange) {
@@ -197,16 +132,16 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   if (!room) return <div>Room not found.</div>;
 
   const roomContent: RoomContentViewerProps["roomContent"] = {
-    npCs: room.npCs.map((npc) => ({
+    npCs: (room.npcs ?? []).map((npc) => ({
       npcId: npc.npcId,
       name: npc.name,
-      dialogs: npc.dialogs,
+      dialogs: npc.dialogs ?? [],
       action: npc.action ? {
         ...npc.action,
         miniGameData: npc.action.miniGameData || "", // Ensuring miniGameData is always a string
       } : null, // Allowing action to be nullable
     })),
-    items: room.items.map((item) => ({
+    items: (room.items ?? []).map((item) => ({
       itemPositionId: item.itemPositionId,
       roomId: item.roomId,
       x: item.x,
@@ -215,7 +150,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
       item: item.item ? { ...item.item } : null, // Handling possible null item
     })),
     // Ensure you're passing the triggerActions array here as expected by RoomContentViewerProps
-    triggerActions: room.triggerActions.map((action) => ({
+    triggerActions: (room.triggerActions ?? []).map((action) => ({
       actionId: action.actionId,
       description: action.description,
       miniGameData: action.miniGameData, // Just pass the miniGameData as is
@@ -250,8 +185,8 @@ const closeAction = () => {
                 alt="Connection"
                 className={styles.connection}
                 style={{
-                  left: `${connection.x /10}%`,
-                  top: `${connection.y /10} %`,
+                  left: `${(connection.x ?? 0) / 10}%`,
+                  top: `${(connection.y ?? 0) / 10}%`,
                   width: `${Math.max(20, window.innerWidth * 0.1)}px`, // Scales based on screen size
                   height: "auto",
                 }}
@@ -265,7 +200,7 @@ const closeAction = () => {
           <p>{room.text}</p>
           <h2>Items</h2>
           <ul>
-            {room.items.map((item) => (
+            {room.items?.map((item) => (
               <li key={item.itemPositionId}>{item.item ? item.item.name : "Unknown item"}</li>
             ))}
           </ul>

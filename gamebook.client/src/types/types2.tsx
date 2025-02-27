@@ -4,7 +4,7 @@ export interface ActionType {
     gameBookActions?: GameBookAction[]; // Optional because it might not always be loaded
   }
   
-  export interface Connection {
+  export type Connection = {
     connectionId: number;
     fromRoomId: number;
     room?: Room; // Optional because it might not always be loaded
@@ -12,10 +12,11 @@ export interface ActionType {
     toRoom?: Room; // Optional because it might not always be loaded
     x?: number | null; // Nullable in the DB
     y?: number | null; // Nullable in the DB
-    img?: Uint8Array | null; // Nullable byte array
+    imgUrl?: string | null; 
+    state?: boolean;
   }
   
-  export interface Dialog {
+  export type Dialog = {
     dialogId: number;
     npcId?: number | null; // Nullable in the DB
     npc?: NPC; // Optional because it might not always be loaded
@@ -28,7 +29,7 @@ export interface ActionType {
     label: string;
   }
   
-  export interface GameBookAction {
+  export type GameBookAction =  {
     actionId: number;
     actionTypeId: number;
     actionType?: ActionType; // Optional because it might not always be loaded
@@ -61,7 +62,7 @@ export interface ActionType {
     quantity?: number; // Optional because it might not always be loaded
   }
   
-  export interface ItemPosition {
+  export type ItemPosition = {
     itemPositionId: number;
     roomId: number;
     room?: Room; // Optional because it might not always be loaded
@@ -71,7 +72,7 @@ export interface ActionType {
     y: number;
   }
   
-  export interface NPC {
+  export type NPC = {
     npcId: number;
     name: string;
     description: string;
@@ -94,9 +95,9 @@ export interface ActionType {
     currentRoom?: Room; // Optional because it might not always be loaded
   }
   
-  export interface Room {
+  export type Room ={
     roomId: number;
-    img: Uint8Array;
+    imgUrl: string;
     name: string;
     text: string;
     requiredItems?: Item[]; // Optional because it might not always be loaded

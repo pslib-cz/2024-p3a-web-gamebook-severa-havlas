@@ -1,17 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {ApiBaseUrl} from "./EnvFile";
-import { Item} from "./types/types2"
+import { Item, GameBookAction} from "./types/types2"
 
-interface Action {
-    actionId: number;
-    description: string;
-    miniGameData: string;
-    actionTypeId: number;
-}
+
 
 interface PreparedAction {
-    action: Action;
+    action: GameBookAction;
     source: string;
 }
 

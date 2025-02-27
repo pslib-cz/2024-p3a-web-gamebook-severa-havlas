@@ -3,12 +3,8 @@ import { ApiBaseUrl } from "../../EnvFile";
 import styles from "./DarkRoomDetails.module.css";
 import { useGameContext } from "../../GameProvider";
 import { set } from "react-hook-form";
+import { Room, Dialog } from "../../types/types2";
 
-type Dialog = {
-  dialogId: number;
-  text: string;
-  label: string;
-};
 
 type TriggerAction = {
   actionId: number;
@@ -18,13 +14,7 @@ type TriggerAction = {
   dialogs?: Dialog[];
 };
 
-type Room = {
-  roomId: number;
-  imgUrl: string;
-  name: string;
-  text: string;
-  triggerActions: TriggerAction[];
-};
+
 
 type DarkRoomDetailsProps = {
   onExit: () => void;
