@@ -1,0 +1,65 @@
+.toggleButton {
+    position: absolute;
+    top: 250px;
+    right: 0;
+    width: 90px;
+    background-color: burlywood;
+    border: 1px solid black;
+    border-radius: 20px 0 0 20px;
+    z-index: 1;
+  }
+  
+  .editorContent {
+    background-image: url('../../assets/TextEditor.webp');
+    background-size: cover;
+  }
+  
+  .editorContent.closed {
+      display: none;
+  }
+  
+  .editorContent.expanded {
+    padding: 20px 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .editorContent.expanded::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .editorContent h2 {
+    color: black;
+    font-style: italic;
+  }
+  
+  body:has(.editorContent.expanded) {
+      overflow: hidden;
+  }
+  
+  .image { 
+    height: 60px;
+    aspect-ratio: 1 / 1;
+    left: 0;
+  }
+  
+  .textarea {
+    height: 75%;
+    width: 75%;
+    background: none;
+    color: black;
+    font-style: italic;
+  }
+  
+  @media (min-width: 768px) {
+    .editorContent.expanded {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(100vw - 100vh); 
+    }
+  }

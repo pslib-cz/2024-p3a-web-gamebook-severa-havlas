@@ -8,6 +8,7 @@ import TextEditor from "../Atoms/TextEditor";
 import Checklist from "../Atoms/Checklist";
 import Map from "../Map/Map";
 import { set } from "react-hook-form";
+import PlayerStats from "../Atoms/PlayerStats";
 
 type Connection = {
   fromRoomId: number;
@@ -297,6 +298,7 @@ const closeAction = () => {
         </div>
         <TextEditor />       
         <Checklist />
+        <PlayerStats/>
         <div className={room.name === "Mapa" ? styles.mapButton : ""}>
           <Map />
         </div>

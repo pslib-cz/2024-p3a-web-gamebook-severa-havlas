@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ApiBaseUrl } from "../../EnvFile";
 import styles from "./DarkRoomDetails.module.css";
 import { useGameContext } from "../../GameProvider";
+import { set } from "react-hook-form";
 
 type Dialog = {
   dialogId: number;
@@ -34,7 +35,7 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [fadeOut, setFadeOut] = useState(false);
-  const { setDate, date } = useGameContext();
+  const { setDate, date, stamina, setStamina } = useGameContext();
 
   // States for dialog conversation
   const [currentDialog, setCurrentDialog] = useState<Dialog | null>(null);
@@ -112,6 +113,7 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
   const handleExit = () => {
     // Increment the date by one day.
     setDate(new Date(date.getTime() + 24 * 60 * 60 * 1000));
+    setStamina(100);
     setFadeOut(true);
     setTimeout(() => {
       onExit();
