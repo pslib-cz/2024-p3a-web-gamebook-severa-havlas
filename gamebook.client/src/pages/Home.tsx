@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from  "./Home.module.css";
 import { useGameContext } from "../GameProvider";
-import { nav } from "framer-motion/client";
+
 const Home = () => {
  
   const navigate = useNavigate();
-    const { previousRoomId,roomId, setRoomId, setPlayerItems,setStamina,  setDate, setPreparedAction, setIsActionOpen, setNoteBookValue } = useGameContext();
+    const { previousRoomId,roomId,money, setMoney, setRoomId, setPlayerItems,setStamina,  setDate, setPreparedAction, setIsActionOpen, setNoteBookValue } = useGameContext();
 
  
  
@@ -29,7 +29,7 @@ const Home = () => {
     setPreparedAction(null);
     setIsActionOpen(false);
     setNoteBookValue("");
-   
+    setMoney(250);
 
     navigate(`/page/1`)
 

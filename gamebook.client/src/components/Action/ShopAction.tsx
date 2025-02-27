@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { ApiBaseUrl } from "../../EnvFile";
+import { useGameContext } from "../../GameProvider";
+import { Item } from "../../types/types2";
 
-interface Item {
-  itemId: number;
-  name: string;
-  description: string;
-  imgUrl: string;
-  price: number | null;
-}
 
 const Shop: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { player, money, setMoney, setPlayerItems } = useGameContext();
+
+const HandleBuy = (e: Item) => {
+  if (e.price !== null && (e.price ?? 0) < money) {
+    setMoney(money - (e.price ?? 0));
+    setPlayerItems((prevItems: Item[]) => {
+      const existingItem = prevItems.find((i) => i.itemId === e.itemId);
+      if (existingItem) {
+        return prevItems.map((i) =>
+          i.itemId === e.itemId ? { ...i, quantity: (i.quantity ?? 0) + 1 } : i
+        );
+      }
+      return [...prevItems, { ...e, quantity: 1 }];
+    });
+  }
+
+}
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -46,8 +58,8 @@ const Shop: React.FC = () => {
               <h3>{item.name}</h3>
               
               <p>{item.description}</p>
-              <p><strong>Price: {item.price} Gold</strong></p>
-              <button style={{ padding: "5px 10px", cursor: "pointer", background: "green", color: "white", border: "none", borderRadius: "5px" }}>
+              <p><strong>Price: {item.price} Krejcarů</strong></p>
+              <button onClick={() => HandleBuy(item)} style={{ padding: "5px 10px", cursor: "pointer", background: "green", color: "white", border: "none", borderRadius: "5px" }}>
                 Buy
               </button>
             </div>

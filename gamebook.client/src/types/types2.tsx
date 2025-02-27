@@ -45,7 +45,7 @@ export interface ActionType {
     dialogs?: Dialog[]; // Optional because it might not always be loaded
   }
   
-  export interface Item {
+  export type Item = {
     itemId: number;
     name: string;
     description: string;
@@ -53,11 +53,12 @@ export interface ActionType {
     gameBookAction?: GameBookAction; // Optional because it might not always be loaded
     itemPositionId?: number | null; // Nullable in the DB
     itemPosition?: ItemPosition; // Optional because it might not always be loaded
-    img?: Uint8Array | null; // Nullable byte array
+    imgUrl?: string | null; // Nullable byte array
     requiredRoomId?: number | null; // Nullable in the DB
     requiredRoom?: Room; // Optional because it might not always be loaded
     target?: number | null; // Nullable in the DB
     price?: number | null; // Nullable in the DB
+    quantity?: number; // Optional because it might not always be loaded
   }
   
   export interface ItemPosition {

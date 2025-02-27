@@ -1,12 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {ApiBaseUrl} from "./EnvFile";
-
-interface PlayerItem {
-    itemId: number;
-    itemName: string;
-    quantity: number;
-}
+import { Item} from "./types/types2"
 
 interface Action {
     actionId: number;
@@ -29,8 +24,8 @@ interface GameContextType {
     roomId: string | null;
     previousRoomId: string | null;
     setRoomId: (id: string | null) => void;
-    player: { items: PlayerItem[] };
-    setPlayerItems: (update: (prevItems: PlayerItem[]) => PlayerItem[]) => void;
+    player: { items: Item[] };
+    setPlayerItems: (update: (prevItems: Item[]) => Item[]) => void;
     stamina: number;
     date: Date;
     setStamina: (value: number) => void;
@@ -47,7 +42,8 @@ interface GameContextType {
     getUserData: (userId: string) => Promise<void>;
     NoteBookValue: string;
     setNoteBookValue: (value: string) => void;
-
+    money: number;
+    setMoney: (value: number) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -55,7 +51,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [roomId, setRoomIdState] = useState<string | null>(null);
     const [previousRoomId, setPreviousRoomId] = useState<string | null>(null);
-    const [player, setPlayer] = useState<{ items: PlayerItem[] }>({ items: [] });
+    const [player, setPlayer] = useState<{ items: Item[] }>({ items: [] });
     const [stamina, setStamina] = useState(100);
     const [date, setDate] = useState(new Date(1849, 1, 3));
     const [preparedAction, setPreparedAction] = useState<PreparedAction | null>(null);
@@ -64,7 +60,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [NoteBookValue, setNoteBookValue] = useState("");
     const location = useLocation();
     const navigate = useNavigate();
-
+    const [money, setMoney] = useState(200);
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -90,7 +86,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const setPlayerItems = (update: (prevItems: PlayerItem[]) => PlayerItem[]) => {
+    const setPlayerItems = (update: (prevItems: Item[]) => Item[]) => {
         setPlayer((prev) => ({ ...prev, items: update(prev.items) }));
     };
 
@@ -102,6 +98,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             stamina,
             date: date.toISOString(),
             preparedAction,
+            isActionOpen,
+            NoteBookValue,
+            money,
         });
     };
 
@@ -162,6 +161,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             preparedAction,
             isActionOpen,
             NoteBookValue,
+            money,
         };
         console.log("Saving user data:", userData);
         try {
@@ -202,6 +202,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setPreparedAction(data.preparedAction);
             setIsActionOpen(data.isActionOpen);
             setNoteBookValue(data.NoteBookValue);
+            setMoney(data.money);
             navigate(`/Page/${data.previousRoomId}`, { replace: true });
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -231,6 +232,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             getUserData,
             NoteBookValue,
             setNoteBookValue,
+            money,
+            setMoney,
         }}>
             {children}
         </GameContext.Provider>
