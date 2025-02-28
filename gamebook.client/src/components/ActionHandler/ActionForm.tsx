@@ -8,6 +8,11 @@ import DarkRoomDetails from '../Room/DarkRoomDetails';
 import Shop from '../Action/ShopAction';
 import { GameBookAction } from '../../types/types2';
 import TexasHoldEm from '../Action/Poker';
+import Work from '../Action/Work';
+import Sacrificer from '../Action/Sacrificer';
+import DialogAction from '../Action/DialogAction';
+import Heal from '../Action/Heal';
+import Pray from '../Action/Pray';
 type ActionComponentProps = { 
     action: GameBookAction;
     source: string;
@@ -47,7 +52,7 @@ type ActionComponentProps = {
 
     switch (action.actionTypeId) {
         case 1:
-            //dialog action
+            actionContent = <DialogAction action={action} source={source} CloseAction={CloseAction}></DialogAction> //netestovaný
             break;
         case 2:
             ForceSolve = true;
@@ -62,11 +67,11 @@ type ActionComponentProps = {
         case 4:
             isNotOverlay = true;
             if (isActionOpen) {
-                actionContent = <DarkRoomDetails onExit={CloseActionForm}/>;}
+                actionContent = <DarkRoomDetails onExit={CloseActionForm}/>;}//netestovaný
             break;
 
         case 5:
-            //Insopect Action
+            //Implementováno v inventáři, tady je to voser
             break;
         case 6:
             actionContent = <Shop/>;
@@ -78,12 +83,19 @@ type ActionComponentProps = {
             break;
          
             case 8:
-                //heal
+                actionContent = <Heal/> //netestovaný
             break;
             case 9:
-                
+                isNotOverlay = true;
+                actionContent = <Work/>
                 break;
-              
+
+                case 10:
+                    actionContent = <Sacrificer/>
+                break;
+              case 11:
+                actionContent = <Pray/> //netestovaný
+                break;
         default:
             actionContent = <div>Unknown Action Type</div>;
             break;

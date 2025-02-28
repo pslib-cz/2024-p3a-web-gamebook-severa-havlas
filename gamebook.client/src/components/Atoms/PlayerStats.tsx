@@ -1,26 +1,37 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useGameContext } from '../../GameProvider';
-import styles from './/PlayerStats.module.css';
+import styles from './PlayerStats.module.css';
 import BackgroundImage from '../../assets/Stats.webp';
-
-// Assuming you have a context that provides PlayerItems and stamina
+import { Item } from '../../types/types2';
+import { ApiBaseUrl } from '../../EnvFile';
 
 const PlayerStats: React.FC = () => {
-    const { player, stamina, money } = useGameContext();
-
-      const { NoteBookValue, setNoteBookValue } = useGameContext();
-      const [text, setText] = useState(NoteBookValue); // Initialize with context value
-      const [isClosed, setIsClosed] = useState(true);
-    
+    const { player, stamina, money, NoteBookValue, setNoteBookValue } = useGameContext();
+    const [text, setText] = useState(NoteBookValue);
+    const [isClosed, setIsClosed] = useState(true);
+    const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
     const toggleEditor = () => {
         if (!isClosed) {
-          setNoteBookValue(text); // Save text to context when closing
+            setNoteBookValue(text);
         } else {
-          setText(NoteBookValue); // Load text from context when opening
+            setText(NoteBookValue);
         }
         setIsClosed((prev) => !prev);
-      };
+    };
+
+    const inspectItem = (item: Item) => {
+        console.log(item.imgUrl);
+        
+
+        setSelectedItem(item.imgUrl ?? null);
+        console.log(`${ApiBaseUrl}${selectedItem}`);
+    };
+
+    const closeInspection = () => {
+       
+        setSelectedItem(null);
+    };
 
     return (
         <>
@@ -31,9 +42,15 @@ const PlayerStats: React.FC = () => {
             <div className={`${styles.editorContent} ${isClosed ? styles.closed : styles.expanded}`}>
                 <h2>Player Stats</h2>
                 <div>
-                    <strong>Items:</strong> {player.items.map((item, index) => (
-                        <li key={index}>{item.name}{index < player.items.length - 1 ? ', ' : ''}: {item.quantity} {item.description}</li>
-                    ))}
+                    <strong>Items:</strong>
+                    <ul>
+                        {player.items.map((item) => (
+                            <li key={item.itemId}>
+                                {item.name}: {item.quantity} {item.description}
+                                <button onClick={() => inspectItem(item)}>Inspect</button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
                 <div>
                     <strong>Stamina:</strong> {stamina}
@@ -42,6 +59,13 @@ const PlayerStats: React.FC = () => {
                     <strong>Money:</strong> {money}
                 </div>
             </div>
+
+            {selectedItem && (
+                <div className={styles.overlay} onClick={closeInspection}>
+               
+                    <img className={styles.largeImage} src={`${ApiBaseUrl}${selectedItem}`} alt="Inspected Item" />
+                </div>
+            )}
         </>
     );
 };

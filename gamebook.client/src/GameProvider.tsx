@@ -39,6 +39,7 @@ interface GameContextType {
     setNoteBookValue: (value: string) => void;
     money: number;
     setMoney: (value: number) => void;
+    sacrificeItem(Itemname: string): void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -56,6 +57,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const location = useLocation();
     const navigate = useNavigate();
     const [money, setMoney] = useState(200);
+
+    const sacrificeItem = (Itemname: string) => {
+
+        player.items = player.items.filter((item) => item.name !== Itemname);
+        setPlayerItems((prevItems) => prevItems.filter((item) => item.name !== Itemname));
+
+    }
+
+
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -229,6 +239,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setNoteBookValue,
             money,
             setMoney,
+            sacrificeItem,
         }}>
             {children}
         </GameContext.Provider>
