@@ -80,7 +80,9 @@ type ActionComponentProps = {
             case 8:
                 //heal
             break;
-            
+            case 9:
+                
+                break;
               
         default:
             actionContent = <div>Unknown Action Type</div>;
