@@ -40,13 +40,13 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
         const response = await fetch(`${ApiBaseUrl}/api/Rooms/${id}`);
         if (!response.ok) throw new Error("Failed to fetch room");
 
-        const data: Room = await response.json();
+        const data = await response.json();
         setRoom({
           ...data,
           connectionsTo: data.connectionsTo || [],
           connectionsFrom: data.connectionsFrom || [],
           items: data.items || [],
-          npcs: data.npcs || [],
+          npcs: data.npCs || [],
         });
 
         if (data.imgUrl && onBackgroundImageChange) {
@@ -130,7 +130,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!room) return <div>Room not found.</div>;
-
+console.log("Room", room)
   const roomContent: RoomContentViewerProps["roomContent"] = {
     npCs: (room.npcs ?? []).map((npc) => ({
       npcId: npc.npcId,

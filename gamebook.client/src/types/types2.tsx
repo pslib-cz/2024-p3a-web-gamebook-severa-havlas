@@ -1,4 +1,4 @@
-export interface ActionType {
+export type ActionType = {
     actionTypeId: number;
     name: string;
     gameBookActions?: GameBookAction[]; // Optional because it might not always be loaded
@@ -87,7 +87,7 @@ export interface ActionType {
     target?: number | null; // Nullable in the DB
   }
   
-  export interface Progress {
+  export type Progress = {
     progressId: number;
     name: string;
     value: number;
