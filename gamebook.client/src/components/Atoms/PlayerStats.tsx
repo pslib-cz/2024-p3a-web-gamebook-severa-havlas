@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useGameContext } from '../../GameProvider';
 import styles from './/PlayerStats.module.css';
-import BackgroundImage from '../../assets/NoteBlock.webp';
+import BackgroundImage from '../../assets/Stats.webp';
 
 // Assuming you have a context that provides PlayerItems and stamina
 

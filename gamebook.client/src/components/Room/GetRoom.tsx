@@ -7,7 +7,7 @@ import ActionForm from "../ActionHandler/ActionForm";
 import TextEditor from "../Atoms/TextEditor";
 import Checklist from "../Atoms/Checklist";
 import Map from "../Map/Map";
-import { set } from "react-hook-form";
+
 import PlayerStats from "../Atoms/PlayerStats";
 import { Connection, Room } from "../../types/types2";
 

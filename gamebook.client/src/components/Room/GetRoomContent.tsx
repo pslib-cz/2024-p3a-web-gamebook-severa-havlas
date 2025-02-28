@@ -43,7 +43,7 @@ export type RoomContentViewerProps = {
 const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) => {
   const { setPlayerItems, setPreparedAction, setIsActionOpen } = useGameContext();
   const [hasTriggeredAction, setHasTriggeredAction] = useState(false);
-
+  
   const triggerAction = useCallback(
     (
       action: RoomContentViewerProps["roomContent"]["triggerActions"][0],
