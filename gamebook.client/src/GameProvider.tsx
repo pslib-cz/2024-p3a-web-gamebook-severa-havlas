@@ -40,6 +40,8 @@ interface GameContextType {
     money: number;
     setMoney: (value: number) => void;
     sacrificeItem(Itemname: string): void;
+    checklist: string;
+    setChecklist: (value: string) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -57,6 +59,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const location = useLocation();
     const navigate = useNavigate();
     const [money, setMoney] = useState(200);
+    const [checklist, setChecklist] = useState("");
 
     const sacrificeItem = (Itemname: string) => {
 
@@ -106,6 +109,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             isActionOpen,
             NoteBookValue,
             money,
+            checklist,
         });
     };
 
@@ -167,6 +171,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             isActionOpen,
             NoteBookValue,
             money,
+            checklist,
         };
         console.log("Saving user data:", userData);
         try {
@@ -208,6 +213,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setIsActionOpen(data.isActionOpen);
             setNoteBookValue(data.NoteBookValue);
             setMoney(data.money);
+            setChecklist(data.checklist);
             navigate(`/Page/${data.previousRoomId}`, { replace: true });
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -240,6 +246,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             money,
             setMoney,
             sacrificeItem,
+            checklist,
+            setChecklist,
         }}>
             {children}
         </GameContext.Provider>
