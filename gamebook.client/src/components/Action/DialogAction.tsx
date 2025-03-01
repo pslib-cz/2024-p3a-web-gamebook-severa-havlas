@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { GameBookAction, Dialog } from '../../types/types2';
+import { ApiBaseUrl } from '../../EnvFile';
 
 type ActionComponentProps = {
     action: GameBookAction;
@@ -29,7 +30,7 @@ const DialogAction: React.FC<ActionComponentProps> = ({ action, CloseAction }) =
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`/api/Dialogs/getOptions/${dialogId}`);
+            const response = await fetch(`${ApiBaseUrl}/api/Dialogs/getOptions/${dialogId}`);
             if (!response.ok) {
                 if (response.status === 404) {
                     CloseAction(); // No more dialogs, close the action

@@ -8,9 +8,9 @@
     color: white;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
-    z-index: 50; /* Ensures it appears above other elements */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Add a shadow for depth */
-    overflow-y: auto;
+    z-index: 50;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); 
+     /* overflow-y: auto;   tohleto Kurví darkRoom, ale když to tam není tak to kurví Shop tohle asi pořešit dymamicky */ 
   }
   
   .overlay.open {
@@ -24,8 +24,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-    z-index: 40; /* Behind the overlay */
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: 40; 
   }
   
   .toggle-button {

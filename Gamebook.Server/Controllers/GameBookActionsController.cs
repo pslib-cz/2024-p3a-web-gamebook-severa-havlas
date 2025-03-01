@@ -129,6 +129,22 @@ namespace Gamebook.Server.Controllers
               return NoContent();
           }
 
+
+        [HttpPatch]
+        public IActionResult Patch(int progressId, int gameBookActionId)
+        {
+            var gameBookAction = _context.Set<GameBookAction>().Find(gameBookActionId);
+            if (gameBookAction == null)
+            {
+                return NotFound("GameBookAction not found.");
+            }
+
+            gameBookAction.ReqProgress = progressId;
+            _context.SaveChanges();
+
+            return Ok(new { Message = "GameBookAction updated", Data = gameBookAction });
+        }
+
         private bool GameBookActionExists(int id)
         {
             return _context.Actions.Any(e => e.ActionId == id);

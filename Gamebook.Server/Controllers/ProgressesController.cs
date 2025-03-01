@@ -72,16 +72,34 @@ namespace Gamebook.Server.Controllers
 
             return NoContent();
         }
-
-        // POST: api/Progresses
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Progress>> PostProgress(Progress progress)
+        public class MyDto
         {
-            _context.Progress.Add(progress);
-            await _context.SaveChangesAsync();
+            public string Value { get; set; }
+            public int Value2 { get; set; }
+        }
 
-            return CreatedAtAction("GetProgress", new { id = progress.ProgressId }, progress);
+
+
+
+
+        [HttpPost]
+        public IActionResult Post([FromBody] MyDto dto)
+        {
+            if (dto == null)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            var progress = new Progress
+            {
+                Name = dto.Value,
+                Value = dto.Value2
+            };
+
+            _context.Set<Progress>().Add(progress);
+            _context.SaveChanges();
+
+            return Ok(new { Message = "Data saved", Data = progress });
         }
 
         // DELETE: api/Progresses/5

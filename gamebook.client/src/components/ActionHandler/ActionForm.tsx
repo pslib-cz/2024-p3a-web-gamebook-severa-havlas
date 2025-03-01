@@ -26,7 +26,7 @@ type ActionComponentProps = {
     let ForceSolve: boolean = false;
     let actionContent;
     let isNotOverlay: boolean = false;
-
+    let isOnceADay: boolean = false;
     const { previousRoomId, setRoomId, isActionOpen, setIsActionOpen } = useGameContext();
 
     const CloseActionForm = () => {
@@ -78,22 +78,27 @@ type ActionComponentProps = {
             break;
             case 7:
                 if(isActionOpen){
+                    isOnceADay = true;
                     actionContent = <TexasHoldEm/>;
                 }
             break;
          
             case 8:
+                isOnceADay = true;
                 actionContent = <Heal/> //netestovaný
             break;
             case 9:
+                isOnceADay = true;
                 isNotOverlay = true;
                 actionContent = <Work/>
                 break;
 
                 case 10:
+                    isOnceADay = true;
                     actionContent = <Sacrificer/>
                 break;
               case 11:
+                isOnceADay = true;
                 actionContent = <Pray/> //netestovaný
                 break;
         default:

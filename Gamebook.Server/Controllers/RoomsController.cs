@@ -114,7 +114,10 @@ namespace Gamebook.Server.Controllers
                             n.Action.ActionId,
                             n.Action.Description,
                             n.Action.ActionTypeId,
-                            n.Action.MiniGameData
+                            n.Action.MiniGameData,
+
+                       
+
                         } : null // Handle cases where n.Action is null
                     }),
 
