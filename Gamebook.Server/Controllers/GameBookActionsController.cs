@@ -102,6 +102,51 @@ namespace Gamebook.Server.Controllers
             return Ok();
         }
 
+        [HttpGet("GetRequireds/{actionId}")]
+        public async Task<IActionResult> GetRequireds(int actionId)
+        {
+            var action = await _context.Actions
+                .Where(a => a.ActionId == actionId)
+                .Select(a => new
+                {
+                    a.ReqItem,
+                    a.ReqProgress
+                })
+                .FirstOrDefaultAsync();
+
+            if (action == null)
+            {
+                return NotFound(new { message = "GameBookAction not found." });
+            }
+
+            var item = await _context.Items
+                .Where(i => i.ItemId == action.ReqItem)
+                .Select(i => new
+                {
+                    i.ItemId,
+                    i.Name,
+                    i.Description,
+                    i.Price
+                })
+                .FirstOrDefaultAsync();
+
+            var progress = await _context.Progress
+                .Where(p => p.ProgressId == action.ReqProgress)
+                .Select(p => new
+                {
+                    p.ProgressId,
+                    p.Name,
+                    p.Value
+                })
+                .FirstOrDefaultAsync();
+
+            return Ok(new
+            {
+                RequiredItem = item,
+                RequiredProgress = progress
+            });
+        }
+
         // DTO Definition
         public class GameBookActionCreateDto
         {
