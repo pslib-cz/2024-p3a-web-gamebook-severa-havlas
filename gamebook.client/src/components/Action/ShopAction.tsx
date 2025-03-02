@@ -54,13 +54,13 @@ const HandleBuy = (e: Item) => {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
         {items.length > 0 ? (
           items.map(item => (
-            <div key={item.itemId} style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "8px", textAlign: "center" }}>
+            <div className={styles.card} key={item.itemId} >
               <img src={`${ApiBaseUrl}${item.imgUrl}`} alt={item.name} style={{ width: "100px", height: "100px", objectFit: "cover" }} />
               <h3>{item.name}</h3>
               
               <p>{item.description}</p>
               <p><strong>Price: {item.price} Krejcarů</strong></p>
-              <button onClick={() => HandleBuy(item)} style={{ padding: "5px 10px", cursor: "pointer", background: "green", color: "white", border: "none", borderRadius: "5px" }}>
+              <button className={styles.button} onClick={() => HandleBuy(item)} >
                 Buy
               </button>
             </div>

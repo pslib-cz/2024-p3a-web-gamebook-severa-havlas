@@ -4,7 +4,7 @@
     left: 0;
     height: 100%;
     aspect-ratio: 1 / 1;
-    background-color: rgb(50, 13, 117);
+    background-color: var(--brown);
     color: white;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
