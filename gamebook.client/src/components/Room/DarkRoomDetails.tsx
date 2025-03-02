@@ -21,32 +21,75 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
   const [exitVisible, setExitVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch(`${ApiBaseUrl}/api/Rooms/29`)
-      .then((response) => {
+    const fetchRequiredProgress = async (actionId: number) => {
+      try {
+        const response = await fetch(`${ApiBaseUrl}/api/GameBookActions/GetRequireds/${actionId}`);
+        if (!response.ok) throw new Error("Failed to fetch required progress");
+    
+        const data = await response.json();
+        if (!data.requiredProgress) return null;
+    
+        const parsedName = JSON.parse(data.requiredProgress.name); // Extract JSON string
+        return parsedName.date.split("T")[0]; // Convert to YYYY-MM-DD format
+      } catch (error) {
+        console.error("Error fetching required progress:", error);
+        return null;
+      }
+    };
+    
+    const fetchRoomData = async () => {
+      try {
+        const response = await fetch(`${ApiBaseUrl}/api/Rooms/29`);
         if (!response.ok) throw new Error("Failed to fetch room data");
-        return response.json();
-      })
-      .then((data: Room) => {
-        setRoom(data);
+    
+        const roomData = await response.json();
+        setRoom(roomData);
         setLoading(false);
-
-        // Find the first trigger action that matches the current date
-        const validTrigger = data.triggerActions && data.triggerActions.length > 0 ? data.triggerActions[0] : null;
-        
-        if (validTrigger && validTrigger.dialogs && validTrigger.dialogs.length > 0) {
-          const firstDialog = validTrigger.dialogs[0];
-          setCurrentDialog(firstDialog);
-          fetchDialogOptions(firstDialog.dialogId);
-        } else {
+    
+    
+       
+       
+    
+        if (!roomData.triggerActions || roomData.triggerActions.length === 0) {
           setExitVisible(true);
+          return;
         }
-      })
-      .catch((err) => {
-        setError(err.message);
+        const formattedGameDate = formatDateToYYYYMMDD(date);
+        // Fetch required progress for each action and find the correct one
+        for (const action of roomData.triggerActions) {
+          const actionDate = await fetchRequiredProgress(action.actionId);
+          console.log("Checking Action Date:", actionDate, "against", formattedGameDate);
+       
+          if (actionDate === formattedGameDate) {
+            console.log("Action Date Matches Game Date");
+            setCurrentDialog(action.dialogs[0]);
+            fetchDialogOptions(action.dialogs[0].dialogId);
+            return;
+          }
+          
+        }
+        console.log("Action Date Does Not Match Game Date");
+        // If no matching action is found, set exit visible
+        setExitVisible(true);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unknown error occurred");
+        }
         setLoading(false);
-      });
-  }, [date]);
+      }
+    };
+    
+    fetchRoomData();
+  }, []); // Runs when `date` from context changes
 
+  const formatDateToYYYYMMDD = (date: Date) => {
+    return date.getFullYear() +
+      "-" + String(date.getMonth() + 1).padStart(2, "0") +
+      "-" + String(date.getDate()).padStart(2, "0");
+  };
+  
   const fetchDialogOptions = async (dialogId: number) => {
     setLoadingOptions(true);
     try {
@@ -56,6 +99,7 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
       setDialogOptions(options.length ? options : []);
       setExitVisible(options.length === 0);
     } catch (error) {
+      
       console.error("Error fetching dialog options:", error);
       setExitVisible(true);
     } finally {
@@ -83,22 +127,23 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
   return (
     <div className={`${styles.container} ${fadeOut ? styles.fadeOut : ""}`}>
       <h1 className={styles.title}>{room.name || "Unknown Room"}</h1>
+      <p className={styles.description}>{room.text || "No description available."}</p>
       {room.imgUrl && (
         <div className={styles.imageContainer}>
           <img src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} className={styles.image} />
         </div>
       )}
-      <p className={styles.description}>{room.text || "No description available."}</p>
+      
       {currentDialog && (
         <div className={styles.dialogContainer}>
-          <h2>Dialog</h2>
+          
           <p>{currentDialog.text}</p>
         </div>
       )}
       {loadingOptions && <p>Loading dialog options...</p>}
       {dialogOptions.length > 0 && (
         <div className={styles.dialogOptions}>
-          <h3>Options:</h3>
+        
           {dialogOptions.map((option) => (
             <button key={option.dialogId} onClick={() => handleDialogOptionClick(option)} className={styles.optionButton}>
               {option.label}
