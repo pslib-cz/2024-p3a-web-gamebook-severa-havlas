@@ -3,26 +3,9 @@ import ActionType3Component from "../ActionType/ActionType3Component";
 import { ApiBaseUrl } from "../../EnvFile";
 import handleAction from "../ActionHandler/HandleActioon";
 import { useGameContext } from "../../GameProvider";
-interface Dialog {
-  dialogId: number;
-  text: string;
-}
+import { Dialog, GameBookAction, NPC } from "../../types/types2";
 
-interface Action {
-  actionId: number;
-  description: string;
-  miniGameData: string;
-  actionTypeId: number;
-}
-
-interface NPC {
-  npcId: number;
-  name: string;
-  dialogs: Dialog[] | null;
-  action: Action | null;
-}
-
-interface NpcInteractionProps {
+type NpcInteractionProps = {
   npc: NPC;
 }
 
@@ -56,7 +39,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
 
   
 
-  const renderActionComponent = (action: Action) => {
+  const renderActionComponent = (action: GameBookAction) => {
    
         return (
           <div>
@@ -67,7 +50,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
                 setPreparedAction({ action, source: "npc" });
               }}
             >
-              Trigger Action
+              {action.description}
             </button>
           </div>
         );
@@ -88,7 +71,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
 
       {dialog && (
         <div>
-          <h3>Dialog</h3>
+         
           <p>{dialog.text}</p>
         </div>
       )}
@@ -97,14 +80,14 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
 
       {options.length > 0 && (
         <div>
-          <h4>Options</h4>
+         
           {options.map((option) => (
             <button
               key={option.dialogId}
               onClick={() => handleOptionClick(option)}
               style={{ marginRight: "10px", padding: "5px 10px" }}
             >
-              {option.text}
+              {option.label}
             </button>
           ))}
         </div>

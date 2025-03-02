@@ -4,12 +4,14 @@ import NpcInteraction from "../NPC/HandleNPC";
 import { ApiBaseUrl } from "../../EnvFile";
 import styles from "./GetRoomContent.module.css"
 import { Item, Room } from "../../types/types2";
+import { NPC } from "../../types/types2";
 export type RoomContentViewerProps = {
   roomContent: {
     npCs: {
       npcId: number;
       name: string;
-      dialogs: { dialogId: number; text: string }[];
+      description: string;
+      dialogs: { dialogId: number; text: string; label: string }[];
       action: {
         actionId: number;
         description: string;
@@ -92,60 +94,74 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
     console.log(`Picked up: ${itemName}`);
   };
 
+  // Define `a` correctly
+  let a: NPC | null =
+    roomContent.npCs && roomContent.npCs.length > 0
+      ? {
+          npcId: roomContent.npCs[0].npcId,
+          name: roomContent.npCs[0].name,
+          description: roomContent.npCs[0].description,
+          dialogs: roomContent.npCs[0].dialogs,
+          action: roomContent.npCs[0].action ?? undefined,
+        }
+      : null;
+
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h2>Room Content Viewer</h2>
       <div style={{ marginTop: "20px" }}>
-        <h3>Room Content:</h3>
         <div>
-          <strong>NPCs:</strong>
           {roomContent.npCs && roomContent.npCs.length > 0 ? (
             <ul>
               {roomContent.npCs.map((npc) => (
                 <li key={npc.npcId}>
-                  {npc.npcId} - {npc.name}
-                  <img className={styles.imageNPC} src={`${ApiBaseUrl}/api/NPCs/${npc.npcId}/image`} alt={npc.name} />
+                  <img
+                    className={styles.imageNPC}
+                    src={`${ApiBaseUrl}/api/NPCs/${npc.npcId}/image`}
+                    alt={npc.name}
+                  />
                   <div style={{ marginTop: "10px" }}>
-                    <NpcInteraction npc={npc} />
+                    {a && <NpcInteraction npc={a} />}
                   </div>
                 </li>
               ))}
             </ul>
           ) : (
-            <p>No NPCs in this room.</p>
+            <p></p>
           )}
         </div>
         <div>
-          <strong>Items:</strong>
           {roomContent.items && roomContent.items.length > 0 ? (
-            <ul>
-              {roomContent.items.map((item) => (
-                <li key={item.itemPositionId}>
-                  {item.item ? (
-                    <>
-                      {item.item.itemId} - {item.item.name} 
-                      <button
-                        onClick={() =>
-                          item.item &&
-                          handlePickUpItem(item.item.itemId, item.item.name)
-                        }
-                        style={{
-                          marginLeft: "10px",
-                          padding: "5px 10px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Pick up
-                      </button>
-                    </>
-                  ) : (
-                    "Unknown item"
-                  )}
-                </li>
-              ))}
-            </ul>
+            <>
+              <strong>Items:</strong>
+              <ul>
+                {roomContent.items.map((item) => (
+                  <li key={item.itemPositionId}>
+                    {item.item ? (
+                      <>
+                        {item.item.itemId} - {item.item.name}
+                        <button
+                          onClick={() =>
+                            item.item &&
+                            handlePickUpItem(item.item.itemId, item.item.name)
+                          }
+                          style={{
+                            marginLeft: "10px",
+                            padding: "5px 10px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Pick up
+                        </button>
+                      </>
+                    ) : (
+                      "Unknown item"
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
           ) : (
-            <p>No Items in this room.</p>
+            ""
           )}
         </div>
       </div>
@@ -154,3 +170,4 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
 };
 
 export default RoomContentViewer;
+

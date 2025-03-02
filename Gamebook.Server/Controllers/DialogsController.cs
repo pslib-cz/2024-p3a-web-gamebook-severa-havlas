@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Gamebook.Server.Data;
 using Gamebook.Server.models;
+using System.Reflection.Emit;
 
 namespace Gamebook.Server.Controllers
 {
@@ -36,6 +37,7 @@ namespace Gamebook.Server.Controllers
                 .Where(d => d.ParentDialogId == dialogId)
                 .Select(d => new DialogDTO
                 {
+                    Label = d.Label,
                     DialogId = d.DialogId,
                     Text = d.Text
                 })
@@ -58,6 +60,7 @@ namespace Gamebook.Server.Controllers
                 .Where(d => d.DialogId == dialogId)
                 .Select(d => new DialogDTO
                 {
+                    Label = d.Label,
                     DialogId = d.DialogId,
                     Text = d.Text
                 })
@@ -72,6 +75,7 @@ namespace Gamebook.Server.Controllers
         }
         public class DialogDTO
         {
+            public string Label { get; set; }
             public int DialogId { get; set; }
             public string Text { get; set; }
         }

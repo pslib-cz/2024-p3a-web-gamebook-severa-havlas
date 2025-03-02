@@ -135,6 +135,7 @@ console.log("Room", room)
     npCs: (room.npcs ?? []).map((npc) => ({
       npcId: npc.npcId,
       name: npc.name,
+      description: npc.description || "", // Adding the missing description property
       dialogs: npc.dialogs ?? [],
       action: npc.action ? {
         ...npc.action,
@@ -198,18 +199,14 @@ const closeAction = () => {
         <div className={styles.description}>
           <h1>{room.name}</h1>
           <p>{room.text}</p>
-          <h2>Items</h2>
+          <p>{date.toLocaleDateString()}</p>
           <ul>
             {room.items?.map((item) => (
               <li key={item.itemPositionId}>{item.item ? item.item.name : "Unknown item"}</li>
             ))}
           </ul>
-          <div>
-            <h2>Player Stats</h2>
-            <p><strong>Stamina:</strong> {stamina}</p>
-            <p><strong>Date:</strong> {date.toDateString()}</p>
-          </div>
-          <h2>Room Connections</h2>
+        
+          
           <ul className={styles.connections}>
           {connections?.map((connection) => {
             const targetRoom = rooms.find((r) => r.roomId === connection.toRoomId);
@@ -229,7 +226,7 @@ const closeAction = () => {
             })}
           </ul>
           <RoomContentViewer roomContent={roomContent} />
-          {JSON.stringify(preparedAction)}
+          
         </div>
         <TextEditor />       
         <Checklist />
