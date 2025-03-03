@@ -42,6 +42,8 @@ interface GameContextType {
     sacrificeItem(Itemname: string): void;
     checklist: string;
     setChecklist: (value: string) => void;
+    completedDialogs: Set<number>;
+    markDialogAsCompleted: (dialogId: number) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -60,6 +62,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const navigate = useNavigate();
     const [money, setMoney] = useState(200);
     const [checklist, setChecklist] = useState("");
+    const [completedDialogs, setCompletedDialogs] = useState<Set<number>>(new Set());
+
+    const markDialogAsCompleted = (dialogId: number) => {
+        setCompletedDialogs((prev) => new Set(prev).add(dialogId));
+    }
 
     const sacrificeItem = (Itemname: string) => {
 
@@ -248,6 +255,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             sacrificeItem,
             checklist,
             setChecklist,
+            completedDialogs,
+            markDialogAsCompleted,
         }}>
             {children}
         </GameContext.Provider>

@@ -11,9 +11,26 @@ type NpcInteractionProps = {
 
 const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   const { setPreparedAction, setIsActionOpen } = useGameContext();
+  const { completedDialogs, markDialogAsCompleted } = useGameContext();
   const [dialog, setDialog] = useState<Dialog | null>(null);
-  const [options, setOptions] = useState<Dialog[]>(npc.dialogs || []);
+  const [options, setOptions] = useState<Dialog[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    let availableDialogs = npc.dialogs || [];
+
+    // Odemknout dialogy, pokud byl jejich parentDialog dokončen
+    availableDialogs = availableDialogs.filter(dialog =>
+        !dialog.parentDialog || completedDialogs.has(dialog.parentDialog.dialogId)
+    );
+
+    if (availableDialogs.length > 0) {
+        setOptions(availableDialogs);
+        setDialog(null); // Reset dialogu, aby se zobrazil nový
+    } else {
+        setOptions([]);
+    }
+}, [npc, completedDialogs]);
 
   const fetchDialogOptions = async (dialogId: number) => {
     setLoading(true);
@@ -34,6 +51,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   const handleOptionClick = async (nextDialog: Dialog) => {
     setDialog(nextDialog);
     setOptions([]);
+    markDialogAsCompleted(nextDialog.dialogId);
     await fetchDialogOptions(nextDialog.dialogId);
   };
 
