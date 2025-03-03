@@ -29,7 +29,7 @@ const RoomDetails: React.FC<RoomDetailsInputProps> = ({ id, onBackgroundImageCha
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   
-  const { serializeContext, preparedAction , setRoomId, stamina, setStamina, date } = useGameContext();
+  const { serializeContext, preparedAction , setRoomId, stamina, setStamina, date ,player} = useGameContext();
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -200,6 +200,7 @@ const closeAction = () => {
           <h1>{room.name}</h1>
           <p>{room.text}</p>
           <p>{date.toLocaleDateString()}</p>
+          <p>{JSON.stringify(player)}</p>
           <ul>
             {room.items?.map((item) => (
               <li key={item.itemPositionId}>{item.item ? item.item.name : "Unknown item"}</li>

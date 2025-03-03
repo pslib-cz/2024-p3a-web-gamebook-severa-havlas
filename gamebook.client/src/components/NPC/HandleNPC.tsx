@@ -10,26 +10,29 @@ type NpcInteractionProps = {
 }
 
 const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
-  const { setPreparedAction, setIsActionOpen } = useGameContext();
-  const { completedDialogs, markDialogAsCompleted } = useGameContext();
+  const { setPreparedAction, setIsActionOpen, player, setPlayerProgress } = useGameContext();
+ 
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [options, setOptions] = useState<Dialog[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
+  let availableDialogs = npc.dialogs || [];
+ 
   useEffect(() => {
-    let availableDialogs = npc.dialogs || [];
+    if (!npc.dialogs) return;
 
-    availableDialogs = availableDialogs.filter(dialog =>
-        !dialog.parentDialog || completedDialogs.has(dialog.parentDialog.dialogId)
-    );
+    const filteredDialogs = npc.dialogs.filter(dialog => {
+        
+        if (player.progress.length === 0) {
+            return !dialog.parentDialog; 
+        }
 
-    if (availableDialogs.length > 0) {
-        setOptions(availableDialogs);
-        //setDialog(null); // Reset dialogu, aby se zobrazil nový
-    } else {
-        setOptions([]);
-    }
-}, [npc, completedDialogs]);
+        
+        const progressEntry = player.progress.find(p => p.name === dialog.dialogId.toString());
+        return progressEntry ? dialog.dialogId === progressEntry.value : false;
+    });
+
+    setOptions(filteredDialogs);
+}, [npc, player.progress]); // Depend on player.progress so it updates dynamically
 
   const fetchDialogOptions = async (dialogId: number) => {
     setLoading(true);
@@ -50,7 +53,13 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   const handleOptionClick = async (nextDialog: Dialog) => {
     setDialog(nextDialog);
     setOptions([]);
-    markDialogAsCompleted(nextDialog.dialogId);
+    setPlayerProgress((prevProgress) => {
+      const name = nextDialog.dialogId.toString();
+  
+      return prevProgress.some(p => p.name === name)
+          ? prevProgress.map(p => p.name === name ? { ...p, value: p.value + 1 } : p) // Increment if exists
+          : [...prevProgress, { name, value: 1 }]; // Add if new
+  });
     await fetchDialogOptions(nextDialog.dialogId);
   };
 
@@ -60,6 +69,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
    
         return (
           <div>
+       
             <button
               onClick={() => {
                 console.log(`Preparing action: ${action.description}`);
@@ -83,9 +93,9 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
     <div>
        
       <h2>{npc.name}</h2>
-        
+        {JSON.stringify(npc)}
       {npc.action && renderActionComponent(npc.action)}
-
+      {JSON.stringify(availableDialogs)}
       {dialog && (
         <div>
          

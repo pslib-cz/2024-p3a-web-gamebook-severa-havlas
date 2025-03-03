@@ -15,12 +15,13 @@ interface User {
     email: string;
 }
 
-interface GameContextType {
+type GameContextType = {
     roomId: string | null;
     previousRoomId: string | null;
     setRoomId: (id: string | null) => void;
-    player: { items: Item[] };
+    player: { items: Item[], progress: {name: string, value: number}[] };
     setPlayerItems: (update: (prevItems: Item[]) => Item[]) => void;
+    setPlayerProgress: (update: (prevProgress: {name: string, value: number}[]) => {name: string, value: number}[]) => void;
     stamina: number;
     date: Date;
     setStamina: (value: number) => void;
@@ -42,8 +43,7 @@ interface GameContextType {
     sacrificeItem(Itemname: string): void;
     checklist: string;
     setChecklist: (value: string) => void;
-    completedDialogs: Set<number>;
-    markDialogAsCompleted: (dialogId: number) => void;
+
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -51,7 +51,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [roomId, setRoomIdState] = useState<string | null>(null);
     const [previousRoomId, setPreviousRoomId] = useState<string | null>(null);
-    const [player, setPlayer] = useState<{ items: Item[] }>({ items: [] });
+    const [player, setPlayer] = useState<{ items: Item[], progress: {name: string, value: number}[] }>({ items: [], progress: [] });
     const [stamina, setStamina] = useState(100);
     const [date, setDate] = useState(new Date(1849, 1, 3));
     const [preparedAction, setPreparedAction] = useState<PreparedAction | null>(null);
@@ -62,11 +62,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const navigate = useNavigate();
     const [money, setMoney] = useState(200);
     const [checklist, setChecklist] = useState("");
-    const [completedDialogs, setCompletedDialogs] = useState<Set<number>>(new Set());
+ 
+    
 
-    const markDialogAsCompleted = (dialogId: number) => {
-        setCompletedDialogs((prev) => new Set(prev).add(dialogId));
-    }
 
     const sacrificeItem = (Itemname: string) => {
 
@@ -104,6 +102,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const setPlayerItems = (update: (prevItems: Item[]) => Item[]) => {
         setPlayer((prev) => ({ ...prev, items: update(prev.items) }));
     };
+    const setPlayerProgress = (update: (prevProgress: { name: string; value: number }[]) => { name: string; value: number }[]) => {
+        setPlayer((prev) => ({ 
+            ...prev, 
+            progress: update(Array.isArray(prev.progress) ? prev.progress : []) 
+        }));
+    };
+    
+   
 
     const serializeContext = () => {
         return JSON.stringify({
@@ -255,8 +261,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             sacrificeItem,
             checklist,
             setChecklist,
-            completedDialogs,
-            markDialogAsCompleted,
+          
+            setPlayerProgress,
         }}>
             {children}
         </GameContext.Provider>
