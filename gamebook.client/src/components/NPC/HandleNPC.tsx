@@ -19,14 +19,13 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   useEffect(() => {
     let availableDialogs = npc.dialogs || [];
 
-    // Odemknout dialogy, pokud byl jejich parentDialog dokončen
     availableDialogs = availableDialogs.filter(dialog =>
         !dialog.parentDialog || completedDialogs.has(dialog.parentDialog.dialogId)
     );
 
     if (availableDialogs.length > 0) {
         setOptions(availableDialogs);
-        setDialog(null); // Reset dialogu, aby se zobrazil nový
+        //setDialog(null); // Reset dialogu, aby se zobrazil nový
     } else {
         setOptions([]);
     }
