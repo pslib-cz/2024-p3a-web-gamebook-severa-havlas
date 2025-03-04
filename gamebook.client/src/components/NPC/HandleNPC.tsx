@@ -5,6 +5,7 @@ import handleAction from "../ActionHandler/HandleActioon";
 import { useGameContext } from "../../GameProvider";
 import { Dialog, GameBookAction, NPC } from "../../types/types2";
 import styles from "./HandleNPC.module.css";
+import TypewriterComponent from "typewriter-effect";
 
 type NpcInteractionProps = {
   npc: NPC;
@@ -100,7 +101,16 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
       {/*JSON.stringify(availableDialogs)*/}
       {dialog && (
         <div>
-          <p>{dialog.text}</p>
+            <TypewriterComponent
+            options={{
+              strings: [dialog.text],
+              autoStart: true,
+              loop: false,
+              pauseFor: 1000000000,
+              delay: 50,
+              cursor: "_",
+            }}
+          />
         </div>
       )}
 
