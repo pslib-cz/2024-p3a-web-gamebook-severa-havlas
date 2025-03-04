@@ -109,17 +109,17 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <div style={{ marginTop: "20px" }}>
-        <div>
+        <div className={styles.dialogs}>
           {roomContent.npCs && roomContent.npCs.length > 0 ? (
             <ul>
               {roomContent.npCs.map((npc) => (
-                <li key={npc.npcId}>
+                <li className={styles.dialog} key={npc.npcId}>
                   <img
                     className={styles.imageNPC}
                     src={`${ApiBaseUrl}/api/NPCs/${npc.npcId}/image`}
                     alt={npc.name}
                   />
-                  <div style={{ marginTop: "10px" }}>
+                  <div className={styles.text}>
                     {a && <NpcInteraction npc={a} />}
                   </div>
                 </li>

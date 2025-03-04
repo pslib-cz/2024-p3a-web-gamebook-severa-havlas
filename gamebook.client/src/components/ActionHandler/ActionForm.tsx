@@ -27,6 +27,7 @@ type ActionComponentProps = {
     let actionContent;
     let isNotOverlay: boolean = false;
     let isOnceADay: boolean = false;
+    let isDialog: boolean = false;
     const { previousRoomId, setRoomId, isActionOpen, setIsActionOpen } = useGameContext();
 
     const CloseActionForm = () => {
@@ -52,6 +53,7 @@ type ActionComponentProps = {
 
     switch (action.actionTypeId) {
         case 1:
+            isDialog = true;
             actionContent = <DialogAction action={action} source={source} CloseAction={CloseAction}></DialogAction> //netestovaný
             break;
         case 2:
@@ -110,7 +112,7 @@ type ActionComponentProps = {
 
     return (
         <> 
-            <div className={`${styles.overlay} ${isActionOpen ? styles.open : ""}`}>
+            <div className={`${styles.overlay} ${isDialog ? styles.dialog : ""} ${isActionOpen ? styles.open : ""}`}>
                 <div className={styles.overlayContent}>
                     <h2>Sliding Overlay</h2>
                     <p>asd</p>

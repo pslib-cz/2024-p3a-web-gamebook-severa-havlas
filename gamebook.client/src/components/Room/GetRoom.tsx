@@ -200,7 +200,7 @@ const closeAction = () => {
           <h1>{room.name}</h1>
           <p>{room.text}</p>
           <p>{date.toLocaleDateString()}</p>
-          <p>{JSON.stringify(player)}</p>
+          <p>{/*JSON.stringify(player)*/}</p>
           <ul>
             {room.items?.map((item) => (
               <li key={item.itemPositionId}>{item.item ? item.item.name : "Unknown item"}</li>

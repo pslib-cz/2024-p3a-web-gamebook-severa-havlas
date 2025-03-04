@@ -4,6 +4,7 @@ import { ApiBaseUrl } from "../../EnvFile";
 import handleAction from "../ActionHandler/HandleActioon";
 import { useGameContext } from "../../GameProvider";
 import { Dialog, GameBookAction, NPC } from "../../types/types2";
+import styles from "./HandleNPC.module.css";
 
 type NpcInteractionProps = {
   npc: NPC;
@@ -71,6 +72,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
           <div>
        
             <button
+              className={styles.button}
               onClick={() => {
                 console.log(`Preparing action: ${action.description}`);
                 setIsActionOpen(true);  // Open overlay when action is prepared
@@ -109,9 +111,9 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
          
           {options.map((option) => (
             <button
+              className={styles.button}
               key={option.dialogId}
               onClick={() => handleOptionClick(option)}
-              style={{ marginRight: "10px", padding: "5px 10px" }}
             >
               {option.label}
             </button>
