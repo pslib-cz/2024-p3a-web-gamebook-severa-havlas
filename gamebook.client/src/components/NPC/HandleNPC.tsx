@@ -15,13 +15,12 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [options, setOptions] = useState<Dialog[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  let availableDialogs = npc.dialogs || [];
  
   useEffect(() => {
     if (!npc.dialogs) return;
 
     const filteredDialogs = npc.dialogs.filter(dialog => {
-        
+
         if (player.progress.length === 0) {
             return !dialog.parentDialog; 
         }
@@ -51,6 +50,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
   };
 
   const handleOptionClick = async (nextDialog: Dialog) => {
+    console.log("handleOptionClick called for dialogId:", nextDialog.dialogId);
     setDialog(nextDialog);
     setOptions([]);
     setPlayerProgress((prevProgress) => {
@@ -93,12 +93,11 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
     <div>
        
       <h2>{npc.name}</h2>
-        {JSON.stringify(npc)}
+        {/*JSON.stringify(npc)*/}
       {npc.action && renderActionComponent(npc.action)}
-      {JSON.stringify(availableDialogs)}
+      {/*JSON.stringify(availableDialogs)*/}
       {dialog && (
         <div>
-         
           <p>{dialog.text}</p>
         </div>
       )}
