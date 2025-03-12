@@ -106,7 +106,7 @@ const NpcInteraction: React.FC<NpcInteractionProps> = ({ npc }) => {
               strings: [dialog.text],
               autoStart: true,
               loop: false,
-              pauseFor: 1000000000,
+              // pauseFor: 1000000000,
               delay: 50,
               cursor: "_",
             }}

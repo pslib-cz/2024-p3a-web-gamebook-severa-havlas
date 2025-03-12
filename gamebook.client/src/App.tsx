@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Admin from "./pages/admin";
 import Page from "./pages/page";
 import Login from "./pages/Login";
-import MolekuleMapViewer from './components/Map/MapViewer';
+// import MolekuleMapViewer from './components/Map/MapViewer';
 
 import GameProvider, { useGameContext } from "./GameProvider";
 
@@ -28,7 +28,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
           <Route path="/Page/:id" element={<Page />} />
-          <Route path="/Page/:nodeId" element={<MolekuleMapViewer />} />
+          <Route path="/Page/:nodeId" element={<></>} />
         </Routes>
       </GameProvider>
     </Router>
