@@ -4,6 +4,7 @@
 }
 
 .image {
+    position: relative;
     width: 100vw;
     aspect-ratio: 1 / 1;
     top: 0;
@@ -64,28 +65,44 @@ li {
     list-style-type: none;
 }
 
+@media (min-width: 1400px) {
+  .description {
+    width: auto;
+  }
+
+  .image {
+    height: 100vh;
+    width: auto;
+  }
+}
+
 @media (min-width: 768px) {
     .room {
         flex-direction: row;
     }
 
     .imageContainer {
+      background-color: burlywood;
       position: sticky;
-      height: auto;
+      top: 0;
+      height: 100vh;
+      max-width: 50vw;
     }
 
     .description {
       padding: 3em 120px 3em 3em;
+      width: 40vw;
+      border-left: 2px solid var(--brown);
     }
 
     .image {
         position: sticky;
-        width: auto;
-        height: 100vh;
+        max-width: 50vw;
+        top: auto;
     }
 
     .connection {
-        display: block;
+        display: none;
         position: fixed;
         translate: -50% -50%;
     }
@@ -95,11 +112,3 @@ li {
     }
 }
 
-  
-  /* .connection {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-  */

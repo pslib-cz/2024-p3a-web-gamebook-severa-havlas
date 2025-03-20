@@ -10,7 +10,7 @@
   }
   
   .checklistContent {
-    background-image: url('../../assets/TextEditor.webp');
+    background-color: burlywood;
     background-size: cover;
   }
   
@@ -20,9 +20,7 @@
   
   .checklistContent.expanded {
       padding: 20px 0;
-      position: absolute;
-      top: 0;
-      right: 0;
+      position: grid;
       width: 100vw;
       height: 100vh;
       overflow-y: auto;
@@ -73,9 +71,12 @@ select {
 
 @media (min-width: 768px) {
   .checklistContent.expanded {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
-    width: calc(100vw - 100vh); 
+  }
+
+  .toggleButton {
+    position: fixed;
   }
 }

@@ -18,4 +18,10 @@
   background-color: white;
   color: black;
 }
+
+@media (min-width: 768px) {
+  .link {
+    position: fixed;
+  }
   
+}

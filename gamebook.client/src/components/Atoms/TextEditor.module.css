@@ -10,7 +10,7 @@
 }
 
 .editorContent {
-  background-image: url('../../assets/TextEditor.webp');
+  background-color: burlywood;
   background-size: cover;
 }
 
@@ -57,9 +57,12 @@ body:has(.editorContent.expanded) {
 
 @media (min-width: 768px) {
   .editorContent.expanded {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
-    width: calc(100vw - 100vh); 
+  }
+
+  .toggleButton {
+    position: fixed;
   }
 }

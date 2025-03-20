@@ -17,3 +17,10 @@
     height: 70px;
     aspect-ratio: 1 / 1;
 }
+
+@media (min-width: 768px) {
+    .link {
+        position: fixed;
+    }
+    
+}
