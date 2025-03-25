@@ -7,7 +7,7 @@ import {  useGameContext } from '../../GameProvider';
 import DarkRoomDetails from '../Room/DarkRoomDetails';
 import Shop from '../Action/ShopAction';
 import { GameBookAction } from '../../types/types2';
-import TexasHoldEm from '../Action/Poker';
+import ShellGame from '../Action/Poker';
 import Work from '../Action/Work';
 import Sacrificer from '../Action/Sacrificer';
 import DialogAction from '../Action/DialogAction';
@@ -28,6 +28,7 @@ type ActionComponentProps = {
     let isNotOverlay: boolean = false;
     let isOnceADay: boolean = false;
     let isDialog: boolean = false;
+    let isDarkRoom: boolean = false;
     const { previousRoomId, setRoomId, isActionOpen, setIsActionOpen } = useGameContext();
 
     const CloseActionForm = () => {
@@ -68,6 +69,7 @@ type ActionComponentProps = {
             break;
         case 4:
             isNotOverlay = true;
+            isDarkRoom = true;
             if (isActionOpen) {
                 actionContent = <DarkRoomDetails onExit={CloseActionForm}/>;}//netestovaný
             break;
@@ -81,7 +83,7 @@ type ActionComponentProps = {
             case 7:
                 if(isActionOpen){
                     isOnceADay = true;
-                    actionContent = <TexasHoldEm/>;
+                    actionContent = <ShellGame/>;
                 }
             break;
          
@@ -112,26 +114,24 @@ type ActionComponentProps = {
 
     return (
         <> 
-            <div className={`${styles.overlay} ${isDialog ? styles.dialog : ""} ${isActionOpen ? styles.open : ""}`}>
+            <div className={`${styles.overlay} ${isDialog ? styles.dialog : ""} ${isActionOpen ? styles.open : ""} ${isDarkRoom ? styles.darkRoom : ""}`} >
                 <div className={styles.overlayContent}>
-                    <h2>Sliding Overlay</h2>
-                    <p>asd</p>
                     {actionContent}
-                    {JSON.stringify(action)}
+                    
 
-                    {previousRoomId && (
+                    {/* {previousRoomId && (
                         <button onClick={handleGoBack} className={styles.goBackButton}>
                             Go Back
                         </button>
                     )}
 
-                    <h1>Action Form</h1>
+                    
                     
                     {previousRoomId && (
                         <button onClick={handleGoBack}>
                             Go Back
                         </button>
-                    )}
+                    )} */}
 
                     <button className={styles.closeButton} onClick={CloseActionForm}>
                         Close

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useGameContext } from "../../GameProvider";
+import styles from "./Poker.module.css";
+import { style } from "framer-motion/client";
 
 const shuffleArray = (arr: any[]) => arr.sort(() => Math.random() - 0.5);
 
@@ -48,15 +50,15 @@ export default function ShellGame() {
     setSelectedCup(index);
     if (index === ballPosition) {
       setMoney(money + bet * 2);
-      setMessage("🎉 Correct! You won " + bet * 2 + " coins!");
+      setMessage("Correct! You won " + bet * 2 + " coins!");
     } else {
-      setMessage("❌ Wrong! You lost your bet of " + bet + " coins.");
+      setMessage("Wrong! You lost your bet of " + bet + " coins.");
     }
     setGameStarted(false);
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
+    <div className={styles.container}>
       <h1 className="text-2xl font-bold">Shell Game</h1>
       <p className="text-lg">Money: {money} coins</p>
       <input
@@ -68,7 +70,7 @@ export default function ShellGame() {
         className="w-64"
       />
       <p>Bet: {bet} coins</p>
-      <div className="flex gap-6">
+      <div className={styles.cups}>
         {cups.map((cup, index) => (
           <motion.div
             key={index}
@@ -78,14 +80,14 @@ export default function ShellGame() {
             transition={{ duration: 0.5 }}
             onClick={() => selectCup(index)}
           >
-            {gameStarted || selectedCup !== index ? "🥤" : ballPosition === index ? "⚽" : "🥤"}
+            {gameStarted || selectedCup !== index ? "🥤" : ballPosition === index ? "⭐" : "🥤"}
           </motion.div>
         ))}
       </div>
       <button
         onClick={startGame}
         disabled={shuffling || gameStarted}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
+        className={styles.button}
       >
         {gameStarted ? (shuffling ? "Shuffling..." : "Choose") : "Start Game"}
       </button>

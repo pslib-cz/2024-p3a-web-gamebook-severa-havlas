@@ -8,7 +8,18 @@
     margin: 0;
 }
 
+.pickUpButton {
+    background-color: burlywood;
+    border: 2px solid var(--brown);
+    color: var(--brown);
+    border-radius: 5px;
+    margin: 10px;
+}
 
+.pickUpButton:hover {
+    background-color: var(--brown);
+    color: burlywood;
+}
 
 .text {
     background-color: rgb(0, 0, 0, 0.75);
@@ -28,7 +39,7 @@
         display: flex; 
         flex-direction: column;
         align-items: center;
-        width: 50vw;
+        width: 100vh;
         height: auto;
     }
 

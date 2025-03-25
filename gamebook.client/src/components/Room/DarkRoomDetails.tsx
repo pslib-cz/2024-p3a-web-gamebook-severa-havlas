@@ -115,7 +115,7 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
 
   const handleExit = () => {
     setDate(new Date(date.getTime() + 24 * 60 * 60 * 1000));
-    setStamina(100);
+    setStamina(300);
     setFadeOut(true);
     setTimeout(onExit, 1000);
   };
@@ -133,24 +133,24 @@ export default function DarkRoomDetails({ onExit }: DarkRoomDetailsProps) {
           <img src={`${ApiBaseUrl}${room.imgUrl}`} alt={room.name} className={styles.image} />
         </div>
       )}
+      <div className={styles.dialogsContainer}>
+        {currentDialog && (
+          <div className={styles.dialogContainer}>
+            <p>{currentDialog.text}</p>
+          </div>
+        )}
+        {loadingOptions && <p>Loading dialog options...</p>}
+        {dialogOptions.length > 0 && (
+          <div className={styles.dialogOptions}>
+            {dialogOptions.map((option) => (
+              <button key={option.dialogId} onClick={() => handleDialogOptionClick(option)} className={styles.optionButton}>
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       
-      {currentDialog && (
-        <div className={styles.dialogContainer}>
-          
-          <p>{currentDialog.text}</p>
-        </div>
-      )}
-      {loadingOptions && <p>Loading dialog options...</p>}
-      {dialogOptions.length > 0 && (
-        <div className={styles.dialogOptions}>
-        
-          {dialogOptions.map((option) => (
-            <button key={option.dialogId} onClick={() => handleDialogOptionClick(option)} className={styles.optionButton}>
-              {option.label}
-            </button>
-          ))}
-        </div>
-      )}
       {exitVisible && <button onClick={handleExit} className={styles.exitButton}>Exit</button>}
     </div>
   );

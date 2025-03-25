@@ -138,17 +138,13 @@ const RoomContentViewer: React.FC<RoomContentViewerProps> = ({ roomContent }) =>
                   <li key={item.itemPositionId}>
                     {item.item ? (
                       <>
-                        {item.item.itemId} - {item.item.name}
+                        {item.item.name}
                         <button
+                          className={styles.pickUpButton}
                           onClick={() =>
                             item.item &&
                             handlePickUpItem(item.item.itemId, item.item.name)
                           }
-                          style={{
-                            marginLeft: "10px",
-                            padding: "5px 10px",
-                            cursor: "pointer",
-                          }}
                         >
                           Pick up
                         </button>

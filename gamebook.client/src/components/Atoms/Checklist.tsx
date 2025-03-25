@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useGameContext } from "../../GameProvider";
 import ChecklistImage from "../../assets/checklist.webp";
 import styles from "./Checklist.module.css";
+import { Link } from "react-router-dom";
 
 const names = [
   "Unknown", "Jeff Swiatkovsky", "Erik Maria Bark", "Jona Magnus", "Björn Lorgbrog", "Sven Nordström", "Harald Isberg", "Sigurd Kvastsson", "Viggo Sørvik", "Einar Frostvik", "Anders Lundström", "Tore Eikfjell", "Lars Vindhaug", "Lapalus Vermeulen", "Frida Oeberg", "Sten Bjørneson", "Vidar Myrland", "Johann Amundsen", "Sigmund Oerberg", "Finn van der Nordhagen"
@@ -67,6 +68,7 @@ const Checklist = () => {
   }, [people, setChecklist]);
 
   useEffect(() => {
+    const isSolve: boolean = false;
     let correctCount = 0;
     const newConfirmedPairs = new Set(confirmedPairs);
     people.forEach((person) => {
@@ -77,6 +79,9 @@ const Checklist = () => {
     });
     if (correctCount % 3 === 0 && correctCount !== confirmedPairs.size) {
       setConfirmedPairs(newConfirmedPairs);
+    }
+    if (correctCount === correctPairs.length) {
+      isSolve = true;
     }
   }, [people]);
 
@@ -144,6 +149,7 @@ const Checklist = () => {
             ))}
           </tbody>
         </table>
+        {/* <Link to="/">Well Done</Link> */}
       </div>
     </>
   );

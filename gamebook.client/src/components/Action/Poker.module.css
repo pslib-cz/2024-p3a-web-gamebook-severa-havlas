@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.cups {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 6px;
+}
+
+.button {
+    padding: 10px 20px;
+    background-color: burlywood;
+    border: 2px solid var(--brown);
+    color: var(--brown);
+    font-weight: bolder;
+    border-radius: 20px;
+  }
+  
+  .button:hover {
+    background-color: var(--brown);
+    color: burlywood;
+    border: 2px solid burlywood;
+  }

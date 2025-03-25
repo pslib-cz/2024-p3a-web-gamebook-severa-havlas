@@ -1,5 +1,6 @@
 .overlay {
     position: fixed;
+    width: 100vw;
     top: 0;
     left: 0;
     height: 100%;
@@ -10,7 +11,11 @@
     transition: transform 0.3s ease-in-out;
     z-index: 50;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); 
-     /* overflow-y: auto;   tohleto Kurví darkRoom, ale když to tam není tak to kurví Shop tohle asi pořešit dymamicky */ 
+    overflow-y: auto;   
+  }
+
+  .darkRoom {
+    overflow-y: hidden;
   }
   
   .overlay.open {
@@ -37,18 +42,38 @@
     cursor: pointer;
     font-size: 16px;
   }
+
+  .toggleButton {
+    padding: 10px 20px;
+    background-color: burlywood;
+    border: 2px solid var(--brown);
+    color: var(--brown);
+    font-weight: bolder;
+    border-radius: 5px;
+  }
   
+  .toggleButton:hover {
+    background-color: var(--brown);
+    color: burlywood;
+    border: 2px solid burlywood;
+  }
+
   .closeButton {
     position: absolute;
     top: 10px;
     left: 10px;
     padding: 10px 20px;
-    background-color: #e53e3e; /* Red */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+    background-color: burlywood;
+    border: 2px solid var(--brown);
+    color: var(--brown);
+    font-weight: bolder;
+    border-radius: 5px;
+  }
+  
+  .closeButton:hover {
+    background-color: var(--brown);
+    color: burlywood;
+    border: 2px solid burlywood;
   }
 
   .dialog {

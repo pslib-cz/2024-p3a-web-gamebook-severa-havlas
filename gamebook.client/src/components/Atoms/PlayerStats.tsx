@@ -47,7 +47,7 @@ const PlayerStats: React.FC = () => {
                         {player.items.map((item) => (
                             <li key={item.itemId}>
                                 {item.name}: {item.quantity} {item.description}
-                                <button onClick={() => inspectItem(item)}>Inspect</button>
+                                {/* <button onClick={() => inspectItem(item)}>Inspect</button> */}
                             </li>
                         ))}
                     </ul>
