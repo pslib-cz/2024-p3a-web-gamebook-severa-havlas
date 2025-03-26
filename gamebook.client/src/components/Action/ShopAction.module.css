@@ -5,6 +5,10 @@
 }
 
 .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     background-color: burlywood;
     color: black;
     padding: 10px; 
@@ -24,3 +28,4 @@
     background-color: burlywood;
     color: var(--brown);
 }
+

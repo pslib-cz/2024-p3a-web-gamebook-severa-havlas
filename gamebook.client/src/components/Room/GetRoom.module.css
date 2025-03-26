@@ -4,8 +4,9 @@
 }
 
 .image {
-    position: relative;
+    position: fixed;
     width: 100vw;
+    height: 100vh;
     aspect-ratio: 1 / 1;
     top: 0;
 }

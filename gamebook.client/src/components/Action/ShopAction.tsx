@@ -55,14 +55,17 @@ const HandleBuy = (e: Item) => {
         {items.length > 0 ? (
           items.map(item => (
             <div className={styles.card} key={item.itemId} >
-              <img src={`${ApiBaseUrl}${item.imgUrl}`} alt={item.name} style={{ width: "100px", height: "100px", objectFit: "cover" }} />
-              <h3>{item.name}</h3>
-              
-              <p>{item.description}</p>
-              <p><strong>Price: {item.price} Krejcarů</strong></p>
-              <button className={styles.button} onClick={() => HandleBuy(item)} >
-                Buy
-              </button>
+              <div className={styles.itemInfo}>
+                <img src={`${ApiBaseUrl}${item.imgUrl}`} alt={item.name} style={{ width: "100px", height: "100px", objectFit: "cover" }} />
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+              </div>
+              <div className={styles.itemActions}>
+                <p><strong>Price: {item.price} Krejcarů</strong></p>
+                <button className={styles.button} onClick={() => HandleBuy(item)} >
+                  Buy
+                </button>
+              </div>
             </div>
           ))
         ) : (

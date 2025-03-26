@@ -74,7 +74,7 @@ export default function ShellGame() {
         {cups.map((cup, index) => (
           <motion.div
             key={index}
-            className="w-20 h-32 bg-gray-600 rounded-full flex items-center justify-center cursor-pointer"
+            className={styles.cup}
             whileTap={{ scale: 0.9 }}
             animate={{ x: shuffling ? [10, -10, 10, 0] : 0 }}
             transition={{ duration: 0.5 }}
