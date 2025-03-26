@@ -4,9 +4,8 @@
 }
 
 .image {
-    position: fixed;
+    position: sticky;
     width: 100vw;
-    height: 100vh;
     aspect-ratio: 1 / 1;
     top: 0;
 }
@@ -100,6 +99,7 @@ li {
         position: sticky;
         max-width: 50vw;
         top: auto;
+        height: 100vh;
     }
 
     .connection {
