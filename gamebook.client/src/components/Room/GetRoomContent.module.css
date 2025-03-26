@@ -39,7 +39,7 @@
         display: flex; 
         flex-direction: column;
         align-items: center;
-        width: 100vh;
+        width: 50vw;
         height: auto;
     }
 
@@ -53,7 +53,7 @@
         left: 0;
         top: auto;
         bottom: 0;
-        
+
     }
 }
 
@@ -62,5 +62,5 @@
         flex-direction: row;
         align-items: end;
     }
-    
+
 }
