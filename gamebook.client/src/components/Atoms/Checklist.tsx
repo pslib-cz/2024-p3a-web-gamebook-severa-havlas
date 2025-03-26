@@ -68,7 +68,7 @@ const Checklist = () => {
   }, [people, setChecklist]);
 
   useEffect(() => {
-    const isSolve: boolean = false;
+    let isSolve: boolean = false;
     let correctCount = 0;
     const newConfirmedPairs = new Set(confirmedPairs);
     people.forEach((person) => {

@@ -53,7 +53,7 @@
         left: 0;
         top: auto;
         bottom: 0;
-        
+
     }
 }
 
@@ -62,5 +62,5 @@
         flex-direction: row;
         align-items: end;
     }
-    
+
 }
